@@ -1,0 +1,466 @@
+.react-grid-item {
+  background: #ececee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px !important;
+  /* height: 100%; */
+}
+
+.font-size {
+  font-size: 15px !important;
+  font-weight: 600;
+  font-family: "Source Sans Pro";
+}
+
+.revenue_heading {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-align: center;
+  margin-top: 1px;
+}
+
+.revenue-graph-box {
+  border: 1px solid lightgray;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  background: #fcfcfc;
+  background: linear-gradient(
+    186deg,
+    rgba(252, 252, 252, 1) 23%,
+    rgba(201, 242, 231, 1) 100%
+  );
+}
+
+.recharts-wrapper:focus {
+  outline: none;
+}
+
+.recharts-wrapper svg:focus {
+  outline: none;
+}
+
+.productivity-widget-loss {
+  background: #fcfcfc;
+  background: linear-gradient(
+    275deg,
+    rgba(252, 252, 252, 1) 9%,
+    rgba(242, 206, 201, 1) 100%
+  );
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 28rem;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  position: relative;
+  margin: 1rem;
+  height: 30vh;
+}
+.productivity-widget-nutral {
+  background: #fcfcfc;
+  background: linear-gradient(
+    275deg,
+    rgb(252, 252, 252) 9%,
+    rgb(242, 234, 201) 100%
+  );
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 28rem;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  position: relative;
+  margin: 1rem;
+  height: 30vh;
+}
+
+/* Reset and base styles for the widget */
+.productivity-widget {
+  /* background-color: #c4dcf4 !important; */
+  background: #fcfcfc;
+  background: linear-gradient(
+    275deg,
+    rgba(252, 252, 252, 1) 9%,
+    rgba(201, 242, 215, 1) 100%
+  );
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 28rem;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  position: relative;
+  margin: 1rem;
+  height: 30vh;
+}
+
+.productivity-widget * {
+  box-sizing: border-box;
+}
+
+.widget-header {
+  margin-bottom: 2rem;
+}
+
+.widget-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.metrics-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.main-metric {
+  margin-bottom: 1rem;
+}
+
+.main-metric-value {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  margin-bottom: 10px;
+  line-height: 1.1;
+  color: #111827;
+  display: block;
+}
+
+.percentage-icon {
+  width: 1rem;
+  height: 1rem;
+  background-color: #10b981;
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.percentage-icon-red {
+  width: 1rem;
+  height: 1rem;
+  background-color: red;
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.percentage-icon svg {
+  width: 0.625rem;
+  height: 0.625rem;
+  color: white;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.percentage-value {
+  color: #10b981;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.percentage-label {
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.chart-container {
+  position: relative;
+  width: 8rem;
+  height: 5rem;
+  flex-shrink: 0;
+}
+
+.chart-wrapper {
+  position: absolute;
+  inset: 0;
+  height: 12vh !important;
+}
+
+.chart-percentage {
+  position: absolute;
+  top: -7px;
+  right: 39px;
+  color: #111827;
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  z-index: 2;
+}
+
+.chart-svg {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 4rem;
+  overflow: visible;
+}
+
+/* Ensure the widget works in different contexts */
+/* .productivity-widget-container {
+  display: inline-block;
+  vertical-align: top;
+} */
+
+/* Reset and base styles for the widget */
+.productivity-widget {
+  /* background-color: #f9fafb; */
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.productivity-widget * {
+  box-sizing: border-box;
+}
+
+.widget-header {
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.widget-title {
+  color: #111827;
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.widget-title-secondary {
+  color: #9ca3af;
+}
+.widget-title {
+  color: #111827;
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  font-weight: 600 !important;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.widget-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.metrics-section {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.main-metric {
+  margin-bottom: auto;
+}
+
+.main-metric-value {
+  font-size: clamp(1.5rem, 6vw, 3rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: #111827;
+  display: block;
+}
+
+.percentage-change {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  margin-top: 8px;
+}
+
+.percentage-icon {
+  width: 1rem;
+  height: 1rem;
+  background-color: #10b981;
+  border-radius: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.percentage-icon svg {
+  width: 0.625rem;
+  height: 0.625rem;
+  color: white;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.percentage-value {
+  color: #10b981;
+  font-weight: 500;
+  white-space: nowrap;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.percentage-label {
+  color: #9ca3af;
+  white-space: nowrap;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+.chart-container {
+  position: relative;
+  width: min(40%, 120px);
+  aspect-ratio: 1.6 / 1;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-percentage {
+  color: #111827;
+  font-weight: 500;
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.2;
+  text-align: right;
+  margin-bottom: 0.25rem;
+}
+
+.chart-svg {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+.productivity-widget-container {
+  width: 100%;
+  height: 100%;
+  min-height: 130px;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .productivity-widget {
+    padding: 1rem;
+    /* min-height: 180px; */
+  }
+
+  .widget-content {
+    gap: 0.75rem;
+  }
+
+  .chart-container {
+    width: min(35%, 100px);
+  }
+}
+
+@media (max-width: 480px) {
+  .productivity-widget {
+    padding: 0.75rem;
+    min-height: 160px;
+  }
+
+  .widget-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .widget-content {
+    gap: 0.5rem;
+  }
+
+  .chart-container {
+    width: min(30%, 80px);
+  }
+
+  .percentage-change {
+    gap: 0.25rem;
+  }
+}
+
+/* For very small containers */
+@media (max-width: 320px) {
+  .productivity-widget {
+    padding: 0.5rem;
+    min-height: 140px;
+  }
+
+  .main-metric-value {
+    font-size: clamp(1.25rem, 8vw, 2rem);
+  }
+}
+
+/* Container query support for modern browsers */
+@container (max-width: 300px) {
+  .productivity-widget {
+    padding: 0.5rem;
+  }
+
+  .widget-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chart-container {
+    width: 100%;
+    max-width: 120px;
+    align-self: flex-end;
+  }
+}
+
+/* Ensure proper scaling in dashboard grids */
+.react-grid-item .productivity-widget {
+  height: 100%;
+  margin: 0;
+  min-height: unset;
+}
+
+.react-grid-item .productivity-widget-container {
+  height: 100%;
+  min-height: unset;
+}
+
+/* Fix for dev tools resizing */
+.productivity-widget {
+  /* resize: both;
+  overflow: hidden; */
+}
+
+.productivity-widget:focus-within {
+  outline: none;
+}
+
+.custom-gauge svg .value-text {
+  font-size: 55.5px !important;
+  fill: #000000 !important;
+}
+
+.hover-red {
+  stroke: red;
+  background-color: red;
+}
+
+/* Root Dashboard Grid */
+@media (max-width: 768px) {
+}

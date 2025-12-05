@@ -1,0 +1,431 @@
+:root {
+    --primary: #f55;
+    --primary-dark: #e53e3e;
+    --gray: #6b7280;
+    --border: #e5e7eb;
+    --bg: #fff;
+    --muted: #9ca3af;
+    --orange: #f97316;
+    --font-sans: ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  font-family: var(--font-sans) !important;
+}
+
+/* card wrapper */
+.ak-doctor-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* main content area */
+.ak-card-main {
+    display: flex;
+    padding: 10px;
+    gap: 15px;
+    height: 100%;
+}
+
+/* doctor photo */
+.ak-doctor-photo {
+    width: 150px;
+    height: 90%;
+    border-radius: 8px 8px 0px 0px;
+    object-fit: cover;
+}
+.ak-doctor-photo1 {
+    /* width: 150px; */
+    height: 90%;
+    border-radius: 8px 8px 0px 0px;
+    object-fit: cover;
+}
+
+.ak-card-main .moh-p h1 {
+    font-weight: 700 !important;
+    background-color: #E31E24;
+    color: white;
+    border-radius: 0px 0px 8px 8px;
+    text-align: center;
+    font-size: 18px !important;
+}
+
+/* doctor info section */
+.ak-doctor-info {
+    flex: 0.8 !important;
+}
+
+.ak-doctor-info h2 {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}
+
+.ak-doctor-info p {
+    margin: 2px 0 !important;
+    font-size: 13px !important;
+    color: black !important;
+    font-weight: 500 !important;
+}
+
+/* chips */
+.ak-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.ak-chip {
+    padding: 4px 8px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--gray);
+    background: #f9fafb;
+    cursor: default;
+}
+
+/* rating row */
+.ak-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+.ak-rating .ak-star {
+    color: gold;
+}
+
+.ak-loyal {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* right side appointments */
+.ak-appointments {
+    flex: 1.5;
+    text-align: left;
+}
+
+.ak-distance{
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px;
+}
+
+
+/* patient list */
+.ak-patient-list {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+}
+
+.ak-patient {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.ak-patient-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.ak-patient-name p{
+    
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+.ak-patient-name span{
+    
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.ak-patient img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ak-patient-status  {
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+    padding: 6px 8px;
+    font-weight: 600 !important;
+    margin-bottom: 0 !important;
+    font-size: 14px !important;
+}
+
+@keyframes ak-smoothBlink {
+    0% {
+        background-color: aliceblue;
+    }
+    50% {
+        background-color: rgb(214, 235, 254);
+    }
+    100% {
+        background-color: aliceblue;
+    }
+}
+
+@keyframes ak-blinkBg2 {
+    0% {
+        background-color: #e7faec;
+    }
+    50% {
+        background-color: #d4fddf;
+    }
+    100% {
+        background-color: #e7faec;
+    }
+}
+
+.ak-pending-status {
+    background-color: aliceblue;
+    animation: ak-smoothBlink 2s ease-in-out infinite;
+}
+
+.ak-success-status {
+    background-color: #e7faec;
+}
+
+/* footer insurance logos */
+.ak-card-footer {
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.ak-insurance-logos {
+    display: flex;
+    gap: 8px;
+}
+
+.ak-insurance-logos img {
+    height: 22px;
+    object-fit: contain;
+}
+
+/* responsive grid wrapper */
+.ak-cards-container {
+    margin: 20px auto;
+    padding: 0 16px;
+}
+
+.ak-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 640px) {
+    /* .ak-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    } */
+}
+
+@media (min-width: 1024px) {
+    .ak-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2,1fr);
+    }
+}
+
+@media (min-width: 1824px) {
+    .ak-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3,1fr);
+
+    }
+}
+
+
+
+
+/* ==============DoctorCardSkeleton CSS =========================== */
+/* Skeleton shimmer effect */
+@keyframes ak-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton .ak-skeleton-img,
+.skeleton .ak-skeleton-text,
+.skeleton .ak-skeleton-chip,
+.skeleton .ak-skeleton-avatar,
+.skeleton .ak-skeleton-badge {
+  background: linear-gradient(
+    90deg,
+    #e6e6e6 25%,
+    #f3f3f3 37%,
+    #e6e6e6 63%
+  );
+  background-size: 400% 100%;
+  animation: ak-shimmer 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+/* image placeholder */
+.ak-skeleton-img {
+    width: 150px;
+    height: 90%;
+    border-radius: 8px 8px 0px 0px;
+}
+
+/* text placeholder */
+.ak-skeleton-text {
+  height: 14px;
+  margin: 6px 0;
+  width: 100%;
+}
+
+.ak-skeleton-text.short {
+  width: 60%;
+}
+
+.ak-skeleton-text.tiny {
+  width: 40%;
+  height: 12px;
+}
+
+/* chips */
+.ak-skeleton-chip {
+  width: 60px;
+  height: 20px;
+  border-radius: 16px;
+}
+
+/* avatar */
+.ak-skeleton-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+/* badge */
+.ak-skeleton-badge {
+  width: 50px;
+  height: 20px;
+  border-radius: 20px;
+}
+
+
+/* .ak-cards-grid.ak-full-width {
+  display: grid;
+  grid-template-columns: 1fr !important;
+} */
+
+/* 2️⃣ When only one doctor — full width + full height */
+.ak-cards-grid.ak-single-card {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* makes it take full height */
+  height: 80vh; /* optional - fill most of viewport height */
+}
+
+.ak-cards-grid.ak-single-card > * {
+  width: 100%;
+  height: 100vh;
+}
+
+
+.ak-cards-grid.ak-two-cards {
+  grid-template-columns: 1fr !important;
+}
+
+/* Optional responsiveness */
+@media (max-width: 768px) {
+  .ak-cards-grid.ak-single-card {
+    height: auto;
+  }
+}
+
+.ak-doctor-card.ak-single-view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column; 
+}
+
+.h-50{
+    height: 75% !important;
+    width: fit-content;
+}
+
+@media screen and (min-width: 10px) and (max-width: 565px)  {
+    
+    .h-50{
+        height: auto !important;
+        width: 100% !important;
+    }
+    .h-100{
+        height: 50% !important;
+        width: 100% !important;
+    }
+    
+    .ak-card-main {
+        display: flex;
+        flex-direction: column !important;
+        padding: 10px;
+        gap: 15px;
+
+        /* height: 10% !important; */
+    }
+
+    /* .ak-doctor-card  */
+    .ak-single-view {
+        width: 100%;
+        /* height: fit-content !important; */
+        /* height: 100%; */
+        display: flex;
+        flex-direction: column; /* stack doctor info + patient list */
+    }
+    .ak-doctor-photo {
+        width: 100%;
+        height: 90%;
+        border-radius: 8px 8px 0px 0px;
+        object-fit: inherit;
+    }
+    .ak-doctor-photo1 {
+        width: 100%;
+        height: 90%;
+        border-radius: 8px 8px 0px 0px;
+        object-fit: inherit;
+    }
+
+    .ak-cards-grid.ak-single-card {
+        width: 100%;
+        height: 50% !important;
+    }
+
+}

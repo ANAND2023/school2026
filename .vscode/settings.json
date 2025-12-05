@@ -1,0 +1,46 @@
+// {
+//   "editor.formatOnPaste": false,
+//   "editor.formatOnSave": false,
+//   "editor.formatOnType": false,
+//   "prettier-eslint.eslintIntegration": true,
+//   "javascript.preferences.importModuleSpecifier": "non-relative",
+//   "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+//   "editor.codeActions.triggerOnFocusChange": true,
+//   "editor.inlineCompletionsAccessibilityVerbose": true,
+//   "editor.cursorSmoothCaretAnimation": "on",
+//   "editor.cursorBlinking": "smooth",
+//   "cSpell.words": [
+//     "Crossconsultation"
+//   ]
+// }
+ 
+{
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
+  "prettier-eslint.eslintIntegration": true,
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "editor.codeActions.triggerOnFocusChange": true,
+  "editor.inlineCompletionsAccessibilityVerbose": true,
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.cursorBlinking": "smooth",
+  "cSpell.words": [
+    "Crossconsultation"
+  ],
+
+  // ✅ FIXES: Add these below
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true
+  },
+  "search.exclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true
+  },
+  "typescript.tsserver.maxTsServerMemory": 4096
+}

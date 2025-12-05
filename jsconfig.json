@@ -1,0 +1,42 @@
+// {
+//     "compilerOptions": {
+//         "module": "ESNext",
+//         "moduleResolution": "Bundler",
+//         "target": "ES2022",
+//         "jsx": "react",
+//         "allowImportingTsExtensions": true,
+//         "strictNullChecks": true,
+//         "strictFunctionTypes": true
+//     },
+//     "exclude": [
+//         "node_modules",
+//         "**/node_modules/*"
+//     ]
+// }
+
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "jsx": "react",
+    "allowImportingTsExtensions": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src", "types", "index.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".next",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+}
