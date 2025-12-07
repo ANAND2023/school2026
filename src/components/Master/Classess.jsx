@@ -3,6 +3,7 @@ import ClassMaster from './ClassMaster'
 import SectionMaster from './SectionMaster'
 import FeeHead from './FeeHead'
 import User from './Role'
+import Profile from './Profile'
 
 const Classess = () => {
   return (
@@ -24,6 +25,15 @@ const Classess = () => {
   <div className="col-md-6">
     <User />
   </div>
+</div>
+   <div className="row">
+  <div className="col-md-6">
+    <Profile />
+  </div>
+
+  {/* <div className="col-md-6">
+    <User />
+  </div> */}
 </div>
 </>
   )

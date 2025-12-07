@@ -71,9 +71,9 @@ function User() {
             notify("Error saving reason", "error");
         }
     };
-    const handleDelete= async (item) => {
+    const handleDelete = async (item) => {
 
-       
+
         try {
             const Response = await Rolesdeleterole(item?.ID);
             if (Response?.success) {
@@ -136,7 +136,7 @@ function User() {
             )}
 
             <div className="card p-1">
-                <Heading title={t("Class Master")} isBreadcrumb={false} />
+                <Heading title={t("Users Master")} isBreadcrumb={false} />
 
                 <div className="row p-2">
                     <Input
@@ -184,7 +184,7 @@ function User() {
                             descripiton: item.descripiton,
                             action: <>
                                 <i className="fa fa-edit mx-2" style={{ cursor: "pointer" }} title="Edit" onClick={() => setValues({ Role: item?.Role, descripiton: item?.descripiton })}></i>
-                                <i className="fa fa-trash mx-2" style={{ cursor: "pointer" }} title="Delete" onClick={()=>handleDelete(item)}></i>
+                                <i className="fa fa-trash mx-2" style={{ cursor: "pointer" }} title="Delete" onClick={() => handleDelete(item)}></i>
                             </>,
                         }))}
 
