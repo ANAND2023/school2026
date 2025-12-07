@@ -3,6 +3,76 @@ import { getPatientIndentAPI } from "./pharmecy";
 
 export const apiUrls = {
   // Auth
+
+ loginAdmin: "Auth/login",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   login: "Login/Login",
   logout: "MasterPage/Logout",
   ReportAIChatPdf: "ReportAI/ReportAIChatPdf",

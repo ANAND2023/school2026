@@ -98,6 +98,7 @@ export const getBloodRequisitionIndentReportApi = async (params) => {
     console.error("Error Found", error);
   }
 };
+
 export const recieptWiseCollectionReportApi = async (params) => {
   try {
     store.dispatch(setLoading(true));
