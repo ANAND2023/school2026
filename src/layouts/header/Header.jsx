@@ -246,23 +246,23 @@ useEffect(() => {
 
 //           {["lg", "md"].includes(screenSize) && (
 //             <li className="nav-item savetheme">
-//               <div type="button" className=" headerboxsize">
-//                 <ReactSelectHead
-//                   placeholderName="Select Role"
-//                   dynamicOptions={GetRoleList?.map((ele) => {
-//                     return {
-//                       label: ele?.roleName,
-//                       value: ele?.roleID,
-//                     };
-//                   })}
-//                   searchable={true}
-//                   respclass="col-12 roll-off"
-//                   value={Number(localData?.defaultRole)}
-//                   handleChange={handleChangeRole}
-//                   //  respclass="roll-off"
-//                   plcN="center"
-//                 />
-//               </div>
+              // <div type="button" className=" headerboxsize">
+              //   <ReactSelectHead
+              //     placeholderName="Select Role"
+              //     dynamicOptions={GetRoleList?.map((ele) => {
+              //       return {
+              //         label: ele?.roleName,
+              //         value: ele?.roleID,
+              //       };
+              //     })}
+              //     searchable={true}
+              //     respclass="col-12 roll-off"
+              //     value={Number(localData?.defaultRole)}
+              //     handleChange={handleChangeRole}
+              //     //  respclass="roll-off"
+              //     plcN="center"
+              //   />
+              // </div>
 //             </li>
 //           )}
 

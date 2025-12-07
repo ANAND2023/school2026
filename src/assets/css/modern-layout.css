@@ -277,3 +277,12 @@
   }
   .d-none-mobile { display: none !important; }
 }
+
+
+body .p-datepicker,
+body .p-component-overlay,
+body .p-dropdown-panel, 
+body .p-tooltip,
+body .p-overlaypanel {
+    z-index: 2000 !important;
+}
