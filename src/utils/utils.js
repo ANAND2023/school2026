@@ -1,4 +1,5 @@
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import { number, ROUNDOFF_VALUE } from "./constant";
 import moment from "moment";
 import { useLocalStorage } from "./hooks/useLocalStorage";
