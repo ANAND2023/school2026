@@ -262,7 +262,7 @@
   flex: 1; display: flex; flex-direction: column; min-width: 0; background-color: #f8fafc;
 }
 
-#modern-dashboard-root .md-page-content { flex: 1; overflow-y: auto; padding: 1.5rem; }
+#modern-dashboard-root .md-page-content { flex: 1; overflow-y: auto; padding: 1rem; }
 
 #modern-dashboard-root .main-footer {
     margin-left: 0 !important; border-top: 1px solid var(--border-color);
