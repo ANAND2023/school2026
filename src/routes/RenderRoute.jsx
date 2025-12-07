@@ -13,6 +13,7 @@ import {
   GetRoleListByEmployeeIDAndCentreID,
 } from "../store/reducers/common/CommonExportFunction";
 import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 function RenderRoute() {
   const { GetMenuList } = useSelector((state) => state?.CommonSlice);
   const localData = useLocalStorage("userData", "get");
@@ -291,7 +292,7 @@ function RenderRoute() {
   }, []);
   return (
     <>
-      <ToastContainer
+      {/* <ToastContainer
         autoClose={1000}
         draggable={false}
         position="top-right"
@@ -300,6 +301,10 @@ function RenderRoute() {
         closeOnClick
         rtl={false}
         pauseOnHover
+      /> */}
+        <Toaster
+        position="top-center"
+        reverseOrder={false}
       />
       <ErrorBoundary fallback={<h1>Oops-Page failed to load</h1>}>
         <Suspense fallback={<Loading />}>
