@@ -26,7 +26,12 @@
 }
 
 #modern-dashboard-root * { box-sizing: border-box; }
-#modern-dashboard-root button { background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; }
+#modern-dashboard-root button { 
+  /* background: none;  */
+  border: none; 
+  cursor: pointer; 
+  /* padding: 0;  */
+  font-family: inherit; }
 #modern-dashboard-root a { text-decoration: none; color: inherit; }
 
 /* --- SIDEBAR --- */
