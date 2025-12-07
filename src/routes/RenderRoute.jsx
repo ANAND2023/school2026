@@ -469,7 +469,8 @@ const allRoutes = {
       layout: Layout,
       path: "/opd-servicebooking",
       component: lazy(
-        () => import("@app/pages/frontOffice/OPD/OPDServiceBooking.jsx")
+        () => import("@app/components/Admission/Admission.jsx")
+        // () => import("@app/pages/frontOffice/OPD/OPDServiceBooking.jsx")
       ),
       exact: true,
     },
@@ -478,10 +479,22 @@ const allRoutes = {
       layout: Layout,
       path: "/Lab-Package-Include",
       component: lazy(
-        () => import("@app/pages/frontOffice/OPD/LabPackageInclude.jsx")
+        () => import("@app/components/Registration/Registration.jsx")
+    
+        // () => import("@app/pages/frontOffice/OPD/OPDServiceBooking.jsx")
       ),
       exact: true,
     },
+    // C:\Users\Anand\Desktop\school\school2026\src\components\Admission\Admission.jsx
+    // {
+    //   Guard: Authenticated,
+    //   layout: Layout,
+    //   path: "/Lab-Package-Include",
+    //   component: lazy(
+    //     () => import("@app/pages/frontOffice/OPD/LabPackageInclude.jsx")
+    //   ),
+    //   exact: true,
+    // },
     {
       Guard: Authenticated,
       layout: Layout,
@@ -529,15 +542,25 @@ const allRoutes = {
       exact: true,
     },
 
+    // {
+    //   Guard: Authenticated,
+    //   layout: Layout,
+    //   path: "/opd-advance",
+    //   component: lazy(
+    //     () => import("@app/pages/frontOffice/OPDAdvance/Index.jsx")
+    //   ),
+    //   exact: true,
+    // },
     {
       Guard: Authenticated,
       layout: Layout,
       path: "/opd-advance",
       component: lazy(
-        () => import("@app/pages/frontOffice/OPDAdvance/Index.jsx")
+        () => import("@app/components/Master/Classess.jsx")
       ),
       exact: true,
     },
+  
     {
       Guard: Authenticated,
       layout: Layout,
