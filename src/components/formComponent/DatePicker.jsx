@@ -131,6 +131,7 @@ function DatePicker({
           inputClassName={inputClassName}
           tabIndex={tabIndex || "-1"}
           onInput={handleManualInput}
+          appendTo={document.body} 
         />
 
         {lable && (
