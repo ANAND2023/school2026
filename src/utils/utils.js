@@ -12,13 +12,14 @@ const { pathname } = location;
 const ip = localStorage.getItem("ip");
 const userData = useLocalStorage("userData", "get");
 export const notify = (message, type = "success") => {
+  debugger
   if (type === "success") {
     // toast.success(message,{duration: 70000});
-    toast.success(message, { autoClose: 3000 });
+    toast.success(message, { autoClose: 1000 });
   } else if (type === "warn") {
-    toast.warn(message, { autoClose: 3000 });
+    toast.warn(message, { autoClose: 1000 });
   } else if (type === "error") {
-    toast.error(message, { autoClose: 3000 });
+    toast.error(message, { autoClose: 1000 });
   }
 };
 

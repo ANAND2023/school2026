@@ -53,23 +53,24 @@ function User() {
     };
 
     const handleSave = async () => {
-
+debugger
         const Payload = {
             "name": values?.Role,
             "description": values?.descripiton
         }
-        try {
-            const Response = await Rolescreaterole(Payload);
-            if (Response?.success) {
-                notify(Response?.message, "success");
-                setValues(initialData)
-                // handleBindQuestions();
-            } else {
-                notify(Response?.message, "error");
-            }
-        } catch (error) {
-            notify("Error saving reason", "error");
-        }
+        notify("Saving...", "success");
+        // try {
+        //     const Response = await Rolescreaterole(Payload);
+        //     if (Response?.success) {
+        //         notify(Response?.message, "success");
+        //         setValues(initialData)
+        //         // handleBindQuestions();
+        //     } else {
+        //         notify(Response?.message, "error");
+        //     }
+        // } catch (error) {
+        //     notify("Error saving reason", "error");
+        // }
     };
     const handleDelete = async (item) => {
 
@@ -172,7 +173,7 @@ function User() {
                             className="btn btn-sm btn-primary"
                             type="button"
                         >
-                            {t("Add")}
+                            {t("Save")}
                         </button>
                     </div>
                 </div>
