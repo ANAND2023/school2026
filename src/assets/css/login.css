@@ -1,0 +1,322 @@
+/* Import a clean font like Roboto or Open Sans */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-blue: #1e40af; /* Deep Royal Blue */
+  --light-bg: #ffffff;
+  --text-dark: #1f2937;
+  --text-gray: #6b7280;
+  --input-border: #e5e7eb;
+  --input-focus: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* --- Main Layout --- */
+.login-page-wrapper {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: var(--light-bg);
+}
+
+/* --- Left Section (Blue) --- */
+.login-left-section {
+  position: relative;
+  width: 45%;
+  background-color: var(--primary-blue);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+  overflow: hidden; /* Important for the curve */
+  color: white;
+}
+
+.brand-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.illustration-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: relative;
+  right: -50px; /* Offset slightly left */
+}
+
+.hero-image {
+  max-width: 100%;
+  height: auto;
+  animation: float 6s ease-in-out infinite;
+}
+
+.left-content-text {
+  z-index: 2;
+  margin-bottom: 60px;
+  max-width: 400px;
+}
+
+.left-content-text h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* --- The Magic Curve --- 
+   We use a large pseudo-element to create the concave white shape
+*/
+.curve-overlay {
+  position: absolute;
+  top: 0;
+  right: -150px; /* Pull it slightly off screen */
+  bottom: 0;
+  width: 300px;
+  background: var(--light-bg);
+  /* Use a complex clip-path or border-radius to shape it */
+  border-top-left-radius: 50% 100%;
+  border-bottom-left-radius: 50% 100%;
+  transform: scaleY(1.5); /* Stretch to make curve gentle */
+  z-index: 1;
+}
+
+/* --- Right Section (Form) --- */
+.login-right-section {
+  width: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally */
+  padding: 40px;
+  background-color: var(--light-bg);
+  position: relative;
+  z-index: 2;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 480px;
+  padding-left: 40px; /* Space from the curve */
+  animation: slideUp 0.8s ease-out;
+}
+
+.header-text {
+  margin-bottom: 40px;
+}
+
+.header-text h2 {
+  font-family: 'Poppins', sans-serif;
+  color: #334155;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.sub-header {
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* --- Form Elements --- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  width: 100%;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.custom-input::placeholder {
+  color: #9ca3af;
+}
+
+.custom-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Checkbox & Forgot Password */
+.form-extras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-gray);
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: var(--text-gray);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgot-link:hover {
+  color: var(--primary-blue);
+}
+
+/* Button */
+.login-btn {
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background-color: #1a3899;
+  transform: translateY(-2px);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+.login-btn:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.privacy-footer {
+  margin-top: 40px;
+  font-size: 0.85rem;
+  color: var(--text-gray);
+  line-height: 1.5;
+}
+
+.privacy-footer .links a {
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+.privacy-footer .links a:hover {
+  text-decoration: underline;
+}
+
+/* --- Animations --- */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+  .login-left-section {
+    width: 40%;
+  }
+  .login-right-section {
+    width: 60%;
+  }
+  .left-content-text h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .login-page-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .login-left-section {
+    width: 100%;
+    height: 300px; /* Short header style */
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Adjust curve for horizontal layout */
+  .curve-overlay {
+    top: auto;
+    bottom: -50px;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    border-radius: 0;
+    border-top-left-radius: 50% 100%; /* Gentle wave at bottom */
+    border-top-right-radius: 50% 100%;
+    transform: none;
+  }
+
+  .illustration-container {
+    display: none; /* Hide image on mobile to save space */
+  }
+
+  .left-content-text {
+    margin-bottom: 40px;
+  }
+
+  .left-content-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .login-right-section {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .form-container {
+    padding-left: 0;
+    max-width: 100%;
+  }
+}
