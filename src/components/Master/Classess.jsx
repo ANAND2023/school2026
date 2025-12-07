@@ -2,6 +2,7 @@ import React from 'react'
 import ClassMaster from './ClassMaster'
 import SectionMaster from './SectionMaster'
 import FeeHead from './FeeHead'
+import User from './Role'
 
 const Classess = () => {
   return (
@@ -20,9 +21,9 @@ const Classess = () => {
     <FeeHead />
   </div>
 
-  {/* <div className="col-md-6">
-    <SectionMaster />
-  </div> */}
+  <div className="col-md-6">
+    <User />
+  </div>
 </div>
 </>
   )

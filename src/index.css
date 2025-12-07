@@ -115,7 +115,7 @@
 .form-control {
   border: 1px solid #ced4da;
   /* border-radius: 4px 0px 0px 4px; */
-  height: 24px !important;
+  height: 32px !important;
   transition:
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
@@ -383,7 +383,7 @@ button {
 
 .required-fields {
   border-bottom: 1px solid red !important;
-  border-radius: 5px !important;
+  border-radius: 3px !important;
 }
 
 .required-fields-active {
@@ -396,7 +396,7 @@ button {
 
 .required-select-fields {
   border-bottom: 1px solid red !important;
-  border-radius: 5px !important;
+  border-radius: 3px !important;
 }
 
 .css-19bb58m>.required-fields {

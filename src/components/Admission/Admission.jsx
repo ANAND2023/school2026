@@ -1051,7 +1051,8 @@ function Admission() {
           <div className="col-12 text-right">
             <button
               onClick={handleSave}
-              className="btn btn-lg btn-success"
+              // className="btn btn-lg btn-success"
+                 className="btn btn-sm btn-primary"
               type="button"
             >
               {t("Admission")}

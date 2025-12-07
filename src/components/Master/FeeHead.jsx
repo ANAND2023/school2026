@@ -120,7 +120,7 @@ function FeeHead() {
                     <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
-
+   className="btn btn-sm btn-primary"
                             type="button"
                         >
                             {t("Add")}

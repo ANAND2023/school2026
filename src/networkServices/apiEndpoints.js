@@ -5,6 +5,11 @@ export const apiUrls = {
   // Auth
 
  loginAdmin: "Auth/login",
+ Rolescreaterole: "Roles/createrole",
+ Rolesremoverole: "Roles/removerole",
+ Rolesdeleterole: "Roles/deleterole",
+ Rolesassignrole: "Roles/assignrole",
+ Rolesgetroles: "Roles/getroles",
 
 
 
