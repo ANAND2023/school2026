@@ -4,42 +4,80 @@ import SectionMaster from './SectionMaster'
 import FeeHead from './FeeHead'
 import User from './Role'
 import Profile from './Profile'
+import Image from './Image'
 
 const Classess = () => {
   return (
-    <>
+        <>
    <div className="row">
   <div className="col-md-6">
     <ClassMaster />
   </div>
-
   <div className="col-md-6">
     <SectionMaster />
   </div>
-</div>
+  </div>
    <div className="row">
   <div className="col-md-6">
     <FeeHead />
   </div>
-
   <div className="col-md-6">
     <User />
   </div>
-</div>
+  </div>
    <div className="row">
   <div className="col-md-6">
     <Profile />
   </div>
-
-  {/* <div className="col-md-6">
-    <User />
-  </div> */}
-</div>
-</>
+  <div className="col-md-6">
+    <Image />
+  </div>
+  </div>
+  </>
   )
 }
 
 export default Classess
+
+
+// import React from 'react'
+// import ClassMaster from './ClassMaster'
+// import SectionMaster from './SectionMaster'
+// import FeeHead from './FeeHead'
+// import User from './Role'
+// import Profile from './Profile'
+
+// const Classess = () => {
+//   return (
+//     <>
+//    <div className="row">
+//   <div className="col-md-6">
+//     <ClassMaster />
+//   </div>
+
+//   <div className="col-md-6">
+//     <SectionMaster />
+//   </div>
+// </div>
+//    <div className="row">
+//   <div className="col-md-6">
+//     <FeeHead />
+//   </div>
+
+//   <div className="col-md-6">
+//     <User />
+//   </div>
+// </div>
+//    <div className="row">
+//   <div className="col-md-6">
+//     <Profile />
+//   </div>
+// </div>
+// </>
+//   )
+// }
+
+// export default Classess
 
 
 // import ClassMaster from "./ClassMaster";

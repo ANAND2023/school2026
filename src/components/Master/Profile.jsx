@@ -5,15 +5,10 @@ import Heading from "../UI/Heading";
 import Input from "../formComponent/Input";
 import { useTranslation } from "react-i18next";
 import Tables from "../UI/customTable";
-
-import {
-
-    bloodBankSaveData,
-
-} from "../../networkServices/blooadbankApi";
 import Modal from "../modalComponent/Modal";
 import { notify } from "../../utils/utils";
 import { Rolescreaterole, Rolesdeleterole, Rolesgetroles } from "../../networkServices/Admin";
+import ImageCaptureCrop from "../formComponent/ImageCaptureCrop";
 
 function Profile() {
     const [t] = useTranslation();
@@ -151,6 +146,18 @@ function Profile() {
                 <Heading title={t("Profile Master")} isBreadcrumb={false} />
 
                 <div className="row p-2">
+                  <div className="col-2">
+                        <div className="text-center">
+                            <label className="form-label">Student Photo</label>
+                            <ImageCaptureCrop
+                                label=""
+                                onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
+                                initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
+                                aspectRatio={1}
+                                previewSize={80}
+                            />
+                        </div>
+                    </div>
                     <Input
                         type="text"
                         className="form-control required-fields"
