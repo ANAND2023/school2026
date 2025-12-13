@@ -726,9 +726,11 @@ const MenuSidebar = () => {
     <>
       <aside className={`md-sidebar ${menuSidebarCollapsed ? 'closed' : ''}`}>
         <div className="md-sidebar-header">
-           <div className="md-logo-box">iD</div>
-           <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>itDose</div>
-           <button className="md-icon-btn d-lg-none ml-auto" onClick={() => dispatch(toggleSidebarMenu())} style={{color:'white'}}>
+           <div className="md-logo-box">DVS</div>
+           <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>Digital Vidya Saarthi</div>
+           <button className="md-icon-btn d-lg-none ml-auto"
+            onClick={() => dispatch(toggleSidebarMenu())} 
+            style={{color:'white'}}>
               <X size={20} />
            </button>
         </div>

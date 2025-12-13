@@ -190,9 +190,14 @@ function ImageCaptureCrop({
         <>
 
 
-            <div className={`d-flex flex-column align-items-center w-auto mx-auto mb-3 ${label ? 'gap-1' : ''}`}>
+            <div 
+            className={` mb-3 ${label ? 'gap-1' : ''}`}
+            // className={`d-flex flex-column align-items-center w-auto mx-auto mb-3 ${label ? 'gap-1' : ''}`}
+            >
                 {label && (
-                    <p className="small text-muted mb-1 text-center">
+                    <p
+                     className="small text-muted mb-1 ml-4"
+                     >
                         {label}
                     </p>
                 )}

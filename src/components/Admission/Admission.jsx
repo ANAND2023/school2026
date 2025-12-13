@@ -11,13 +11,13 @@ import DatePicker from "../../components/formComponent/DatePicker";
 import Tables from "../../components/UI/customTable";
 
 import {
-  
-    BinddonorBloodGroup,
+
+  BinddonorBloodGroup,
   BindQuestions,
-  
-  
+
+
   bloodBankSaveData,
- 
+
   donorBindOrganisation,
   DonorGetCity,
   DonorGetCountry,
@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { MOBILE_NUMBER_VALIDATION_REGX } from "../../utils/constant";
+import ImageCaptureCrop from "../formComponent/ImageCaptureCrop";
 
 function Admission() {
   const [t] = useTranslation();
@@ -283,8 +284,8 @@ function Admission() {
     // }
 
     try {
-      const Response = [{"label":"Test Question 1","value":"Test Answer 1"},{"label":"Test Question 2","value":"Test Answer 2"}];
-    //   const Response = await BloodBankEstablishedDonorView(Payload);
+      const Response = [{ "label": "Test Question 1", "value": "Test Answer 1" }, { "label": "Test Question 2", "value": "Test Answer 2" }];
+      //   const Response = await BloodBankEstablishedDonorView(Payload);
       // const Response = await BloodBankBindQuestions(Payload);
 
       if (Response?.success) {
@@ -585,10 +586,12 @@ function Admission() {
   }, []);
 
 
-  {
-    console.log("QuestionnaireData", QuestionnaireData)
-  }
-
+  const handleImageProcessed = (fileObject, imageFieldName) => {
+    setValues((preV) => ({
+      ...preV,
+      [imageFieldName]: fileObject, // fileObject will be a File or null
+    }));
+  };
   return (
     <>
       {handleModelData?.isOpen && (
@@ -610,27 +613,19 @@ function Admission() {
       )}
 
       <div className="card p-1">
-        <Heading title={t("Student Detail for Admission")} isBreadcrumb={false} />
-
+        <Heading title={t("Student Detail for Admission")} isBreadcrumb={true} />
         <div className="row p-2">
-          {/* <Input
-            type="text"
-            className="form-control"
-            id="donorid"
-            name="donorid"
-            value={values?.donorid ? values?.donorid : ""}
-            onChange={handleChange}
-            lable={t("Donor Id")}
-            placeholder=" "
-            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-            isUpperCase={true}
-          /> */}
-
-
-
-          <div className="col-xl-2 col-md-4 col-sm-4 col-12">
-            <div className="row d-flex">
-
+          <div className="col-2">
+            <ImageCaptureCrop
+              label="Student"
+              onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
+              initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
+              aspectRatio={1}
+              previewSize={80}
+            />
+          </div>
+          <div className="col-10">
+            <div className="row">
               <Input
                 type="text"
                 className="form-control required-fields"
@@ -640,7 +635,7 @@ function Admission() {
                 // onChange={handleChange}
                 lable={t("First_Name")}
                 placeholder=" "
-                respclass="col-5"
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                 isUpperCase={true}
                 onChange={(e) => handleCapitalLatter(e)}
               />
@@ -654,11 +649,164 @@ function Admission() {
                 value={values?.lastname || ""}
                 // onChange={handleChange}
                 lable={t("Last Name")}
-                // respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                respclass="col-7"
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+              // respclass="col-7"
+              />
+
+
+
+              <ReactSelect
+                placeholderName={t("Gender")}
+                id={"gender"}
+                searchable={true}
+                removeIsClearable={true}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                handleChange={handleSelect}
+                dynamicOptions={gender_type}
+                value={`${values?.gender?.value}`}
+                name={"gender"}
+              />
+
+
+              <DatePicker
+                id="dob"
+                name="dob"
+                placeholder={VITE_DATE_FORMAT}
+                lable={t("DOB")}
+                className="custom-calendar"
+                value={values?.dob}
+                handleChange={handleChange}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                // maxDate={new Date()}
+                maxDate={get18YearsOldDate()}
+              />
+              <ReactSelect
+                placeholderName={t("Class")}
+                id={"class"}
+                searchable={true}
+                removeIsClearable={true}
+                dynamicOptions={[
+                  { value: "1", label: "I" },
+                  { value: "2", label: "II" },
+                  { value: "3", label: "III" },
+                  { value: "4", label: "IV" },
+                  { value: "5", label: "V" },
+                  { value: "6", label: "VI" },
+                  { value: "7", label: "VII" },
+
+                ]}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                // respclass="col-6"
+                handleChange={handleSelect}
+                value={`${values?.class?.value}`}
+                name={"class"}
+              />
+              <ReactSelect
+                placeholderName={t("Section")}
+                id={"Section"}
+                searchable={true}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                removeIsClearable={true}
+                dynamicOptions={[
+                  { value: "A", label: "A" },
+                  { value: "B", label: "B" },
+                  { value: "C", label: "C" },
+                  { value: "D", label: "D" },
+
+
+                ]}
+
+
+                handleChange={handleSelect}
+                value={`${values?.Section?.value}`}
+                name={"Section"}
+              />
+              <Input
+                className="form-control required-fields"
+                type="number"
+                placeholder=""
+
+                id="contactNo"
+                name="contactNo"
+                value={values?.contactNo || ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (MOBILE_NUMBER_VALIDATION_REGX.test(value)) {
+                    setValues({ ...values, contactNo: value });
+                  }
+                }}
+                // onChange={handleChange}
+                lable={t("Contact No")}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+              />
+
+              <Input
+                type="email"
+                placeholder=""
+                className="form-control"
+                id="email"
+                name="email"
+                value={values?.email || ""}
+                onChange={handleChange}
+                lable={t("Email")}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+              />
+
+
+
+              <DatePicker
+                id="admissionDate"
+                name="admissionDate"
+                placeholder={VITE_DATE_FORMAT}
+                lable={t("Admission Date")}
+                className="custom-calendar"
+                value={values?.admissionDate}
+                handleChange={handleChange}
+                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+              // maxDate={new Date()}
               />
             </div>
           </div>
+        </div>
+        {/* <div className="row p-2">
+       
+
+          <div className="col-xl-2 col-md-4 col-sm-4 col-12">
+            <ImageCaptureCrop
+              label="ddddd"
+              onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
+              initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
+              aspectRatio={1}
+              previewSize={80}
+            />
+          </div>
+          <Input
+            type="text"
+            className="form-control required-fields"
+            id="First"
+            name="PFirstName"
+            value={values?.PFirstName ? values?.PFirstName : ""}
+            // onChange={handleChange}
+            lable={t("First_Name")}
+            placeholder=" "
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            isUpperCase={true}
+            onChange={(e) => handleCapitalLatter(e)}
+          />
+          <Input
+            type="text"
+            onChange={(e) => handleCapitalLatter(e)}
+            id="lastname"
+            placeholder=" "
+            name="lastname"
+            className="form-control required-fields"
+            value={values?.lastname || ""}
+            // onChange={handleChange}
+            lable={t("Last Name")}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+          // respclass="col-7"
+          />
+
 
 
           <ReactSelect
@@ -686,56 +834,47 @@ function Admission() {
             // maxDate={new Date()}
             maxDate={get18YearsOldDate()}
           />
+          <ReactSelect
+            placeholderName={t("Class")}
+            id={"class"}
+            searchable={true}
+            removeIsClearable={true}
+            dynamicOptions={[
+              { value: "1", label: "I" },
+              { value: "2", label: "II" },
+              { value: "3", label: "III" },
+              { value: "4", label: "IV" },
+              { value: "5", label: "V" },
+              { value: "6", label: "VI" },
+              { value: "7", label: "VII" },
+
+            ]}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            // respclass="col-6"
+            handleChange={handleSelect}
+            value={`${values?.class?.value}`}
+            name={"class"}
+          />
+          <ReactSelect
+            placeholderName={t("Section")}
+            id={"Section"}
+            searchable={true}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            removeIsClearable={true}
+            dynamicOptions={[
+              { value: "A", label: "A" },
+              { value: "B", label: "B" },
+              { value: "C", label: "C" },
+              { value: "D", label: "D" },
 
 
-          <div className="col-xl-2 col-md-4 col-sm-4 col-12">
-            <div className="row d-flex">
-              <ReactSelect
-                placeholderName={t("Class")}
-                id={"class"}
-                searchable={true}
-                removeIsClearable={true}
-                dynamicOptions={[
-                  { value: "1", label: "I" },
-                  { value: "2", label: "II" },
-                  { value: "3", label: "III" },
-                  { value: "4", label: "IV" },
-                  { value: "5", label: "V" },
-                  { value: "6", label: "VI" },
-                  { value: "7", label: "VII" },
-
-                ]}
-                // respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                respclass="col-6"
-                handleChange={handleSelect}
-                value={`${values?.class?.value}`}
-                name={"class"}
-              />
-              <ReactSelect
-                placeholderName={t("Section")}
-                id={"Section"}
-                searchable={true}
-                removeIsClearable={true}
-                dynamicOptions={[
-                  { value: "A", label: "A" },
-                  { value: "B", label: "B" },
-                  { value: "C", label: "C" },
-                  { value: "D", label: "D" },
+            ]}
 
 
-                ]}
-                respclass="col-6"
-
-                handleChange={handleSelect}
-                value={`${values?.Section?.value}`}
-                name={"Section"}
-              />
-            </div>
-          </div>
-
-
-
-
+            handleChange={handleSelect}
+            value={`${values?.Section?.value}`}
+            name={"Section"}
+          />
           <Input
             className="form-control required-fields"
             type="number"
@@ -780,7 +919,7 @@ function Admission() {
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           // maxDate={new Date()}
           />
-        </div>
+        </div> */}
 
 
         <Heading title={t("Parent Details")} isBreadcrumb={false} />
@@ -797,7 +936,7 @@ function Admission() {
           <div className="col-xl-2 col-md-4 col-sm-4 col-12">
             <div className="row d-flex">
               <ReactSelect
-                placeholderName={t("Title")}
+                placeholderName={("Title")}
                 removeIsClearable={true}
                 dynamicOptions={filterByTypes(
                   CentreWiseCache,
@@ -1052,7 +1191,7 @@ function Admission() {
             <button
               onClick={handleSave}
               // className="btn btn-lg btn-success"
-                 className="btn btn-sm btn-primary"
+              className="btn btn-sm btn-primary"
               type="button"
             >
               {t("Admission")}

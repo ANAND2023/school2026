@@ -353,7 +353,10 @@ useEffect(() => {
     <header className="md-header">
       {/* LEFT SECTION */}
       <div className="md-header-left">
-        <button className="md-icon-btn" onClick={handleToggleSidebar} title="Toggle Sidebar">
+        <button className="md-icon-btn"
+         onClick={handleToggleSidebar} 
+          // onMouseEnter={handleToggleSidebar}
+         title="Toggle Sidebar">
           <Menu size={20} />
         </button>
 

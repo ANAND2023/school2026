@@ -220,8 +220,8 @@ const ReactSelect = ({
   const customStyles = {
     control: (base, state) => ({
       ...base,
-      height: customHeight || 15,
-      minHeight: customHeight ? `${customHeight}px` : "24px !important",
+      height: customHeight || 20,
+      minHeight: customHeight ? `${customHeight}px` : "32px !important",
       width: "100%",
       display: "flex",
       alignItems: "center",

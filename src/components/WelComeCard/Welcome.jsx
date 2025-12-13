@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Img from "../../assets/image/Flat-Journalist.png";
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 import { useTranslation } from "react-i18next";
+import "./WelcomeCard.css";
 const Welcome = () => {
   const [currentDate, setCurrentDate] = useState("");
   const [greeting, setGreeting] = useState("");
@@ -83,21 +84,49 @@ const Welcome = () => {
 
   return (
     
-    <div>
-      <div className="welcome_wrp" id="welcome_wrp">
-        <div className="col-md-12 col-sm-12">
-          <div className="d-flex justify-content-between align-items-center flex-wrap">
-            <div>
-              <h2>{t(greeting)} 👋</h2>
-              <h3>{currentDate}</h3>
-              <h1>{t("Welcome Back!")} {localData?.empName?.length>25?localData?.empName?.slice(0,25)+"...":localData?.empName} </h1>
-              <p></p>
-            </div>
+    // <div>
+    //   <div className="welcome_wrp" id="welcome_wrp"
+    //   style={{background:"#4e7676"}}
+    //   >
+    //     <div className="col-md-12 col-sm-12">
+    //       <div className="d-flex justify-content-between align-items-center flex-wrap">
+    //         <div>
+    //           <h2>{t(greeting)} 👋</h2>
+    //           <h3>{currentDate}</h3>
+    //           <h1>{t("Welcome Back!")} {localData?.empName?.length>25?localData?.empName?.slice(0,25)+"...":localData?.empName} </h1>
+    //           <p></p>
+    //         </div>
 
-            <div>
-              <img src={Img} alt="" width={"137px"} />
-            </div>
-          </div>
+    //         <div>
+    //           <img src={Img} alt="" width={"137px"} />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+
+    <div className="welcome-card">
+      <div className="welcome-content">
+        <div className="welcome-text">
+          <h2 className="greeting">
+            {t(greeting)} <span className="wave">👋</span>
+          </h2>
+
+          <p className="date">{currentDate}</p>
+
+          <h1 className="welcome-title">
+            {t("Welcome Back!")},{" "}
+            <span className="username">{name}</span>
+          </h1>
+
+          <p className="subtitle">
+            We’re glad to see you again. Let’s get things done today 🚀
+          </p>
+        </div>
+
+        <div className="welcome-image">
+          <img src={Img} alt="Welcome Illustration" />
         </div>
       </div>
     </div>

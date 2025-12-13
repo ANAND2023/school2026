@@ -31,6 +31,7 @@ import Marque from "../components/UI/Marque";
 import NewsDataDashboard from "../components/modalComponent/Utils/NewsDataDashboard";
 import { useTranslation } from "react-i18next";
 import { BirthDaySVGIcon } from "../components/SvgIcons";
+import DashboardCard from "../components/UI/DashboardCard";
 Chart.register(...registerables);
 
 const Dashboard = () => {
@@ -459,7 +460,7 @@ const Dashboard = () => {
             <div className="row">
               <div className="col-md-6">
                 <Welcome />
-                <div className="d-flex flex-wrap" style={{ gap: "10px" }}>
+                {/* <div className="d-flex flex-wrap" style={{ gap: "10px" }}>
                   {headSetName?.length > 0 &&
                     headSetName?.map((head, index) => {
                       if (apiData[head?.name]?.length > 0) {
@@ -486,11 +487,12 @@ const Dashboard = () => {
                         );
                       }
                     })}
-                </div>
+                </div> */}
+                <DashboardCard/>
               </div>
               {/* graph end */}
 
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="row">
                   <div className="col-md-6">
                     <div className="birthDay-Box">
@@ -674,7 +676,7 @@ const Dashboard = () => {
                   Object.keys(apiData?.firstAPIData)?.map((item, index) => {
                     return cardDataPrint(Number(item), apiData?.firstAPIData);
                   })}
-              </div>
+              </div> */}
             </div>
           </div>
         );
@@ -684,7 +686,7 @@ const Dashboard = () => {
   return (
     <div>
       <div className="mainDashboardwrp">
-        <div
+        {/* <div
           className="card patient_registration border"
         // style={{ position: "sticky", top: "100px", zIndex: 99 }}
         >
@@ -697,7 +699,7 @@ const Dashboard = () => {
               name={"selectDate"}
               handleChange={handleReactChange}
             />
-            {/* <DatePicker
+            <DatePicker
               className="custom-calendar"
               id="fromDate"
               name="fromDate"
@@ -717,7 +719,7 @@ const Dashboard = () => {
               respclass={"col-xl-2 col-md-4 col-sm-6 col-12"}
               value={payloadData.toDate}
               handleChange={dateHandleChange}
-            /> */}
+            />
 
             {buttonsGroup.map((item, index) => (
               <div className="col-xl-1 col-md-2 col-sm-4 col-4 d-flex my-1" key={index}>
@@ -733,7 +735,7 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         <ScrollComponent viewPort={1}>
           {handleRenderDashboard(selectedButton)}
         </ScrollComponent>

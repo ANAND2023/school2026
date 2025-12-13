@@ -1,0 +1,81 @@
+.welcome-card {
+  background: linear-gradient(135deg, #4e7676, #3a5f5f);
+  border-radius: 16px;
+  padding: 28px 32px;
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.welcome-text {
+  max-width: 600px;
+}
+
+.greeting {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.wave {
+  animation: wave 1.8s infinite;
+  display: inline-block;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(15deg); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(15deg); }
+  80% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.date {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 12px;
+}
+
+.welcome-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.username {
+  color: #ffd369;
+}
+
+.subtitle {
+  font-size: 15px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.welcome-image img {
+  width: 150px;
+  max-width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcome-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .welcome-image {
+    margin-top: 20px;
+  }
+
+  .welcome-title {
+    font-size: 26px;
+  }
+}

@@ -13,16 +13,16 @@ const Image = () => {
     };
   return (
     <div>
-        <div className="text-center">
-                            <label className="form-label">Student Photo</label>
+        {/* <div className="text-center"> */}
+                            {/* <label className="form-label">Student Photo</label> */}
                             <ImageCaptureCrop
-                                label=""
+                                label="ddddd"
                                 onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
                                 initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
                                 aspectRatio={1}
                                 previewSize={80}
                             />
-                        </div>
+                        {/* </div> */}
     </div>
   )
 }

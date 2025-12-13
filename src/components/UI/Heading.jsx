@@ -66,7 +66,10 @@ function Heading({ title, onClick, secondTitle, isBreadcrumb, ReactSelectPageWis
     <>
       <div className="card card_background">
         <div className="card-header" onClick={onClick}>
-          <h4 className="card-title w-100 d-md-flex align-items-center justify-content-between">
+          <h4 
+          // className="card-title p-2 d-md-flex "
+          // className="card-title w-100 d-md-flex align-items-center justify-content-between"
+          >
 
             {isBreadcrumb ? (
               <Breadcrumb path={isSlideScreen ? title : ""} />
