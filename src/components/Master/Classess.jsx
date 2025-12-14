@@ -5,6 +5,7 @@ import FeeHead from './FeeHead'
 import User from './Role'
 import Profile from './Profile'
 import Image from './Image'
+import Permission from './Permission'
 
 const Classess = () => {
   return (
@@ -26,11 +27,13 @@ const Classess = () => {
   </div>
   </div>
    <div className="row">
-  <div className="col-md-6">
+  <div 
+  className="col-md-6"
+  >
     <Profile />
   </div>
   <div className="col-md-6">
-    <Image />
+    <Permission />
   </div>
   </div>
   </>

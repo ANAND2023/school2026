@@ -43,6 +43,8 @@ function ImageCaptureCrop({
     outputFilenamePrefix = "cropped_image",
     label,
     previewSize = 90,
+    respclass = "",
+    
 }) {
     // All state and logic hooks remain the same
     const [showWebcamModal, setShowWebcamModal] = useState(false);
@@ -191,12 +193,12 @@ function ImageCaptureCrop({
 
 
             <div 
-            className={` mb-3 ${label ? 'gap-1' : ''}`}
+            className={` mb-3 ${label ? 'gap-1' : ''} respclass=${respclass}`}
             // className={`d-flex flex-column align-items-center w-auto mx-auto mb-3 ${label ? 'gap-1' : ''}`}
             >
                 {label && (
                     <p
-                     className="small text-muted mb-1 ml-4"
+                     className="small text-muted mb-1 "
                      >
                         {label}
                     </p>

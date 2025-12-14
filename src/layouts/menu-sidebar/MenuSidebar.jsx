@@ -639,6 +639,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "@app/utils/i18n";
+import logo from "../../../public/img/DIGITALV-removebg-preview.7c847aad42c53321dc7e (1).png"
 import { toggleSidebarMenu } from "@app/store/reducers/ui";
 import { X, Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Users, Stethoscope, Settings } from 'lucide-react';
 
@@ -726,8 +727,15 @@ const MenuSidebar = () => {
     <>
       <aside className={`md-sidebar ${menuSidebarCollapsed ? 'closed' : ''}`}>
         <div className="md-sidebar-header">
-           <div className="md-logo-box">DVS</div>
-           <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>Digital Vidya Saarthi</div>
+           <div 
+          //  className="md-logo-box"
+           >
+             <img src={logo} alt="Digital Vidya Saarthi" 
+            //  className="dvs-logo"
+            style={{width:'200px'}}
+              />
+           </div>
+           {/* <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>Digital Vidya Saarthi</div> */}
            <button className="md-icon-btn d-lg-none ml-auto"
             onClick={() => dispatch(toggleSidebarMenu())} 
             style={{color:'white'}}>

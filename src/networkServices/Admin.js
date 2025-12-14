@@ -63,6 +63,7 @@ export const Rolesgetroles = async () => {
   }
 };
 
+
 export const Rolesdeleterole = async (roleId) => {
   store.dispatch(setLoading(true));
   try {
@@ -81,3 +82,67 @@ export const Rolesdeleterole = async (roleId) => {
     console.error("Error Found", error);
   }
 };
+
+
+
+
+
+
+// permission Start ...................
+
+export const Permissionscreatepermission = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.Permissionscreatepermission}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const Permissionsgetallpermissions = async () => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+    //   data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.Permissionsgetallpermissions}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const Permissionsdelete = async (roleId) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "DELETE",
+    //   data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.Permissionsdelete}?permissionId=${roleId}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+// permission End ...................

@@ -5,11 +5,25 @@ export const apiUrls = {
   // Auth
 
  loginAdmin: "Auth/login",
+
  Rolescreaterole: "Roles/createrole",
  Rolesremoverole: "Roles/removerole",
  Rolesdeleterole: "Roles/deleterole",
  Rolesassignrole: "Roles/assignrole",
  Rolesgetroles: "Roles/getroles",
+
+
+//  Permission Api Start....................
+ Permissionscreatepermission: "Permissions/createpermission",
+ Permissionsassigntorole: "Permissions/assigntorole",
+ Permissionsremovefromrole: "Permissions/removefromrole",
+ Permissionsassigntouser: "Permissions/assigntouser",
+ Permissionsremovefromuser: "Permissions/removefromuser",
+ Permissionsdelete: "Permissions/delete",
+ Permissionsgetallpermissions: "Permissions/getallpermissions",
+
+//  Permission Api End....................
+
 
 
 

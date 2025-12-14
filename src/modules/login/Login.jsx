@@ -1,7 +1,7 @@
 
 // import React, { useState } from "react";
 // import "@app/assets/css/login.css";
-// import { Link, useNavigate } from "react-router-dom";
+// import { Link, Navigate, useNavigate } from "react-router-dom";
 // import logo from "@app/assets/image/logo.png"; // Ensure path is correct
 // import { useDispatch } from "react-redux";
 // import { useFormik } from "formik";
@@ -42,8 +42,10 @@
 // try {
 //   const response=await adminlogin(paylod);
 //   if(response?.success){
-//     notify(response?.message, "success");
-//     // speakMessage(`Welcome ${response?.data?.userDetails?.empName ? response?.data?.userDetails?.empName : ""}`);  
+//     debugger
+//     notify("Login Successfully", "success");
+//     speakMessage(`Welcome ${"Login Successfully" ||""}`); 
+//           Navigate("/dashboard");
 //   }
 //   else{
 //     notify(response?.message, "error");
@@ -53,50 +55,6 @@
 // }
 // }
 
-//   // const { handleChange, values, handleSubmit, isSubmitting } = useFormik({
-//   //   initialValues: {
-//   //     userName: "",
-//   //     password: "",
-//   //     rememberMe: false, // Added to match UI
-//   //     DateTime: new Date(),
-//   //   },
-
-//   //   onSubmit: async (values) => {
-//   //     const errors = {};
-
-//   //     if (!values.userName || !values.password) {
-//   //       errors.userName = "Both fields are required";
-//   //       notify(errors.userName, "error");
-//   //     } else if (values.userName.length < 3) {
-//   //       errors.userName = "At least 3 characters are required";
-//   //       notify(errors.userName, "error");
-//   //     }
-
-//   //     if (Object.keys(errors).length > 0) return;
-
-//   //     try {
-//   //       let loginData = await dispatch(signInAction(values));
-
-//   //       if (!loginData?.payload?.success) {
-//   //         notify(loginData?.payload?.message, "error");
-//   //         return;
-//   //       }
-
-//   //       if (loginData?.payload?.data?.userDetails?.themeName) {
-//   //         useLocalStorage("theme", "set", loginData?.payload?.data?.userDetails?.themeName);
-//   //       } else {
-//   //         useLocalStorage("theme", "set", "default_theme");
-//   //       }
-
-//   //       if (loginData?.payload?.success) {
-//   //         speakMessage(`Welcome ${loginData?.payload?.data?.userDetails?.empName || ""}`);
-//   //         navigate("/dashboard");
-//   //       }
-//   //     } catch (error) {
-//   //       notify(error?.message, "error");
-//   //     }
-//   //   },
-//   // });
 
 //   return (
 //     <div className="login-page-wrapper">

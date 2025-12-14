@@ -146,18 +146,18 @@ function Profile() {
                 <Heading title={t("Profile Master")} isBreadcrumb={false} />
 
                 <div className="row p-2">
-                  <div className="col-2">
-                        <div className="text-center">
-                            <label className="form-label">Student Photo</label>
+                  {/* <div className="col-2"> */}
+                        {/* <div className="text-center"> */}
+                            {/* <label className="form-label">Student Photo</label> */}
                             <ImageCaptureCrop
-                                label=""
+                                label="User Photo"
                                 onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
                                 initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
                                 aspectRatio={1}
                                 previewSize={80}
                             />
-                        </div>
-                    </div>
+                        {/* </div> */}
+                    {/* </div> */}
                     <Input
                         type="text"
                         className="form-control required-fields"
@@ -301,6 +301,48 @@ function Profile() {
                         isUpperCase={true}
                         onChange={(e) => handleCapitalLatter(e)}
                     />
+                    <Input
+                        type="email"
+                        className="form-control required-fields"
+                        id="schoolCode"
+                        name="schoolCode"
+                        value={values?.schoolCode ? values?.schoolCode : ""}
+                        // onChange={handleChange}
+                        lable={t("School Code")}
+                        placeholder=" "
+                        respclass="col-xl-2 col-md-3 col-sm-4 col-12"
+                        isUpperCase={true}
+                        onChange={(e) => handleCapitalLatter(e)}
+                    />
+                    <Input
+                        type="email"
+                        className="form-control required-fields"
+                        id="regNo"
+                        name="regNo"
+                        value={values?.regNo ? values?.regNo : ""}
+                        // onChange={handleChange}
+                        lable={t("School regNo")}
+                        placeholder=" "
+                        respclass="col-xl-2 col-md-3 col-sm-4 col-12"
+                        isUpperCase={true}
+                        onChange={(e) => handleCapitalLatter(e)}
+                    />
+                      <ImageCaptureCrop
+                                label="School Logo"
+                                onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
+                                initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
+                                aspectRatio={1}
+                                previewSize={80}
+                                 respclass="col-xl-3 col-md-2 col-sm-4 col-12"
+                            />
+                             <ImageCaptureCrop
+                                label="Principal Signature"
+                                onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
+                                initialImageUrl={typeof values.studentPhoto === 'string' ? values.studentPhoto : null}
+                                aspectRatio={1}
+                                previewSize={80}
+                                 respclass="col-xl-3 col-md-2 col-sm-4 col-12"
+                            />
 
                     <div className="col-12 text-right">
                         <button
@@ -312,7 +354,7 @@ function Profile() {
                         </button>
                     </div>
                 </div>
-                <Tables
+                {/* <Tables
                     thead={[{ name: "Roles", }, { name: "descripiton" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
@@ -324,7 +366,7 @@ function Profile() {
                             </>,
                         }))}
 
-                />
+                /> */}
             </div>
         </>
     );

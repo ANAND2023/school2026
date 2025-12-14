@@ -8,26 +8,27 @@ import Tables from "../UI/customTable";
 
 import Modal from "../modalComponent/Modal";
 import { notify } from "../../utils/utils";
-import { Rolescreaterole, Rolesdeleterole, Rolesgetroles } from "../../networkServices/Admin";
+import { Permissionscreatepermission, Permissionsdelete, Permissionsgetallpermissions } from "../../networkServices/Admin";
 
-function User() {
+function Permission() {
     const [t] = useTranslation(); const initialData = {
-        Name: "",
+        Role: "",
         descripiton: "Testing"
     }
+    const [isEdit, setIsEdit] = useState(false);
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState(
         [
             {
-                Name: "Admission",
+                Role: "Admission",
                 descripiton: "Testing"
             },
             {
-                Name: "Registration",
+                Role: "Registration",
                 descripiton: "Testing"
             },
             {
-                Name: "Class",
+                Role: "Class",
                 descripiton: "Testing"
             },
         ]
@@ -48,19 +49,19 @@ function User() {
     };
 
     const handleSave = async () => {
-debugger
+
+
         const Payload = {
-            "name": values?.Name,
+            "name": values?.Role,
             "description": values?.descripiton
         }
-       
+      
         try {
-            const Response = await Rolescreaterole(Payload);
+            const Response = await Permissionscreatepermission(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-                // handleBindQuestions();
-                getData()
+               
             } else {
                 notify(Response?.message, "error");
             }
@@ -72,11 +73,10 @@ debugger
 
 
         try {
-            const Response = await Rolesdeleterole(item?.ID);
+            const Response = await Permissionsdelete(item?.ID);
             if (Response?.success) {
                 notify(Response?.message, "success");
-                // setValues(initialData)
-                // handleBindQuestions();
+                
                 getData()
             } else {
                 notify(Response?.message, "error");
@@ -85,27 +85,39 @@ debugger
             notify("Error saving reason", "error");
         }
     };
+    const handleUpdate = async (item) => {
+        setIsEdit(true);
+setValues({ Role: item?.Role, descripiton: item?.descripiton })
+
+        // try {
+        //     const Response = await Permissionsdelete(item?.ID);
+        //     if (Response?.success) {
+        //         notify(Response?.message, "success");
+                
+        //         getData()
+        //     } else {
+        //         notify(Response?.message, "error");
+        //     }
+        // } catch (error) {
+        //     notify("Error saving reason", "error");
+        // }
+    };
     const getData = async () => {
 
         try {
-            const response = await Rolesgetroles();
+            const response = await Permissionsgetallpermissions();
             if (response?.success) {
-               
+            //    setTableData(response?.data)
             } else {
                 notify(response?.message, "error");
-                    
+                    //  setTableData([])
             }
         } catch (error) {
             notify("Error saving reason", "error");
+            // setTableData([])
         }
     };
-    const handleCapitalLatter = (e) => {
-
-        let event = { ...e }
-        event.target.value = event.target.value.toUpperCase()
-        handleChange(e)
-
-    }
+   
     useEffect(() => {
         getData()
     }, [])
@@ -130,21 +142,21 @@ debugger
             )}
 
             <div className="card p-1">
-                <Heading title={t("Role Master")} isBreadcrumb={false} />
+                <Heading title={t("Permission Master")} isBreadcrumb={false} />
 
                 <div className="row p-2">
                     <Input
                         type="text"
                         className="form-control required-fields"
-                        id="Name"
-                        name="Name"
-                        value={values?.Name ? values?.Name : ""}
+                        id="Role"
+                        name="Role"
+                        value={values?.Role ? values?.Role : ""}
                         // onChange={handleChange}
-                        lable={t("Name")}
+                        lable={t("Role ")}
                         placeholder=" "
                         respclass="col-5"
                         isUpperCase={true}
-                        onChange={(e) => handleCapitalLatter(e)}
+                        onChange={(e) => handleChange(e)}
                     />
                     <Input
                         type="text"
@@ -157,10 +169,27 @@ debugger
                         placeholder=" "
                         respclass="col-5"
                         isUpperCase={true}
-                        onChange={(e) => handleCapitalLatter(e)}
+                        onChange={(e) => handleChange(e)}
                     />
 
-                    {/* <div className="col-12 text-right"> */}
+                   
+                    {
+                        isEdit ?<div className="col-12 text-right mt-2">
+                             <button
+                            // onClick={handleSave}
+                            className="btn btn-sm btn-primary"
+                            type="button"
+                        >
+                            {t("Update")}
+                        </button>
+                        <button
+                            onClick={() => { setIsEdit(false); setValues(initialData); }}
+                            className="btn btn-sm btn-secondary"
+                            type="button"
+                        >
+                            {t("Cancel Edit")}
+                        </button>
+                    </div>: <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
@@ -168,16 +197,17 @@ debugger
                         >
                             {t("Save")}
                         </button>
-                    {/* </div> */}
+                    </div>
+                    }
                 </div>
                 <Tables
                     thead={[{ name: "Roles", }, { name: "descripiton" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            Name: item.Name,
+                            Role: item.Role,
                             descripiton: item.descripiton,
                             action: <>
-                                <i className="fa fa-edit mx-2" style={{ cursor: "pointer" }} title="Edit" onClick={() => setValues({ Name: item?.Name, descripiton: item?.descripiton })}></i>
+                                <i className="fa fa-edit mx-2" style={{ cursor: "pointer" }} title="Edit" onClick={() => handleUpdate()}></i>
                                 <i className="fa fa-trash mx-2" style={{ cursor: "pointer" }} title="Delete" onClick={() => handleDelete(item)}></i>
                             </>,
                         }))}
@@ -188,4 +218,4 @@ debugger
     );
 }
 
-export default User;
+export default Permission;
