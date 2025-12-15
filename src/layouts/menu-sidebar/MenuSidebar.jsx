@@ -641,7 +641,67 @@ import { useTranslation } from "react-i18next";
 import i18n from "@app/utils/i18n";
 import logo from "../../../public/img/DIGITALV-removebg-preview.7c847aad42c53321dc7e (1).png"
 import { toggleSidebarMenu } from "@app/store/reducers/ui";
-import { X, Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Users, Stethoscope, Settings } from 'lucide-react';
+import { X, Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Users, Stethoscope, Settings, Palette } from 'lucide-react';
+
+// Theme configurations
+const THEMES = {
+  dark: {
+    name: 'Dark',
+    sidebarBg: '#0f172a',
+    sidebarHeaderBg: '#020617',
+    sidebarText: '#94a3b8',
+    sidebarTextHover: '#ffffff',
+    sidebarActiveGradient: 'linear-gradient(90deg, rgba(37,99,235,0.15) 0%, transparent 100%)',
+    sidebarGroupHover: 'rgba(255,255,255,0.05)',
+    sidebarChildrenBg: 'rgba(0,0,0,0.2)',
+    searchBg: '#1e293b',
+    searchBorder: '#334155',
+    primary: '#2563eb',
+    activeBorder: '#2563eb'
+  },
+  light: {
+    name: 'Light',
+    sidebarBg: '#ffffff',
+    sidebarHeaderBg: '#f8fafc',
+    sidebarText: '#64748b',
+    sidebarTextHover: '#1e293b',
+    sidebarActiveGradient: 'linear-gradient(90deg, rgba(37,99,235,0.1) 0%, transparent 100%)',
+    sidebarGroupHover: '#f1f5f9',
+    sidebarChildrenBg: '#f8fafc',
+    searchBg: '#f1f5f9',
+    searchBorder: '#e2e8f0',
+    primary: '#2563eb',
+    activeBorder: '#2563eb'
+  },
+  purple: {
+    name: 'Purple',
+    sidebarBg: '#1e1b4b',
+    sidebarHeaderBg: '#0f0a2e',
+    sidebarText: '#a78bfa',
+    sidebarTextHover: '#ffffff',
+    sidebarActiveGradient: 'linear-gradient(90deg, rgba(139,92,246,0.15) 0%, transparent 100%)',
+    sidebarGroupHover: 'rgba(167,139,250,0.1)',
+    sidebarChildrenBg: 'rgba(0,0,0,0.2)',
+    searchBg: '#312e81',
+    searchBorder: '#4c1d95',
+    primary: '#8b5cf6',
+    activeBorder: '#8b5cf6'
+  },
+  green: {
+    name: 'Green',
+    sidebarBg: '#064e3b',
+    sidebarHeaderBg: '#022c22',
+    sidebarText: '#6ee7b7',
+    sidebarTextHover: '#ffffff',
+    sidebarActiveGradient: 'linear-gradient(90deg, rgba(16,185,129,0.15) 0%, transparent 100%)',
+    sidebarGroupHover: 'rgba(110,231,183,0.1)',
+    sidebarChildrenBg: 'rgba(0,0,0,0.2)',
+    searchBg: '#065f46',
+    searchBorder: '#047857',
+    primary: '#10b981',
+    activeBorder: '#10b981'
+  }
+};
 
 // Static Menu Definition
 export const MENU = {
@@ -669,9 +729,21 @@ const MenuSidebar = () => {
   
   const [query, setQuery] = useState("");
   const [menuData, setMenuData] = useState([]);
+  const [theme, setTheme] = useState('light');
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
   
   // State to track expanded menu groups (by menuName)
   const [expandedMenus, setExpandedMenus] = useState({});
+
+  const currentTheme = THEMES[theme];
+
+  useEffect(() => {
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('sidebarTheme');
+    if (savedTheme && THEMES[savedTheme]) {
+      setTheme(savedTheme);
+    }
+  }, []);
 
   useEffect(() => {
     // Combine Static and Dynamic Menu Data
@@ -686,8 +758,6 @@ const MenuSidebar = () => {
       const matchingChildren = category.children?.filter(child => 
         child.childrenName?.toLowerCase().includes(query.toLowerCase())
       );
-      // If children match, keep the category. 
-      // Also, if searching, you might want to auto-expand, but we'll stick to manual toggle for now unless requested.
       if (matchingChildren?.length > 0) return { ...category, children: matchingChildren };
       return null;
     }).filter(Boolean);
@@ -707,7 +777,7 @@ const MenuSidebar = () => {
   const handleToggleGroup = (menuName) => {
     setExpandedMenus(prev => ({
       ...prev,
-      [menuName]: !prev[menuName] // Toggle current, keep others as is
+      [menuName]: !prev[menuName]
     }));
   };
 
@@ -715,6 +785,12 @@ const MenuSidebar = () => {
      if (screenSize === 'xs' || screenSize === 'sm') {
          dispatch(toggleSidebarMenu());
      }
+  };
+
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('sidebarTheme', newTheme);
+    setShowThemeMenu(false);
   };
 
   const getIcon = (iconClass) => {
@@ -725,70 +801,119 @@ const MenuSidebar = () => {
 
   return (
     <>
-      <aside className={`md-sidebar ${menuSidebarCollapsed ? 'closed' : ''}`}>
-        <div className="md-sidebar-header">
-           <div 
-          //  className="md-logo-box"
-           >
-             <img src={logo} alt="Digital Vidya Saarthi" 
-            //  className="dvs-logo"
-            style={{width:'200px'}}
-              />
+      <aside 
+        className={`md-sidebar ${menuSidebarCollapsed ? 'closed' : ''}`}
+        style={{
+          backgroundColor: currentTheme.sidebarBg,
+          borderRight: `1px solid ${currentTheme.searchBorder}`
+        }}
+      >
+        <div 
+          className="md-sidebar-header"
+          style={{
+            backgroundColor: currentTheme.sidebarHeaderBg,
+            borderBottom: `1px solid ${currentTheme.searchBorder}`
+          }}
+        >
+           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+             <div style={{
+               width: '32px',
+               height: '32px',
+               background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.activeBorder})`,
+               borderRadius: '8px',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+               fontWeight: 'bold',
+               color: 'white',
+               fontSize: '1rem'
+             }}>
+               D
+             </div>
+             <span style={{ 
+               fontSize: '1.1rem', 
+               fontWeight: '700',
+               color: currentTheme.sidebarTextHover
+             }}>
+               Digital Vidya
+             </span>
            </div>
-           {/* <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>Digital Vidya Saarthi</div> */}
-           <button className="md-icon-btn d-lg-none ml-auto"
-            onClick={() => dispatch(toggleSidebarMenu())} 
-            style={{color:'white'}}>
+           <button 
+             className="md-icon-btn d-lg-none ml-auto"
+             onClick={() => dispatch(toggleSidebarMenu())} 
+             style={{color: currentTheme.sidebarTextHover}}
+           >
               <X size={20} />
            </button>
         </div>
 
         <div style={{ padding: '1rem 1rem 0 1rem' }}>
-          <div style={{ position: 'relative', backgroundColor: '#1e293b', borderRadius: '8px', border: '1px solid #334155' }}>
-             <Search size={14} style={{ position: 'absolute', left: '10px', top: '10px', color: '#64748b' }}/>
+          <div style={{ 
+            position: 'relative', 
+            backgroundColor: currentTheme.searchBg, 
+            borderRadius: '8px', 
+            border: `1px solid ${currentTheme.searchBorder}` 
+          }}>
+             <Search size={14} style={{ 
+               position: 'absolute', 
+               left: '10px', 
+               top: '10px', 
+               color: currentTheme.sidebarText 
+             }}/>
              <input 
                 type="text" 
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search..."
                 style={{
-                  width: '100%', backgroundColor: 'transparent', border: 'none',
-                  padding: '8px 8px 8px 32px', color: 'white', fontSize: '0.85rem', outline: 'none'
+                  width: '100%', 
+                  backgroundColor: 'transparent', 
+                  border: 'none',
+                  padding: '8px 8px 8px 32px', 
+                  color: currentTheme.sidebarTextHover, 
+                  fontSize: '0.85rem', 
+                  outline: 'none'
                 }}
              />
           </div>
         </div>
 
         <div className="md-sidebar-content">
-          {/* Loop through the filtered data directly since we flattened it in useEffect or use raw keys logic */}
-          {/* Note: In previous examples we assumed an object with keys. If GetMenuList is array, we map directly. 
-              If using the keys structure (commonComponent, frontOffice), we map keys first. 
-              Assuming 'menuData' is the flattened array from useEffect above.
-          */}
-          
+        
           {menuData.map((group, index) => {
-             // Handle grouping if your data is nested in objects like {common:[], front:[]}
-             // If menuData is already an array of groups (e.g. Registration, OPD), we just render them.
-             
+           
              if (!group) return null;
              
              const isExpanded = !!expandedMenus[group.menuName];
              const MainIcon = getIcon(group.icon);
 
-             // If query is active, only show if it exists in filtered list
              if (query && !filteredMenu.find(m => m?.menuName === group.menuName)) return null;
 
-             // Use the filtered children if searching, else all children
              const childrenToRender = query 
                 ? (filteredMenu.find(m => m?.menuName === group.menuName)?.children || [])
                 : group.children;
 
              return (
                <div key={index} className="md-menu-group">
-                 {/* Clickable Header for the Group */}
                  <div 
                     className={`md-nav-group-header ${isExpanded ? 'active' : ''}`} 
                     onClick={() => handleToggleGroup(group.menuName)}
+                    style={{
+                      color: isExpanded ? currentTheme.primary : currentTheme.sidebarText,
+                      backgroundColor: isExpanded ? currentTheme.sidebarGroupHover : 'transparent'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isExpanded) {
+                        e.currentTarget.style.backgroundColor = currentTheme.sidebarGroupHover;
+                        e.currentTarget.style.color = currentTheme.sidebarTextHover;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isExpanded) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = currentTheme.sidebarText;
+                      }
+                    }}
                  >
                     <div className="flex items-center gap-3">
                         <MainIcon size={16} className="md-group-icon" />
@@ -797,8 +922,12 @@ const MenuSidebar = () => {
                     {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                  </div>
 
-                 {/* Collapsible Children Container */}
-                 <div className={`md-nav-children ${isExpanded ? 'expanded' : ''}`}>
+                 <div 
+                   className={`md-nav-children ${isExpanded ? 'expanded' : ''}`}
+                   style={{
+                     backgroundColor: currentTheme.sidebarChildrenBg
+                   }}
+                 >
                    {childrenToRender?.map((child, cIndex) => {
                       const ChildIcon = getIcon(child.icon);
                       const isActive = location.pathname === (child.url || child.path);
@@ -810,9 +939,37 @@ const MenuSidebar = () => {
                           state={{ data: child.breadcrumb }}
                           className={`md-nav-item ${isActive ? 'active' : ''}`}
                           onClick={handleCloseMobile}
+                          style={{
+                            color: isActive ? currentTheme.sidebarTextHover : currentTheme.sidebarText,
+                            borderLeftColor: isActive ? currentTheme.activeBorder : 'transparent',
+                            background: isActive ? currentTheme.sidebarActiveGradient : 'transparent'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isActive) {
+                              e.currentTarget.style.color = currentTheme.sidebarTextHover;
+                              e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isActive) {
+                              e.currentTarget.style.color = currentTheme.sidebarText;
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            }
+                          }}
                         >
                            <div className="md-nav-icon">
-                              {ChildIcon === FileText ? <div className="md-dot"></div> : <ChildIcon size={16} />}
+                              {ChildIcon === FileText ? (
+                                <div 
+                                  className="md-dot"
+                                  style={{
+                                    backgroundColor: isActive ? currentTheme.primary : 'currentColor',
+                                    opacity: isActive ? 1 : 0.5,
+                                    boxShadow: isActive ? `0 0 5px ${currentTheme.primary}` : 'none'
+                                  }}
+                                ></div>
+                              ) : (
+                                <ChildIcon size={16} />
+                              )}
                            </div>
                            <span className="md-nav-text">{t(child.childrenName || child.name)}</span>
                         </NavLink>
@@ -822,6 +979,102 @@ const MenuSidebar = () => {
                </div>
              );
           })}
+        </div>
+
+        {/* Theme Switcher at Bottom */}
+        <div style={{
+          padding: '1rem',
+          borderTop: `1px solid ${currentTheme.searchBorder}`,
+          minWidth: '280px'
+        }}>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setShowThemeMenu(!showThemeMenu)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '0.75rem 1rem',
+                backgroundColor: currentTheme.searchBg,
+                border: `1px solid ${currentTheme.searchBorder}`,
+                borderRadius: '8px',
+                color: currentTheme.sidebarTextHover,
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                fontWeight: '600',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = currentTheme.sidebarGroupHover;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = currentTheme.searchBg;
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Palette size={16} />
+                <span>{currentTheme.name} Theme</span>
+              </div>
+              <ChevronDown size={14} />
+            </button>
+
+            {showThemeMenu && (
+              <div style={{
+                position: 'absolute',
+                bottom: '100%',
+                left: 0,
+                right: 0,
+                marginBottom: '8px',
+                backgroundColor: currentTheme.sidebarBg,
+                border: `1px solid ${currentTheme.searchBorder}`,
+                borderRadius: '8px',
+                overflow: 'hidden',
+                boxShadow: '0 -4px 12px rgba(0,0,0,0.15)',
+                zIndex: 1000
+              }}>
+                {Object.entries(THEMES).map(([key, t]) => (
+                  <button
+                    key={key}
+                    onClick={() => handleThemeChange(key)}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      backgroundColor: theme === key ? currentTheme.sidebarGroupHover : 'transparent',
+                      border: 'none',
+                      color: theme === key ? currentTheme.primary : currentTheme.sidebarText,
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.85rem',
+                      fontWeight: theme === key ? '600' : '400',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = currentTheme.sidebarGroupHover;
+                      e.currentTarget.style.color = currentTheme.sidebarTextHover;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (theme !== key) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = currentTheme.sidebarText;
+                      }
+                    }}
+                  >
+                    <div style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      backgroundColor: t.primary
+                    }}></div>
+                    {t.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </aside>
       
