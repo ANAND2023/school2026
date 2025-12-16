@@ -46,12 +46,12 @@ export default function DashboardCharts() {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Blue Data",
+        label: "Income",
         data: [45, 30, 60, 40, 55],
         backgroundColor: "#3b82f6",
       },
       {
-        label: "Red Data",
+        label: "Expense",
         data: [35, 50, 45, 55, 40],
         backgroundColor: "#ef4444",
       },
@@ -83,8 +83,12 @@ export default function DashboardCharts() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
+    <div
+     style={styles.container}
+     >
+      <div
+       style={styles.card}
+       >
         
         <Bar data={barData} options={commonOptions} />
       </div>
@@ -101,7 +105,7 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
     gap: "20px",
-    background: "#020617",
+    // background: "#020617",
     padding: "20px",
     height: "100vh",
   },

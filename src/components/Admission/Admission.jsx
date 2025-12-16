@@ -613,7 +613,7 @@ function Admission() {
       )}
 
       <div className="card p-1">
-        <Heading title={t("Student Detail for Admission")} isBreadcrumb={true} />
+        <Heading title={t("Student Detail for Admission")} isBreadcrumb={true} secondTitle={"dsdsds"} />
         <div className="row p-2">
           <div className="col-2">
             <ImageCaptureCrop

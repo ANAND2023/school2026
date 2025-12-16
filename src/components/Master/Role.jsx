@@ -9,6 +9,7 @@ import Tables from "../UI/customTable";
 import Modal from "../modalComponent/Modal";
 import { notify } from "../../utils/utils";
 import { Rolescreaterole, Rolesdeleterole, Rolesgetroles } from "../../networkServices/Admin";
+import { Pencil, Trash2 } from "lucide-react";
 
 function User() {
     const [t] = useTranslation(); const initialData = {
@@ -177,9 +178,27 @@ debugger
                             Name: item.Name,
                             descripiton: item.descripiton,
                             action: <>
-                                <i className="fa fa-edit mx-2" style={{ cursor: "pointer" }} title="Edit" onClick={() => setValues({ Name: item?.Name, descripiton: item?.descripiton })}></i>
-                                <i className="fa fa-trash mx-2" style={{ cursor: "pointer" }} title="Delete" onClick={() => handleDelete(item)}></i>
-                            </>,
+                            <div className="d-flex align-items-center justify-content-center gap-2">
+  <button
+    // onClick={() => handleEdit(item.id)}
+    onClick={() => setValues({ Name: item?.Name, descripiton: item?.descripiton })}
+    className="btn d-flex align-items-center justify-content-center p-2 text-primary shadow-sm btn-edit"
+    title="Edit"
+  >
+    <Pencil size={16} className="icon-hover" />
+  </button>
+
+  <button
+    // onClick={() => handleDelete(item.id)}
+    onClick={() => handleDelete(item)}
+    className="btn d-flex align-items-center justify-content-center p-2 text-danger shadow-sm btn-delete"
+    title="Delete"
+  >
+    <Trash2 size={16} className="icon-hover" />
+  </button>
+</div>
+
+                               </>,
                         }))}
 
                 />

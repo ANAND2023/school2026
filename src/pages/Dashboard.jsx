@@ -32,6 +32,7 @@ import NewsDataDashboard from "../components/modalComponent/Utils/NewsDataDashbo
 import { useTranslation } from "react-i18next";
 import { BirthDaySVGIcon } from "../components/SvgIcons";
 import DashboardCard from "../components/UI/DashboardCard";
+import DashboardCharts from "../components/DashboardUI/DashboardCharts";
 Chart.register(...registerables);
 
 const Dashboard = () => {
@@ -488,7 +489,8 @@ const Dashboard = () => {
                       }
                     })}
                 </div> */}
-                <DashboardCard/>
+                {/* <DashboardCard/> */}
+              
               </div>
               {/* graph end */}
 
@@ -677,6 +679,9 @@ const Dashboard = () => {
                     return cardDataPrint(Number(item), apiData?.firstAPIData);
                   })}
               </div> */}
+            </div>
+            <div className="row mt-3">
+                <DashboardCharts/>
             </div>
           </div>
         );
