@@ -49,12 +49,12 @@ function User() {
     };
 
     const handleSave = async () => {
-debugger
+        debugger
         const Payload = {
             "name": values?.Name,
             "description": values?.descripiton
         }
-       
+
         try {
             const Response = await Rolescreaterole(Payload);
             if (Response?.success) {
@@ -91,10 +91,10 @@ debugger
         try {
             const response = await Rolesgetroles();
             if (response?.success) {
-               
+
             } else {
                 notify(response?.message, "error");
-                    
+
             }
         } catch (error) {
             notify("Error saving reason", "error");
@@ -162,13 +162,14 @@ debugger
                     />
 
                     {/* <div className="col-12 text-right"> */}
-                        <button
-                            onClick={handleSave}
-                            className="btn btn-sm btn-primary"
-                            type="button"
-                        >
-                            {t("Save")}
-                        </button>
+                    <button
+                        onClick={handleSave}
+                        // className="btn btn-sm btn-primary"
+                        className="btn btn-outline-success"
+                        type="button"
+                    >
+                        {t("Save")}
+                    </button>
                     {/* </div> */}
                 </div>
                 <Tables
@@ -178,27 +179,30 @@ debugger
                             Name: item.Name,
                             descripiton: item.descripiton,
                             action: <>
-                            <div className="d-flex align-items-center justify-content-center gap-2">
-  <button
-    // onClick={() => handleEdit(item.id)}
-    onClick={() => setValues({ Name: item?.Name, descripiton: item?.descripiton })}
-    className="btn d-flex align-items-center justify-content-center p-2 text-primary shadow-sm btn-edit"
-    title="Edit"
-  >
-    <Pencil size={16} className="icon-hover" />
-  </button>
 
-  <button
-    // onClick={() => handleDelete(item.id)}
-    onClick={() => handleDelete(item)}
-    className="btn d-flex align-items-center justify-content-center p-2 text-danger shadow-sm btn-delete"
-    title="Delete"
-  >
-    <Trash2 size={16} className="icon-hover" />
-  </button>
-</div>
+                                <div 
+                                // className="d-flex align-items-center justify-content-center gap-2"
+                                className="row gap-2"
+                                >
+                                    <button
+                                        id="editBtn"
+                                        onclick="handleEdit(item.id)"
+                                        title="Edit"
+                                        className="d-flex align-items-center justify-content-center"
+                                    >
+                                        <i class=" bi-pencil-square"></i>
+                                    </button>
 
-                               </>,
+                                    <button
+                                        id="deleteBtn"
+                                        onclick="handleDelete(item.id)"
+                                        title="Delete"
+                                    >
+                                        <i class="bi-trash3"></i>
+                                    </button>
+                                </div>
+
+                            </>,
                         }))}
 
                 />

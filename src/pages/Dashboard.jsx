@@ -33,6 +33,7 @@ import { useTranslation } from "react-i18next";
 import { BirthDaySVGIcon } from "../components/SvgIcons";
 import DashboardCard from "../components/UI/DashboardCard";
 import DashboardCharts from "../components/DashboardUI/DashboardCharts";
+import DashBoardCard from "../components/DashboardUI/DashBoardCard";
 Chart.register(...registerables);
 
 const Dashboard = () => {
@@ -457,9 +458,17 @@ const Dashboard = () => {
         );
       default:
         return (
-          <div className="container-fluid">
+          <div 
+          className="container-fluid"
+          >
+            <div className="row"
+            // style={{backgroundColor: "#472525ff"}}
+            >
+              <DashBoardCard/>
+            </div>
             <div className="row">
               <div className="col-md-6">
+
                 <Welcome />
                 {/* <div className="d-flex flex-wrap" style={{ gap: "10px" }}>
                   {headSetName?.length > 0 &&
@@ -683,6 +692,7 @@ const Dashboard = () => {
             <div className="row mt-3">
                 <DashboardCharts/>
             </div>
+           
           </div>
         );
     }
@@ -697,7 +707,7 @@ const Dashboard = () => {
         >
           <div className="row g-4 m-2">
             <ReactSelect
-              respclass={"col-xl-3 col-md-6 col-sm-12 col-12"}
+              respclassName={"col-xl-3 col-md-6 col-sm-12 col-12"}
               removeIsClearable={true}
               dynamicOptions={DATE_REACTSELECT_OPTION}
               value={payloadData?.selectDate}
@@ -710,7 +720,7 @@ const Dashboard = () => {
               name="fromDate"
               lable={"From Date"}
               placeholder={VITE_DATE_FORMAT}
-              respclass={"col-xl-2 col-md-4 col-sm-6 col-12"}
+              respclassName={"col-xl-2 col-md-4 col-sm-6 col-12"}
               value={payloadData.fromDate}
               handleChange={dateHandleChange}
             />
@@ -721,7 +731,7 @@ const Dashboard = () => {
               name="toDate"
               lable={"To Date"}
               placeholder={VITE_DATE_FORMAT}
-              respclass={"col-xl-2 col-md-4 col-sm-6 col-12"}
+              respclassName={"col-xl-2 col-md-4 col-sm-6 col-12"}
               value={payloadData.toDate}
               handleChange={dateHandleChange}
             />
