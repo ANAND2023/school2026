@@ -17,6 +17,7 @@ import CreateTax from './FeeMaster/CreateTax'
 const AcademicMaster = () => {
   return (
     <div>
+      
       <CreateAcademicYear/>
       <ClassMaster/>
       <SectionMaster/>

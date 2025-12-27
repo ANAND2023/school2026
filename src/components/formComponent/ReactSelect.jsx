@@ -335,9 +335,49 @@ const ReactSelect = ({
   //   setMenuIsOpen(false);
   // };
 
-  let theme = useLocalStorage("theme", "get");
+  let themee = useLocalStorage("theme", "get");
 
 
+  
+    const [theme, setTheme] = useState('dark');
+  
+    useEffect(() => {
+      // Load saved theme from localStorage
+      const savedTheme = localStorage.getItem('sidebarTheme');
+      if (savedTheme && THEMES[savedTheme]) {
+        setTheme(savedTheme);
+      }
+    }, []);
+    const THEMES = {
+      dark: { name: 'Dark', primary: '#2563eb', headerBg: 'white' },
+      light: { name: 'Light', primary: '#2563eb', headerBg: 'white' },
+      purple: { name: 'Purple', primary: '#8b5cf6', headerBg: 'white' },
+      green: { name: 'Green', primary: '#10b981', headerBg: 'white' }
+    };
+  
+  
+    useEffect(() => {
+      const handleStorageChange = () => {
+        const savedTheme = localStorage.getItem('sidebarTheme');
+        if (savedTheme && THEMES[savedTheme]) {
+          setTheme(savedTheme);
+        }
+      };
+  
+      window.addEventListener('storage', handleStorageChange);
+  
+      // Poll for changes (since storage event doesn't fire in same tab)
+      const interval = setInterval(() => {
+        handleStorageChange();
+      }, 500);
+  
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        clearInterval(interval);
+      };
+    }, []);
+    const currentTheme = THEMES[theme];
+  
 
   return (
     <>
@@ -365,7 +405,7 @@ const ReactSelect = ({
                     return handleFormatlabel(name, label, rest);
                   }
 
-                  return <div>{label}</div>;
+                  return <div  style={{ color: currentTheme.primary }}>{label}</div>;
                 }}
                 components={CustomComponent}
                 id={id}
@@ -385,7 +425,7 @@ const ReactSelect = ({
                 className={requiredClassName}
                 menuPortalTarget={document.body}
                 scrollMenuIntoView={false}
-                classNamePrefix={`remove-extrapadding ${theme}`}
+                classNamePrefix={`remove-extrapadding ${themee}`}
                 onKeyDown={onKeyDown}
                 isClearable={!removeIsClearable}
                 menuPlacement="auto"

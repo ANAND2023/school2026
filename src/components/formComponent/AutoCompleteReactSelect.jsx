@@ -35,7 +35,7 @@ export default function CustomAutoCompleteReactSelect({
 
   // Optional custom item template
   const itemTemplate = (item) => (
-    <div style={{ fontSize: '13px' }}>{item.label}</div>
+    <div style={{ fontSize: '13px',color:"green" }} >{item.label}</div>
   );
 
   return (

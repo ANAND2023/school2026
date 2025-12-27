@@ -88,7 +88,7 @@ function CreateTax() {
   /* ================= JSX ================= */
   return (
     <div className="card p-1">
-      <Heading title={t("Create Tax")} isBreadcrumb={false} />
+      <Heading title={t("Create Tax")} isBreadcrumb={true} />
 
       <div className="row p-2">
         {/* ===== CONTEXT ===== */}

@@ -615,7 +615,7 @@ function Admission() {
       <div className="card p-1">
         <Heading title={t("Student Detail for Admission")} isBreadcrumb={true} secondTitle={"dsdsds"} />
         <div className="row p-2">
-          <div className="col-2">
+          <div className="col-1">
             <ImageCaptureCrop
               label="Student"
               onImageCropped={(file) => handleImageProcessed(file, 'studentPhoto')}
@@ -624,7 +624,7 @@ function Admission() {
               previewSize={80}
             />
           </div>
-          <div className="col-10">
+          <div className="col-11">
             <div className="row">
               <Input
                 type="text"

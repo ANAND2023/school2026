@@ -4,12 +4,15 @@ const DashBoardCard = () => {
   return (
  
   <div
-   className="row"
+   className="row "
   >
     <div 
     className="col-xl-3 col-lg-3"
     >
-      <div className="dashcard l-bg-cherry">
+      <div
+       className="dashcard "
+      //  className="dashcard l-bg-cherry"
+       >
         <div className="dashcard-statistic-3 p-4">
           <div className="dashcard-icon dashcard-icon-large">
             <i className="fas fa-shopping-cart"></i>
@@ -45,7 +48,10 @@ const DashBoardCard = () => {
     </div>
 
     <div className="col-xl-3 col-lg-3">
-      <div className="dashcard l-bg-blue-dark">
+      <div
+       className="dashcard "
+      //  className="dashcard l-bg-blue-dark"
+       >
         <div className="dashcard-statistic-3 p-4">
           <div className="dashcard-icon dashcard-icon-large">
             <i className="fas fa-users"></i>
@@ -81,7 +87,10 @@ const DashBoardCard = () => {
     </div>
 
     <div className="col-xl-3 col-lg-3">
-      <div className="dashcard l-bg-green-dark">
+      <div
+       className="dashcard "
+      //  className="dashcard l-bg-green-dark"
+       >
         <div className="dashcard-statistic-3 p-4">
           <div className="dashcard-icon dashcard-icon-large">
             <i className="fas fa-ticket-alt"></i>
@@ -117,7 +126,10 @@ const DashBoardCard = () => {
     </div>
 
     <div className="col-xl-3 col-lg-3">
-      <div className="dashcard l-bg-orange-dark">
+      <div 
+      className="dashcard "
+      // className="dashcard l-bg-orange-dark"
+      >
         <div className="dashcard-statistic-3 p-4">
           <div className="dashcard-icon dashcard-icon-large">
             <i className="fas fa-dollar-sign"></i>

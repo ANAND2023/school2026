@@ -8,17 +8,17 @@ import SlideScreen from "../front-office/SlideScreen";
 import SeeMoreSlideScreen from "./SeeMoreSlideScreen";
 import { BindFrameMenuByRoleID } from "../../store/reducers/common/CommonExportFunction";
 
-function Heading({ 
-  title, 
-  onClick, 
-  secondTitle, 
-  isBreadcrumb, 
-  ReactSelectPageWise, 
-  ReactSelectPageWise1, 
-  removeSecondHeadAlignClass, 
-  isSlideScreen, 
+function Heading({
+  title,
+  onClick,
+  secondTitle,
+  isBreadcrumb,
+  ReactSelectPageWise,
+  ReactSelectPageWise1,
+  removeSecondHeadAlignClass,
+  isSlideScreen,
   frameName,
-  data 
+  data
 }) {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ function Heading({
 
   const bindGetSubScreenMenuByRole = async (result, vIsFrameMenu) => {
     let apiResp = await GetSubScreenMenuByRole(
-      result?.subMenuID, 
+      result?.subMenuID,
       vIsFrameMenu ? vIsFrameMenu : 0
     );
     if (apiResp?.success) {
@@ -59,7 +59,7 @@ function Heading({
     const result = findChildByUrl(GetMenuList, location?.pathname);
     if (result?.isShowSubMenu === 1) {
       bindGetSubScreenMenuByRole(
-        data?.FrameMenuID ? { subMenuID: data?.FrameMenuID } : result, 
+        data?.FrameMenuID ? { subMenuID: data?.FrameMenuID } : result,
         (data === undefined || data?.vIsFrameMenu === 0) ? 0 : 1
       );
     }
@@ -88,10 +88,53 @@ function Heading({
     });
   };
 
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('sidebarTheme');
+    if (savedTheme && THEMES[savedTheme]) {
+      setTheme(savedTheme);
+    }
+  }, []);
+  const THEMES = {
+    dark: { name: 'Dark', primary: '#2563eb', headerBg: 'white' },
+    light: { name: 'Light', primary: '#2563eb', headerBg: 'white' },
+    purple: { name: 'Purple', primary: '#8b5cf6', headerBg: 'white' },
+    green: { name: 'Green', primary: '#10b981', headerBg: 'white' }
+  };
+
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedTheme = localStorage.getItem('sidebarTheme');
+      if (savedTheme && THEMES[savedTheme]) {
+        setTheme(savedTheme);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Poll for changes (since storage event doesn't fire in same tab)
+    const interval = setInterval(() => {
+      handleStorageChange();
+    }, 500);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
+  const currentTheme = THEMES[theme];
+
   return (
     <>
       <div className="card card_background">
-        <div className="card-header" onClick={onClick}>
+
+        <div className="card-header" onClick={onClick}
+          // style={{ backgroundColor: currentTheme.headerBg }}
+          style={{ background: currentTheme?.primary + '30' }}
+        >
           <div className="d-flex align-items-center justify-content-between flex-wrap">
             {/* Left Side - Title/Breadcrumb */}
             <div className="flex-grow-1">
@@ -227,7 +270,7 @@ export default Heading;
 //     <>
 //       <div className="card card_background">
 //         <div className="card-header" onClick={onClick}>
-//           <h4 
+//           <h4
 //           // className="card-title p-2 d-md-flex "
 //           // className="card-title w-100 d-md-flex align-items-center justify-content-between"
 //           >
