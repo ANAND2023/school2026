@@ -13,10 +13,12 @@ import {
 } from "../../networkServices/blooadbankApi";
 import Modal from "../../components/modalComponent/Modal";
 import { notify } from "../../utils/utils";
+import { CreateClass, GetAllClasses } from "../../networkServices/AcademicYear";
 
 function ClassMaster() {
     const [t] = useTranslation(); const initialData = {
-        PFirstName: "",
+        class_name: "",
+        Order: "",
 
     }
     const [values, setValues] = useState(initialData);
@@ -24,14 +26,17 @@ function ClassMaster() {
         [
             {
                 class_name: "First Class",
+                Order: 1
 
             },
             {
                 class_name: "2",
+                Order: 2
 
             },
             {
                 class_name: "3",
+                Order: 3
 
             },
         ]
@@ -47,7 +52,24 @@ function ClassMaster() {
             setValues((prev) => ({ ...prev, [name]: value }));
         }
     };
+    const getData = async () => {
 
+        try {
+            const response = await GetAllClasses();
+            if (response?.success) {
+                setTableData(response?.data)
+            } else {
+                notify(response?.message, "error");
+                setTableData([])
+            }
+        } catch (error) {
+            notify("Error saving reason", "error");
+        }
+    };
+
+    useEffect(() => {
+        // getData()
+    }, [])
 
     const setIsOpen = () => {
         setHandleModelData((val) => ({ ...val, isOpen: false }));
@@ -56,11 +78,12 @@ function ClassMaster() {
     const handleSave = async () => {
 
         const Payload = {
-            donorId: "",
+            "className": values?.class_name ?? "",
+            "classOrder": Number(values?.Order ?? 0)
+        }
 
-        };
         try {
-            const Response = await bloodBankSaveData(Payload);
+            const Response = await CreateClass(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
@@ -106,35 +129,73 @@ function ClassMaster() {
                     <Input
                         type="text"
                         className="form-control required-fields"
-                        id="First"
+                        id="class_name"
                         name="class_name"
                         value={values?.class_name ? values?.class_name : ""}
                         // onChange={handleChange}
                         lable={t("Class Name")}
                         placeholder=" "
-                        respclass="col-5"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         isUpperCase={true}
-                        onChange={(e) => handleCapitalLatter(e)}
+                        onChange={(e) => handleChange(e)}
+                    />
+                    <Input
+                        type="number"
+                        className="form-control required-fields"
+                        id="Order"
+                        name="Order"
+                        value={values?.Order ? values?.Order : ""}
+                        // onChange={handleChange}
+                        lable={t("Class Order")}
+                        placeholder=" "
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        isUpperCase={true}
+                        onChange={(e) => handleChange(e)}
                     />
 
                     <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
-   className="btn btn-sm btn-primary"
+                            className="btn btn-sm btn-primary"
                             type="button"
                         >
                             {t("Class Add")}
                         </button>
                     </div>
                 </div>
+
+
+
                 <Tables
-                    thead={[{ name: "Class Name", }, { name: "Action" }]}
+                    thead={[{ name: "Roles", }, { name: "Order" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
                             class_name: item.class_name,
+                            Order: item.Order,
                             action: <>
-                                <i className="fa fa-edit mx-2" style={{ cursor: "pointer" }} title="Edit" onClick={() => setValues({ class_name: item?.class_name })}></i>
-                                <i className="fa fa-trash mx-2" style={{ cursor: "pointer" }} title="Delete"></i>
+
+                                <div
+                                    // className="d-flex align-items-center justify-content-center gap-2"
+                                    className="row gap-2"
+                                >
+                                    <button
+                                        id="editBtn"
+                                        onclick="handleEdit(item.id)"
+                                        title="Edit"
+                                        className="d-flex align-items-center justify-content-center"
+                                    >
+                                        <i class=" bi-pencil-square"></i>
+                                    </button>
+
+                                    <button
+                                        id="deleteBtn"
+                                        onclick="handleDelete(item.id)"
+                                        title="Delete"
+                                    >
+                                        <i class="bi-trash3"></i>
+                                    </button>
+                                </div>
+
                             </>,
                         }))}
 

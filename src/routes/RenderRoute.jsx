@@ -58,6 +58,36 @@ function RenderRoute() {
   }
 
   const getAllUrls = [];
+  getAllUrls.push("/academicmaster");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   getAllUrls.push("/display-name-master");
   getAllUrls.push("/doctor-departmentMapping");
   getAllUrls.push("/voucher-audit");
@@ -565,7 +595,16 @@ const allRoutes = {
       ),
       exact: true,
     },
-  
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/academicmaster",
+      component: lazy(
+        () => import("@app/components/Master/AcademicMaster.jsx")
+      ),
+      exact: true,
+    },
+
     {
       Guard: Authenticated,
       layout: Layout,

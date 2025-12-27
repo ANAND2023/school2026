@@ -13,28 +13,32 @@ import {
 } from "../../networkServices/blooadbankApi";
 import Modal from "../../components/modalComponent/Modal";
 import { notify } from "../../utils/utils";
-import { CreateSection, GetAllSections } from "../../networkServices/AcademicYear";
+import { CreateClass, CreateSubject, GetAllClasses, GetAllSubjects } from "../../networkServices/AcademicYear";
 import ReactSelect from "../formComponent/ReactSelect";
 
-function SectionMaster() {
+function Subject() {
     const [t] = useTranslation(); const initialData = {
-        section_name: "",
-        class_Name: { label: "1", value: "true" },
+        subjectCode: "",
+        subjectName: "",
+        isPractical:{ label: "Yes", value: "true" },
+
     }
     const [values, setValues] = useState(initialData);
-    
     const [tableData, setTableData] = useState(
         [
             {
-                section_name: "A",
+                class_name: "First Class",
+                Order: 1
 
             },
             {
-                section_name: "B",
+                class_name: "2",
+                Order: 2
 
             },
             {
-                section_name: "C",
+                class_name: "3",
+                Order: 3
 
             },
         ]
@@ -44,14 +48,16 @@ function SectionMaster() {
     const [modalData, setModalData] = useState({});
     const handleChange = (e, type, limit = 9999999999999) => {
         const { name, value } = e.target
+        if (type === "number" && ((limit < Number(value)) || isNaN(Number(value)))) {
 
-        setValues((prev) => ({ ...prev, [name]: value }));
-
+        } else {
+            setValues((prev) => ({ ...prev, [name]: value }));
+        }
     };
- const getData = async () => {
+    const getData = async () => {
 
         try {
-            const response = await GetAllSections();
+            const response = await GetAllSubjects();
             if (response?.success) {
                 setTableData(response?.data)
             } else {
@@ -67,20 +73,27 @@ function SectionMaster() {
         // getData()
     }, [])
 
-
     const setIsOpen = () => {
         setHandleModelData((val) => ({ ...val, isOpen: false }));
     };
 
     const handleSave = async () => {
 
-        const Payload = {
-            "sectionName": values?.section_name,
-            "classId": values?.class_Name?.value
-        }
+        const Payload =
+        {
+  "subjectName": "string",
+  "subjectCode": "string",
+  "isPractical": true
+}
+
+        
+        // {
+        //     "className": values?.class_name ?? "",
+        //     "classOrder": Number(values?.Order ?? 0)
+        // }
 
         try {
-            const Response = await CreateSection(Payload);
+            const Response = await CreateSubject(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
@@ -99,7 +112,7 @@ function SectionMaster() {
         handleChange(e)
 
     }
-    const handleSelect = (name, value) => {
+     const handleSelect = (name, value) => {
         setValues((prev) => ({ ...prev, [name]: value }));
     };
     return (
@@ -123,37 +136,50 @@ function SectionMaster() {
             )}
 
             <div className="card p-1">
-                <Heading title={t("Section Master")} isBreadcrumb={false} />
+                <Heading title={t("Subject Master")} isBreadcrumb={false} />
 
                 <div className="row p-2">
                     <Input
                         type="text"
                         className="form-control required-fields"
-                        id="section_name"
-                        name="section_name"
-                        value={values?.section_name ? values?.section_name : ""}
+                        id="subjectName"
+                        name="subjectName"
+                        value={values?.subjectName ? values?.subjectName : ""}
                         // onChange={handleChange}
-                        lable={t("Section Name")}
+                        lable={t("Subject Name")}
                         placeholder=" "
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         isUpperCase={true}
-                        onChange={(e) => handleCapitalLatter(e)}
+                        onChange={(e) => handleChange(e)}
                     />
-                    <ReactSelect
-                        placeholderName={t("Class")}
-                        searchable={true}
+                    <Input
+                        type="number"
+                        className="form-control required-fields"
+                        id="subjectCode"
+                        name="subjectCode"
+                        value={values?.subjectCode ? values?.subjectCode : ""}
+                        // onChange={handleChange}
+                        lable={t("Subject Code")}
+                        placeholder=" "
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        id="class_Name"
-                        name="class_Name"
-                        removeIsClearable={true}
-                        dynamicOptions={[
-                            { label: "1", value: "true" },
-                            { label: "2", value: "false" },
-                        ]}
-                        handleChange={handleSelect}
-                        value={values?.class_Name?.value}
-                        requiredClassName="required-fields"
+                        isUpperCase={true}
+                        onChange={(e) => handleChange(e)}
                     />
+                     <ReactSelect
+                                            placeholderName={t("Is Practical")}
+                                            searchable={true}
+                                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                                            id="isPractical"
+                                            name="isPractical"
+                                            removeIsClearable={true}
+                                            dynamicOptions={[
+                                                { label: "Yes", value: "true" },
+                                                { label: "No", value: "false" },
+                                            ]}
+                                            handleChange={handleSelect}
+                                            value={values?.isPractical?.value}
+                                            requiredClassName="required-fields"
+                                        />
 
                     <div className="col-12 text-right">
                         <button
@@ -161,18 +187,21 @@ function SectionMaster() {
                             className="btn btn-sm btn-primary"
                             type="button"
                         >
-                            {t("Add Section")}
+                            {t("Class Add")}
                         </button>
                     </div>
                 </div>
 
+
+
                 <Tables
-                    thead={[{ name: "Section", }, { name: "Action" }]}
+                    thead={[{ name: "Roles", }, { name: "Order" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            section_name: item.section_name,
-
+                            class_name: item.class_name,
+                            Order: item.Order,
                             action: <>
+
                                 <div
                                     // className="d-flex align-items-center justify-content-center gap-2"
                                     className="row gap-2"
@@ -194,6 +223,7 @@ function SectionMaster() {
                                         <i class="bi-trash3"></i>
                                     </button>
                                 </div>
+
                             </>,
                         }))}
 
@@ -203,4 +233,4 @@ function SectionMaster() {
     );
 }
 
-export default SectionMaster;
+export default Subject;
