@@ -33,6 +33,8 @@ import { useTranslation } from "react-i18next";
 import { BirthDaySVGIcon } from "../components/SvgIcons";
 import DashboardCard from "../components/UI/DashboardCard";
 import DashboardCharts from "../components/DashboardUI/DashboardCharts";
+import DashBoardCard from "../components/DashboardUI/DashBoardCard";
+import SchoolDashboard from "./SchoolDashBoard/SchoolDashboard";
 Chart.register(...registerables);
 
 const Dashboard = () => {
@@ -457,232 +459,20 @@ const Dashboard = () => {
         );
       default:
         return (
-          <div className="container-fluid">
+          <div >
+            {/* <DashBoardCard />
             <div className="row">
               <div className="col-md-6">
+
                 <Welcome />
-                {/* <div className="d-flex flex-wrap" style={{ gap: "10px" }}>
-                  {headSetName?.length > 0 &&
-                    headSetName?.map((head, index) => {
-                      if (apiData[head?.name]?.length > 0) {
-                        return (
-                          <GraphBox
-                            data={createGraphData(
-                              apiData[head?.name],
-                              "TextField",
-                              ["ValueField"],
-                              head?.defaultChart
-                            )}
-                            component={getGraphComponent(head?.defaultChart)}
-                            options={{
-                              ...head?.options,
-                              ...dynamicOptions(head?.defaultChart),
-                            }}
-                            width={"100%"}
-                            headName={head?.name}
-                            handleGraphChange={(e) =>
-                              handleGraphChange(e, index, apiData[head?.name])
-                            }
-                            value={head?.defaultChart}
-                          />
-                        );
-                      }
-                    })}
-                </div> */}
-                {/* <DashboardCard/> */}
-              
+
               </div>
-              {/* graph end */}
 
-              {/* <div className="col-md-6">
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="birthDay-Box">
-                      <div
-                        className="birthdayHead d-flex justify-content-between"
-                        id="birthdayHead"
-                      >
-                        <span style={{ fontWeight: 700, color: "#fb5353" }}>
-                          {t("BirthDay List")}{" "}
-                        </span>
-                        ({moment().format("dddd, MMMM Do YYYY")})
-                      </div>
-                      <div
-                        style={{
-                          padding: "2px",
-                        }}
-                      >
-                        <Marque height={handleHeightOfBirthDaycard()}>
-                          {birthDayData?.map((item, index) => (
-                            <div className="birthdayBody mt-2" key={index}>
-                              <div
-                                className="thread"
-                                style={{
-                                  backgroundColor: generateRandomColor(),
-                                  fontSize: "10px",
-                                  padding: "2px 5px",
-                                  borderRadius: "0px 5px 5px 0px",
-                                  display: "inline",
-                                  color: "black",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                {item?.Department}
-                              </div>
-                              <div className="d-flex justify-content-between p-2">
-                                <div className="deatils">
-                                  <div style={{ fontWeight: 800 }}>
-                                    {item?.EmployeeName}
-                                  </div>
-                                  <div>
-                                    {item?.EmployeeAge} {t("Birthday")}
-                                    <BirthDaySVGIcon />
-                                  </div>
-                                </div>
-                                <div>
-                                  <img
-                                    src={item?.EmployeePhoto}
-                                    className="img-holder"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </Marque>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="birthDay-Box">
-                      <div
-                        className="birthdayHead d-flex justify-content-between"
-                        id="birthdayHead"
-                      >
-                        <span style={{ fontWeight: 700, color: "blue" }}>
-                          {t("News")}
-                        </span>
-                        ({moment(payloadData?.fromDate).format("DD-MMM-YYYY")} -{" "}
-                        {moment(payloadData?.toDate).format("DD-MMM-YYYY")} )
-                      </div>
-                      <div
-                        style={{
-                          padding: "2px",
-                        }}
-                      >
-                        <Marque height={handleHeightOfBirthDaycard()}>
-                          {newsLetter?.map((item, index) => (
-                            <div
-                              className="birthdayBody mt-2"
-                              key={index}
-                              onClick={() => handleNewsModal(item)}
-                            >
-                              <div
-                                className="thread"
-                                style={{
-                                  backgroundColor: generateRandomColor(),
-                                  fontSize: "10px",
-                                  padding: "2px 5px",
-                                  borderRadius: "0px 5px 5px 0px",
-                                  display: "inline",
-                                  color: "black",
-                                  fontWeight: "600",
-                                }}
-                              >
-                                {item?.Subject}
-                              </div>
-                              <div className="d-flex justify-content-between p-2">
-                                <div className="deatils">
-                                  <div style={{ fontWeight: 800 }}>
-                                    <svg
-                                      width="20"
-                                      height="15"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <circle
-                                        cx="12"
-                                        cy="8"
-                                        r="4"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        fill="none"
-                                      />
-                                      <path
-                                        d="M4 20C4 15.5817 7.58172 12 12 12C16.4183 12 20 15.5817 20 20"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        fill="none"
-                                      />
-                                    </svg>{" "}
-                                    {item?.RaisedBy}
-                                  </div>
-                                  <div style={{ color: "green" }}>
-                                    <svg
-                                      width="24"
-                                      height="15"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13h-1v6h6v-1h-5z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                    {item?.NewsDates}
-                                  </div>
-                                </div>
-                                <div>
-                                  <div style={{ color: "blue" }}>
-                                    <svg
-                                      width="24"
-                                      height="15"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13h-1v6h6v-1h-5z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>{" "}
-                                    {item?.EntryDate}
-                                  </div>
-                                  <div style={{ color: "red" }}>
-                                    <svg
-                                      width="24"
-                                      height="15"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13h-1v6h6v-1h-5z"
-                                        fill="currentColor"
-                                      />
-                                    </svg>
-                                    {item?.NewsExpiryDate}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </Marque>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {apiData?.firstAPIData &&
-                  Object.keys(apiData?.firstAPIData)?.map((item, index) => {
-                    return cardDataPrint(Number(item), apiData?.firstAPIData);
-                  })}
-              </div> */}
             </div>
             <div className="row mt-3">
-                <DashboardCharts/>
-            </div>
+              <DashboardCharts />
+            </div> */}
+            <SchoolDashboard />
           </div>
         );
     }
@@ -690,14 +480,14 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="mainDashboardwrp">
-        {/* <div
+      {/* <div className="mainDashboardwrp"> */}
+      {/* <div
           className="card patient_registration border"
         // style={{ position: "sticky", top: "100px", zIndex: 99 }}
         >
           <div className="row g-4 m-2">
             <ReactSelect
-              respclass={"col-xl-3 col-md-6 col-sm-12 col-12"}
+              respclassName={"col-xl-3 col-md-6 col-sm-12 col-12"}
               removeIsClearable={true}
               dynamicOptions={DATE_REACTSELECT_OPTION}
               value={payloadData?.selectDate}
@@ -710,7 +500,7 @@ const Dashboard = () => {
               name="fromDate"
               lable={"From Date"}
               placeholder={VITE_DATE_FORMAT}
-              respclass={"col-xl-2 col-md-4 col-sm-6 col-12"}
+              respclassName={"col-xl-2 col-md-4 col-sm-6 col-12"}
               value={payloadData.fromDate}
               handleChange={dateHandleChange}
             />
@@ -721,7 +511,7 @@ const Dashboard = () => {
               name="toDate"
               lable={"To Date"}
               placeholder={VITE_DATE_FORMAT}
-              respclass={"col-xl-2 col-md-4 col-sm-6 col-12"}
+              respclassName={"col-xl-2 col-md-4 col-sm-6 col-12"}
               value={payloadData.toDate}
               handleChange={dateHandleChange}
             />
@@ -741,10 +531,10 @@ const Dashboard = () => {
             ))}
           </div>
         </div> */}
-        <ScrollComponent viewPort={1}>
-          {handleRenderDashboard(selectedButton)}
-        </ScrollComponent>
-      </div>
+      {/* <ScrollComponent viewPort={1}> */}
+      {handleRenderDashboard(selectedButton)}
+      {/* </ScrollComponent> */}
+      {/* </div> */}
 
       {registerModal.isShow && (
         <Modal

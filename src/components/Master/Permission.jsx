@@ -55,13 +55,13 @@ function Permission() {
             "name": values?.Role,
             "description": values?.descripiton
         }
-      
+
         try {
             const Response = await Permissionscreatepermission(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-               
+
             } else {
                 notify(Response?.message, "error");
             }
@@ -76,7 +76,7 @@ function Permission() {
             const Response = await Permissionsdelete(item?.ID);
             if (Response?.success) {
                 notify(Response?.message, "success");
-                
+
                 getData()
             } else {
                 notify(Response?.message, "error");
@@ -87,13 +87,13 @@ function Permission() {
     };
     const handleUpdate = async (item) => {
         setIsEdit(true);
-setValues({ Role: item?.Role, descripiton: item?.descripiton })
+        setValues({ Role: item?.Role, descripiton: item?.descripiton })
 
         // try {
         //     const Response = await Permissionsdelete(item?.ID);
         //     if (Response?.success) {
         //         notify(Response?.message, "success");
-                
+
         //         getData()
         //     } else {
         //         notify(Response?.message, "error");
@@ -107,17 +107,17 @@ setValues({ Role: item?.Role, descripiton: item?.descripiton })
         try {
             const response = await Permissionsgetallpermissions();
             if (response?.success) {
-            //    setTableData(response?.data)
+                //    setTableData(response?.data)
             } else {
                 notify(response?.message, "error");
-                    //  setTableData([])
+                //  setTableData([])
             }
         } catch (error) {
             notify("Error saving reason", "error");
             // setTableData([])
         }
     };
-   
+
     useEffect(() => {
         getData()
     }, [])
@@ -172,32 +172,32 @@ setValues({ Role: item?.Role, descripiton: item?.descripiton })
                         onChange={(e) => handleChange(e)}
                     />
 
-                   
+
                     {
-                        isEdit ?<div className="col-12 text-right mt-2">
-                             <button
-                            // onClick={handleSave}
-                            className="btn btn-sm btn-primary"
-                            type="button"
-                        >
-                            {t("Update")}
-                        </button>
-                        <button
-                            onClick={() => { setIsEdit(false); setValues(initialData); }}
-                            className="btn btn-sm btn-secondary"
-                            type="button"
-                        >
-                            {t("Cancel Edit")}
-                        </button>
-                    </div>: <div className="col-12 text-right">
-                        <button
-                            onClick={handleSave}
-                            className="btn btn-sm btn-primary"
-                            type="button"
-                        >
-                            {t("Save")}
-                        </button>
-                    </div>
+                        isEdit ? <div className="col-12 text-right mt-2">
+                            <button
+                                // onClick={handleSave}
+                                className="btn btn-sm btn-primary"
+                                type="button"
+                            >
+                                {t("Update")}
+                            </button>
+                            <button
+                                onClick={() => { setIsEdit(false); setValues(initialData); }}
+                                className="btn btn-sm btn-secondary"
+                                type="button"
+                            >
+                                {t("Cancel Edit")}
+                            </button>
+                        </div> : <div className="col-12 text-right">
+                            <button
+                                onClick={handleSave}
+                                className="btn btn-sm btn-primary"
+                                type="button"
+                            >
+                                {t("Save")}
+                            </button>
+                        </div>
                     }
                 </div>
                 <Tables
@@ -207,8 +207,29 @@ setValues({ Role: item?.Role, descripiton: item?.descripiton })
                             Role: item.Role,
                             descripiton: item.descripiton,
                             action: <>
-                                <i className="fa fa-edit mx-2" style={{ cursor: "pointer" }} title="Edit" onClick={() => handleUpdate()}></i>
-                                <i className="fa fa-trash mx-2" style={{ cursor: "pointer" }} title="Delete" onClick={() => handleDelete(item)}></i>
+                                <div
+                                    // className="d-flex align-items-center justify-content-center gap-2"
+                                    className="row gap-2"
+                                >
+                                    <button
+                                        id="editBtn"
+                                        onclick="handleEdit(item.id)"
+                                        title="Edit"
+
+                                        onClick={() => handleUpdate()}
+                                    >
+                                        <i class=" bi-pencil-square"></i>
+                                    </button>
+
+                                    <button
+                                        id="deleteBtn"
+                                        onclick="handleDelete(item.id)"
+                                        title="Delete"
+                                        onClick={() => handleDelete(item)}
+                                    >
+                                        <i class="bi-trash3"></i>
+                                    </button>
+                                </div>
                             </>,
                         }))}
 

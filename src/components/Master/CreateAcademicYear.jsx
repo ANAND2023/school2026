@@ -10,11 +10,17 @@ import Modal from "../modalComponent/Modal";
 import { notify } from "../../utils/utils";
 import { Rolescreaterole, Rolesdeleterole, Rolesgetroles } from "../../networkServices/Admin";
 import { Pencil, Trash2 } from "lucide-react";
+import { CreateAcademicYearApi, GetAllAcademicYears } from "../../networkServices/AcademicYear";
+import DatePicker from "../formComponent/DatePicker";
+import ReactSelect from "../formComponent/ReactSelect";
+import moment from "moment";
 
-function User() {
+function CreateAcademicYear() {
     const [t] = useTranslation(); const initialData = {
-        Name: "",
-        descripiton: "Testing"
+        yearName: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        isCurrent: { label: "Yes", value: "true" },
     }
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState(
@@ -36,6 +42,9 @@ function User() {
     const [handleModelData, setHandleModelData] = useState({});
 
     const [modalData, setModalData] = useState({});
+    const handleSelect = (name, value) => {
+        setValues((prev) => ({ ...prev, [name]: value }));
+    };
     const handleChange = (e) => {
         const { name, value } = e.target
 
@@ -50,13 +59,16 @@ function User() {
 
     const handleSave = async () => {
         debugger
-        const Payload = {
-            "name": values?.Name,
-            "description": values?.descripiton
+        const Payload =
+        {
+            "yearName": values?.yearName,
+            "startDate": moment(values?.startDate).format("YYYY-MM-DD"),
+            "endDate": moment(values?.endDate).format("YYYY-MM-DD"),
+            "isCurrent": values?.isCurrent?.value === "true" ? true : false
         }
 
         try {
-            const Response = await Rolescreaterole(Payload);
+            const Response = await CreateAcademicYearApi(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
@@ -89,7 +101,7 @@ function User() {
     const getData = async () => {
 
         try {
-            const response = await Rolesgetroles();
+            const response = await GetAllAcademicYears();
             if (response?.success) {
 
             } else {
@@ -100,13 +112,7 @@ function User() {
             notify("Error saving reason", "error");
         }
     };
-    const handleCapitalLatter = (e) => {
 
-        let event = { ...e }
-        event.target.value = event.target.value.toUpperCase()
-        handleChange(e)
-
-    }
     useEffect(() => {
         getData()
     }, [])
@@ -137,30 +143,54 @@ function User() {
                     <Input
                         type="text"
                         className="form-control required-fields"
-                        id="Name"
-                        name="Name"
-                        value={values?.Name ? values?.Name : ""}
+                        id="yearName"
+                        name="yearName"
+                        value={values?.yearName ? values?.yearName : ""}
                         // onChange={handleChange}
-                        lable={t("Name")}
+                        lable={t("Year Name")}
                         placeholder=" "
-                        respclass="col-5"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         isUpperCase={true}
-                        onChange={(e) => handleCapitalLatter(e)}
+                        onChange={(e) => handleChange(e)}
                     />
-                    <Input
-                        type="text"
-                        className="form-control required-fields"
-                        id="descripiton"
-                        name="descripiton"
-                        value={values?.descripiton ? values?.descripiton : ""}
-                        // onChange={handleChange}
-                        lable={t("descripiton ")}
-                        placeholder=" "
-                        respclass="col-5"
-                        isUpperCase={true}
-                        onChange={(e) => handleCapitalLatter(e)}
+                    <DatePicker
+                        id="startDate"
+                        width
+                        name="startDate"
+                        lable={t("Start Date")}
+                        value={values?.startDate || new Date()}
+                        handleChange={handleChange}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        className="custom-calendar"
+                        maxDate={values?.startDate}
+                    />
+                    <DatePicker
+                        id="endDate"
+                        width
+                        name="endDate"
+                        lable={t("End Date")}
+                        value={values?.endDate || new Date()}
+                        handleChange={handleChange}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        className="custom-calendar"
+                        maxDate={values?.endDate}
                     />
 
+                    <ReactSelect
+                        placeholderName={t("Is Current")}
+                        searchable={true}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        id="isCurrent"
+                        name="isCurrent"
+                        removeIsClearable={true}
+                        dynamicOptions={[
+                            { label: "Yes", value: "true" },
+                            { label: "No", value: "false" },
+                        ]}
+                        handleChange={handleSelect}
+                        value={values?.isCurrent?.value}
+                        requiredClassName="required-fields"
+                    />
                     {/* <div className="col-12 text-right"> */}
                     <button
                         onClick={handleSave}
@@ -180,9 +210,9 @@ function User() {
                             descripiton: item.descripiton,
                             action: <>
 
-                                <div 
-                                // className="d-flex align-items-center justify-content-center gap-2"
-                                className="row gap-2"
+                                <div
+                                    // className="d-flex align-items-center justify-content-center gap-2"
+                                    className="row gap-2"
                                 >
                                     <button
                                         id="editBtn"
@@ -211,4 +241,4 @@ function User() {
     );
 }
 
-export default User;
+export default CreateAcademicYear;

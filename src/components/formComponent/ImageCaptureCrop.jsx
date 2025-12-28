@@ -190,9 +190,125 @@ function ImageCaptureCrop({
 
     return (
         <>
+<div
+  className={`mb-3 ${label ? "gap-1" : ""} ${respclass}`}
+  style={{
+    width: "100px",
+    height: "150px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    background: "#ffffff",
+    boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.3s ease",
+  }}
+>
+  {label && (
+    <p className="small text-muted mb-1 fw-semibold text-center">
+      {label}
+    </p>
+  )}
+
+  <div
+    className="position-relative"
+    style={{ width: "82px", height: "95px" }}
+  >
+    {/* Image / Placeholder */}
+    <div
+      className={`w-100 h-100 d-flex align-items-center justify-content-center overflow-hidden`}
+      style={{
+        borderRadius: "10px",
+        border: `2px dashed ${currentImagePreview ? "#10b981" : "#d1d5db"}`,
+        background: "#f9fafb",
+      }}
+    >
+      {currentImagePreview ? (
+        <img
+          src={currentImagePreview}
+          alt={label || "Preview"}
+          className="w-100 h-100"
+          style={{ objectFit: "cover" }}
+        />
+      ) : (
+        <CameraIcon size={28} className="text-secondary" />
+      )}
+    </div>
+
+    {/* Action Buttons */}
+    <div
+      className="position-absolute d-flex"
+      style={{
+        bottom: -22,
+        left: "50%",
+        transform: "translateX(-50%)",
+        gap: "0.5rem",
+      }}
+    >
+      <button
+        type="button"
+        onClick={openWebcam}
+        disabled={isProcessing}
+        className="btn rounded-circle shadow"
+        style={{
+          width: 34,
+          height: 34,
+          background: "linear-gradient(135deg,#ff6f61,#ff9472)",
+          color: "#fff",
+          padding: 0,
+        }}
+        aria-label="Take Photo"
+      >
+        <CameraIcon size={16} />
+      </button>
+
+      <button
+        type="button"
+        onClick={triggerFileInput}
+        disabled={isProcessing}
+        className="btn rounded-circle shadow"
+        style={{
+          width: 34,
+          height: 34,
+          background: "linear-gradient(135deg,#3b82f6,#2563eb)",
+          color: "#fff",
+          padding: 0,
+        }}
+        aria-label="Upload File"
+      >
+        <Upload size={16} />
+      </button>
+    </div>
+
+    {/* Remove Button */}
+    {currentImagePreview && (
+      <button
+        type="button"
+        onClick={handleRemoveImage}
+        disabled={isProcessing}
+        className="position-absolute d-flex align-items-center justify-content-center rounded-circle shadow-sm"
+        style={{
+          top: -8,
+          right: -8,
+          width: 22,
+          height: 22,
+          background: "#fff",
+          border: "1px solid #e5e7eb",
+          color: "#ef4444",
+          padding: 0,
+        }}
+        aria-label="Remove image"
+      >
+        <XCircle size={14} />
+      </button>
+    )}
+  </div>
+</div>
 
 
-            <div 
+            {/* <div 
             className={` mb-3 ${label ? 'gap-1' : ''} respclass=${respclass}`}
             // className={`d-flex flex-column align-items-center w-auto mx-auto mb-3 ${label ? 'gap-1' : ''}`}
             >
@@ -220,9 +336,7 @@ function ImageCaptureCrop({
                     <div
                         className="position-absolute d-flex"
                         style={{ bottom: -25, right: 1, gap: '0.4rem' }}
-                    >
-                        {/* NOTE: Custom background colors are kept. For theme colors, use btn-primary, btn-danger etc. */}
-                        <button
+                    > <button
                             type="button" onClick={openWebcam} disabled={isProcessing}
                             className="btn rounded-circle d-flex align-items-center justify-content-center shadow"
                             style={{ backgroundColor: '#FF6F61', color: 'white', width: 32, height: 32, padding: 0, marginBottom: 13, marginRight: 8 }}
@@ -251,7 +365,7 @@ function ImageCaptureCrop({
                         </button>
                     )}
                 </div>
-            </div>
+            </div> */}
 
             <input
                 type="file" ref={fileInputRef} onChange={handleFileSelect}

@@ -4,7 +4,8 @@ import { getPatientIndentAPI } from "./pharmecy";
 export const apiUrls = {
   // Auth
 
- loginAdmin: "Auth/login",
+ loginAdmin: "auth/login",
+//  loginAdmin: "Auth/login",
 
  Rolescreaterole: "Roles/createrole",
  Rolesremoverole: "Roles/removerole",

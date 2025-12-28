@@ -816,7 +816,7 @@ const MenuSidebar = () => {
           }}
         >
            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-             <div style={{
+             {/* <div style={{
                width: '32px',
                height: '32px',
                background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.activeBorder})`,
@@ -836,7 +836,10 @@ const MenuSidebar = () => {
                color: currentTheme.sidebarTextHover
              }}>
                Digital Vidya
-             </span>
+             </span> */}
+             <img src={logo} alt=""
+             
+             style={{width:"200px"}}/>
            </div>
            <button 
              className="md-icon-btn d-lg-none ml-auto"

@@ -48,6 +48,9 @@
 //     debugger
 //     notify("Login Successfully", "success");
 //     speakMessage(`Welcome ${"Login Successfully" ||""}`); 
+//      useLocalStorage("userData", "set", response?.data?.userDetails);
+//           useLocalStorage("token", "set", response?.data?.accessToken);
+//           useLocalStorage("ip", "set", "10.0.2.175")
 //           Navigate("/dashboard");
 //   }
 //   else{
@@ -340,7 +343,7 @@ const Login = () => {
     initialValues: {
       userName: "",
       password: "",
-      rememberMe: false, // Added to match UI
+      // rememberMe: false, // Added to match UI
       DateTime: new Date(),
     },
 
