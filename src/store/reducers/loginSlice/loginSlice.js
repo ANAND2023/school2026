@@ -5,6 +5,7 @@ import { getLocalIP, notify } from "../../../utils/utils";
 import { setLoading } from "../loadingSlice/loadingSlice";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { jwtDecode } from "jwt-decode";
+import { schoolApiEndpoints } from "../../../networkServices/schoolEnpoints";
 
 const initialState = {
   user: {},
@@ -23,7 +24,7 @@ export const signInAction = createAsyncThunk(
     };
     try {
       dispatch(setLoading(true));
-      const data = await makeApiRequest(apiUrls?.login, options);
+      const data = await makeApiRequest(schoolApiEndpoints?.login, options);
       dispatch(setLoading(false));
       return data;
     } catch {
