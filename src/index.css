@@ -2635,6 +2635,9 @@ td {
   color: #fff;
 }
 
+.p-multiselect-panel {
+  z-index: 9999 !important;
+}
 /* custom.css */
 .p-multiselect {
   height: 26px;

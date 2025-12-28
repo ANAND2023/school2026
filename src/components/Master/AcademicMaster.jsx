@@ -13,12 +13,17 @@ import CreateLateFeePenalty from './FeeMaster/CreateLateFeePenalty'
 import CreatePaymentMode from './FeeMaster/CreatePaymentMode'
 import CreateScholarship from './FeeMaster/CreateScholarship'
 import CreateTax from './FeeMaster/CreateTax'
+import FeesPayment from './FeeMaster/FeesPayment'
+import Admission from '../Admission/Admission'
+import Registration from '../Registration/Registration'
+import StudentProfile from '../Student/StudentProfile'
 
 const AcademicMaster = () => {
   return (
     <div>
-      
-      <CreateAcademicYear/>
+      <StudentProfile/>
+      <FeesPayment/>
+      <CreateAcademicYear/>a
       <ClassMaster/>
       <SectionMaster/>
       <Subject/>
@@ -32,6 +37,8 @@ const AcademicMaster = () => {
       <CreatePaymentMode/>
       <CreateScholarship/>
       <CreateTax/>
+      <Admission/>
+      <Registration/>
     </div>
   )
 }
