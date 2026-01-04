@@ -1,3 +1,845 @@
+// import { useTranslation } from "react-i18next";
+// import Heading from "../../../components/UI/Heading";
+// import ReactSelect from "../../../components/formComponent/ReactSelect";
+// import OverLay from "../../../components/modalComponent/OverLay";
+// import { Fragment, lazy, useEffect, useMemo, useRef, useState } from "react";
+// import TestPayment from "../../../components/front-office/TestPayment";
+// import PaymentGateway from "../../../components/front-office/PaymentGateway";
+// import TestAddingTable from "../../../components/UI/customTable/frontofficetables/TestAddingTable";
+// import {
+//   BindDisApprovalList,
+//   BindPRO,
+//   CheckblacklistAPI,
+//   FeedBackGetSpecialCarePatient,
+//   GetBindDoctorDept,
+//   GetDiscReasonList,
+//   GetEligiableDiscountPercent,
+//   GetLastVisitDetail,
+//   LastVisitDetails,
+//   OPDAdvancegetPatientAdvanceRoleWise,
+//   PatientSearchbyBarcode,
+//   SaveLabPrescriptionOPD,
+//   bindHashCode,
+
+// } from "../../../networkServices/opdserviceAPI";
+// import { PAYMENT_OBJECT, THEAD } from "../../../utils/constant";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   OPDServiceBookingPayload,
+//   notify,
+// } from "../../../utils/utils";
+// import SearchComponentByUHIDMobileName from "../../../components/commonComponents/SearchComponentByUHIDMobileName";
+// import DetailsCardForDefaultValue from "../../../components/commonComponents/DetailsCardForDefaultValue";
+// import Index from "../../frontOffice/PatientRegistration/Index";
+// import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+// import NotificationCard from "../Re_Print/NotificationCard";
+// import MessageCard from "../Re_Print/MessageCard";
+// import { useLocation } from "react-router-dom";
+// import { OpenPDFURL, RedirectURL } from "../../../networkServices/PDFURL";
+// import { CommonReceiptPdf, OPDServiceBookingChecklist } from "../../../networkServices/BillingsApi";
+
+// import moment from "moment";
+// import Modal from "../../../components/modalComponent/Modal";
+// import Confirm from "../../../components/modalComponent/Confirm";
+
+// export default function OPDServiceBooking(props) {
+
+//   const { UHID, TestData, handleConfirmationSubmit
+//     //  ,sendFunctionToParent
+//   } = props;
+//   const location = useLocation();
+//   const [t] = useTranslation();
+//   // Starting date and time
+//   const start = moment(); // current date and time
+//   // Ending time (e.g., 5 minutes after the start)
+//   const end = moment(start).add(5, 'minutes');
+//   // Format the string
+//   const AppointmentFormattedString = `${start.format('DD-MMM-YYYY')}#${start.format('hh:mm A')}-${end.format('hh:mm A')}`;
+//   const [singlePatientData, setSinglePatientData] = useState({});
+//   const [advanceData, setAdvanceData] = useState({});
+//   const [relationdata, setRelationData] = useState([]);
+//   const [visible, setVisible] = useState(false);
+//   const [isExecutionDone, setIsExecutionDone] = useState(false);
+
+//   const [renderComponent, setRenderComponent] = useState({
+//     name: "",
+//     component: null,
+//   });
+//   const [discounts, setDiscounts] = useState({
+//     discountApprovalList: [],
+//     discountReasonList: [],
+//   });
+//   const [confirmBoxvisible, setConfirmBoxvisible] = useState({
+//     show: false,
+//     alertMessage: "",
+//     lableMessage: "",
+//     chidren: "",
+//   });
+//   const [testPaymentState, setTestPaymentState] = useState({
+//     type: "",
+//     category: "0",
+//     subCategory: "0",
+//     searchType: 1,
+//   });
+//   const [testAddingTableState, setTestAddingTable] = useState([]);
+//   const [lastVisitData, setLastVisitData] = useState(null)
+//   const [lastVisitItemData, setLastVisitItemData] = useState(null)
+
+//   let userData = useLocalStorage("userData", "get");
+
+//   console.log(singlePatientData, "singlePatientDatasinglePatientData")
+
+//   // global state for this component
+//   const [payloadData, setPayloadData] = useState({
+//     panelID: singlePatientData?.PanelID,
+//     referalTypeID: {
+//       label: "Self",
+//       value: 4,
+//     },
+//     referDoctorID: "",
+//     DepartmentID: "ALL",
+//     DoctorID: "",
+//     proId: "",
+//     ECHSDoctorID: "",
+//     ECHSPolyClinicID: "",
+//     Source: "",
+//     MLC: "",
+//     ReferEmpID: "",
+//     PatientRelationData: [],
+//     contactNo: singlePatientData?.ContactNo
+//   });
+
+
+
+//   const [paymentControlModeState, setPaymentControlModeState] =
+//     useState(PAYMENT_OBJECT);
+
+//   const [paymentMethod, setPaymentMethod] = useState([]);
+
+//   const [notificationDetail, setNotificationData] = useState([]);
+
+//   const sendReset = () => {
+//     setSinglePatientData({});
+
+//     setTestPaymentState({
+//       type: "",
+//       category: "0",
+//       subCategory: "0",
+//       searchType: 1,
+//     });
+
+//     setTestAddingTable([]);
+
+//     setPayloadData({
+//       panelID: "",
+//       referalTypeID: {
+//         label: "Self",
+//         value: 4,
+//       },
+//       referDoctorID: "",
+//       DepartmentID: "ALL",
+//       DoctorID: "",
+//       proId: "",
+//     });
+
+//     setPaymentControlModeState(PAYMENT_OBJECT);
+//     setPaymentMethod([]);
+//     setNotificationData([]);
+//   };
+
+//   const ModalComponent = (name, component) => {
+//     setVisible(true);
+//     setRenderComponent({
+//       name: name,
+//       component: component,
+//     });
+//   };
+
+//   const handleGetLastVisitDetail = async (PatientID, DoctorID) => {
+//     try {
+//       const response = await GetLastVisitDetail(PatientID, DoctorID);
+//       return response?.data
+
+//     } catch (error) {
+//       console.log(error, "error");
+//     }
+//   };
+
+//   const handleLastVisitDetails = async (PatientID) => {
+//     try {
+//       const data = await LastVisitDetails(PatientID);
+//       return data?.data;
+//     } catch (error) {
+//       console.log(error, "error");
+//     }
+//   };
+
+
+//   const handleJSXNotificationDetils = (details) => {
+//     const { getLastDetail, lastDetail } = details;
+//     const response = {
+//       getLastDetail: {},
+//       lastDetail: {},
+//     };
+
+//     // getLastDetail
+
+//     response.getLastDetail.header =  getLastDetail?.length >0 ? "Last Visit Details" : false;
+
+//     const responsegetLastDetail = getLastDetail[0];
+//     // const responsegetLastDetail = getLastDetail[getLastDetail.length - 1];
+//     const component = (
+//       <div>
+//         <div className="d-flex justify-content-between">
+//           <div>{t("Date")}</div>
+//           <div>{responsegetLastDetail?.VisitDate}</div>
+//         </div>
+
+//         <div className="d-flex justify-content-between">
+//           <div>{t("Valid To")}</div>
+//           <div>{responsegetLastDetail?.ValidTo}</div>
+//         </div>
+
+//         <div className="d-flex justify-content-between">
+//           <div>{t("Amount Paid")}</div>
+//           <div>{responsegetLastDetail?.AmountPaid}</div>
+//         </div>
+
+//         <div className="d-flex justify-content-between">
+//           <div>{t("Days")}</div>
+//           <div>{responsegetLastDetail?.Days}</div>
+//         </div>
+
+//         <div className="d-flex justify-content-between">
+//           <div>{t("Type")}</div>
+//           <div>{responsegetLastDetail?.VisitType}</div>
+//         </div>
+
+//         <div className="d-flex justify-content-between">
+//           <div>{t("Doctor")}</div>
+//           <div>{responsegetLastDetail?.Doctor}</div>
+//         </div>
+//       </div>
+//     );
+
+//     response.getLastDetail.component = component;
+
+//     // lastDetail
+
+//     response.lastDetail.header = lastDetail?.length > 0 ? "Last Visit Details" : false;
+
+//     const responselastDetail = lastDetail;
+
+//     const responselastDetailcomponent = (
+//       <table>
+//         <tbody>
+//           {responselastDetail?.map((ele, index) => (
+//             <tr key={index}>
+//               <td>{index + 1}</td>
+//               <td style={{ textAlign: "left" }}>{ele?.Name}</td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//     );
+
+//     response.lastDetail.component = responselastDetailcomponent;
+//     return response;
+//   };
+
+//   console.log(lastVisitData, "dayaya")
+
+//   const GetSpecialCarePatient = async (PatientID) => {
+//     try {
+//       const response = await FeedBackGetSpecialCarePatient(PatientID);
+//       if (!response?.success) {
+//        notify(response?.message, "warn");
+//       }
+//     } catch (error) {
+//       console.log(error, "error");
+//     }
+//   };
+
+//   const handleSinglePatientData = async (data) => {
+
+//     let blacklist = await CheckblacklistAPI();
+//     const { MRNo } = data;
+//     try {
+//       debugger
+//       // const data = await PatientSearchbyBarcode(MRNo, 1);
+//       const response = await PatientSearchbyBarcode(MRNo, 1);
+//       const pateintCare = await GetSpecialCarePatient(MRNo);
+//       console.log("firstdata", response?.data)
+   
+//       getAdvanceAmount(MRNo)
+//       // if(response?.data?.IPDNo){
+
+//       if (response?.data?.IPDNo && response.data.IPDNo !== "0" && response.data.IPDNo !== "") {
+//         //  notify("Patient already admitted in IPD", "error");
+//         setConfirmBoxvisible({
+//           show: true,
+//           lableMessage: <div>Patient already admitted in IPD</div>,
+//           alertMessage: (
+//             <div>
+//               Patient already admitted in IPD{" "}
+
+//             </div>
+//           ),
+//           chidren: (
+//             <div>
+
+//               <button
+//                 className="btn btn-sm btn-primary mx-1"
+//                 onClick={() => {
+
+//                   setConfirmBoxvisible({
+//                     show: false,
+//                     alertMessage: "",
+//                     lableMessage: "",
+//                     chidren: "",
+//                   });
+//                   //  resolve(true); // Prescribe Again
+//                 }}
+//               >
+//                 OK
+//               </button>
+
+//             </div>
+//           ),
+//         });
+//       }
+//       const responseGetLastVisitDetail = await handleGetLastVisitDetail(
+//         MRNo,
+//         response?.data?.DoctorID
+//       );
+//       if (responseGetLastVisitDetail?.length > 0) {
+
+//         const finalData = responseGetLastVisitDetail?.flatMap((item) => [
+//           { label: "Date", value: item?.VisitDate || "" },
+//           { label: "Valid To", value: item?.ValidTo || "" },
+//           { label: "Amount Paid", value: item?.AmountPaid || 0 },
+//           { label: "Days", value: item?.Days || 0 },
+//           { label: "Type", value: item?.VisitType || "" },
+//           { label: "Doctor", value: item?.Doctor || "" },
+//         ]);
+
+//         setLastVisitData(finalData)
+//       }
+
+//       const responseLastVisitDetail = await handleLastVisitDetails(MRNo);
+//       if (responseLastVisitDetail?.length > 0) {
+
+//         const finalData = responseLastVisitDetail?.flatMap((item, i) => [
+//           { label: i + 1, value: item?.Name || "" },
+//         ]);
+//         setLastVisitItemData(finalData)
+//       }
+
+
+//       if (
+//         responseGetLastVisitDetail.length > 0 ||
+//         responseLastVisitDetail.length > 0
+//       ) {
+//         const { getLastDetail, lastDetail } = handleJSXNotificationDetils({
+//           getLastDetail: responseGetLastVisitDetail,
+//           lastDetail: responseLastVisitDetail,
+//         });
+
+//         const notificationResponse = [];
+//         if(getLastDetail?.header) notificationResponse.push(getLastDetail)
+//         if(lastDetail?.header) notificationResponse.push(lastDetail)
+
+//         setNotificationData(notificationResponse);
+//       }
+//       setSinglePatientData(
+//         Array.isArray(response?.data) ? response?.data[0] : response?.data
+//       );
+//       console.log("response?.dataresponse?.dataresponse?.data", response?.data)
+//       setPayloadData((val) => ({ ...val, DoctorID: response?.data?.DoctorID, Source: response?.data?.Source }));
+//       if (response?.data?.PanelID === 323 || response?.data?.PanelID === 336) {
+//         notify("PATIENT IS UNDER CHIEF MINISTER SCHEME PANEL", "warn")
+//       }
+
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   console.log(advanceData, "advanceData")
+
+//   const getAdvanceAmount = async (uhid) => {
+//     try {
+//       // 
+//       const response = await OPDAdvancegetPatientAdvanceRoleWise(uhid);
+//       if (response?.success) {
+//         console.log("insidee advance", response?.data[0])
+//         setAdvanceData(response?.data[0]);
+//       }
+//       else {
+//         console.log("else advance")
+//         setAdvanceData({})
+//       }
+
+//     } catch (error) {
+
+//     }
+//   }
+
+//   useEffect(() => {
+//     if (UHID) {
+//       handleSinglePatientData({ MRNo: UHID });
+
+//     }
+//   }, [UHID]);
+
+//   const handlePaymentGateWay = (details) => {
+
+//     const {
+//       panelID,
+//       billAmount,
+//       discountAmount,
+//       isReceipt,
+//       patientAdvanceAmount,
+//       autoPaymentMode,
+//       minimumPayableAmount,
+//       panelAdvanceAmount,
+//       disableDiscount,
+//       refund,
+//       constantMinimumPayableAmount,
+//       coPayIsDefault,
+//       discountIsDefault,
+//       discountReason,
+//       discountApproveBy,
+//     } = details;
+
+//     const setData = {
+//       panelID,
+//       billAmount,
+//       discountAmount,
+//       isReceipt,
+//       patientAdvanceAmount,
+//       autoPaymentMode,
+//       minimumPayableAmount,
+//       panelAdvanceAmount,
+//       disableDiscount,
+//       refund,
+//       constantMinimumPayableAmount,
+//       coPayIsDefault,
+//       discountIsDefault,
+//       discountReason,
+//       discountApproveBy,
+//     };
+//     // 
+//     setPaymentMethod([]);
+//     setPaymentControlModeState(setData);
+//   };
+
+//   // table
+
+//   const handleChange = (e, index, name) => {
+//     const { value } = e.target;
+//     const data = [...bodyData];
+//     data[index][name] = value;
+//     console.log("data", data)
+//     setBodyData(data);
+//   };
+// console.log("notificationDetail",notificationDetail)
+//   const renderNotification = useMemo(() => {
+//     return (
+//       <NotificationCard>
+//         {notificationDetail.map((row, index) => {
+//           return (
+//             <MessageCard header={row?.header} key={index}>
+//               {row?.component}
+//             </MessageCard>
+//           );
+//         })}
+//       </NotificationCard>
+//     );
+//   }, [notificationDetail]);
+
+
+//   const GetDiscListAPI = async () => {
+//     try {
+//       const [
+//         discountReasonListRes,
+//         discountApprovalListRes,
+//         eligibleDiscountPercentRes,
+//       ] = await Promise.all([
+//         GetDiscReasonList("OPD"),
+//         BindDisApprovalList("HOSPITAL", "1"),
+//         GetEligiableDiscountPercent(userData?.employeeID),
+//       ]);
+//       const discountReasonList = discountReasonListRes?.data;
+//       const discountApprovalList = discountApprovalListRes?.data;
+//       const eligibleDiscountPercent =
+//         eligibleDiscountPercentRes?.data?.Eligible_DiscountPercent;
+
+//       if (discountReasonList)
+//         setDiscounts((val) => ({ ...val, discountReasonList }));
+//       if (discountApprovalList)
+//         setDiscounts((val) => ({ ...val, discountApprovalList }));
+//       if (eligibleDiscountPercent)
+//         setDiscounts((val) => ({
+//           ...val,
+//           Eligible_DiscountPercent: eligibleDiscountPercent,
+//         }));
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//       // Handle error as needed
+//     }
+//   };
+
+
+
+//   const handleOPDServiceAPI = async () => {
+//     // if(!payload.lt.DepositeBy){
+//     //  
+//     // }
+//     if (isExecutionDone) return;
+//     setIsExecutionDone(true);
+//     try {
+//       if (paymentControlModeState?.discountAmount > 0) {
+//         if (!paymentControlModeState?.discountReason) {
+//           notify("Discount Type is required", "error");
+//           return;
+//         } else if (!paymentControlModeState?.DiscountReasons1) {
+//           notify("Discount Reason is required", "error");
+//           return;
+//         } else if (!paymentControlModeState?.discountApproveBy?.value) {
+//           notify("Discount Approve By is required", "error");
+//           return;
+//         }
+
+//         // return;
+//       }
+
+
+
+//       const { pathname } = location;
+
+//       const hashcode = await bindHashCode();
+//       const { response, payload } = OPDServiceBookingPayload(
+//         singlePatientData,
+//         payloadData,
+//         hashcode?.data,
+//         testAddingTableState,
+//         paymentControlModeState,
+//         paymentMethod,
+//         pathname,
+//         relationdata,
+//         AppointmentFormattedString
+//       );
+
+//       if (!payload?.lt?.DepositedBy || payload.lt.DepositedBy.trim() === "") {
+//         notify("Deposited By is required", "warn");
+//         return;
+//       }
+
+
+
+//       if (Object?.keys(response).length > 0) {
+//         notify(response?.message, response?.status);
+//         return;
+//       }
+
+//       // if (type === "confirmation") {
+//       //   handleConfirmationSubmit(payload);
+//       //   return;
+//       // }
+
+//       const data = await SaveLabPrescriptionOPD({
+//         ...payload,
+//       });
+
+//       if (data?.success) {
+//         //  
+//         const reportResp = await CommonReceiptPdf({
+//           ledgerTransactionNo: data?.data?.ledgerTransactionNo,
+//           isBill: 1,
+//           receiptNo: "",
+//           duplicate: "",
+//           type: "OPD",
+//           supplierID: "",
+//           billNo: "",
+//           isEMGBilling: "",
+//           isOnlinePrint: "",
+//           isRefound: 0,
+//         });
+//         if (data?.success) {
+//           //  
+
+         
+//           sendReset();
+//           if (reportResp?.success) {
+//             RedirectURL(reportResp?.data?.pdfUrl);
+//           } else {
+//             notify(reportResp?.data?.message, "error");
+//           }
+//         }
+//         else {
+//           sendReset();
+//           RedirectURL(reportResp?.data?.pdfUrl);
+//         }
+//         notify(data?.message, "success");
+//         sendReset();
+//         if (UHID) {
+//           handleConfirmationSubmit();
+//         }
+
+//       } else {
+//         notify(data?.message, "error");
+//       }
+//     } catch (error) {
+//       notify(error, "error");
+//       console.log(error, "error");
+//     }
+//     finally {
+//       setIsExecutionDone(false)
+//     }
+//   };
+
+//   useEffect(() => {
+//     GetDiscListAPI();
+//   }, []);
+
+
+//   const setCallingApi = (validateInvestigation) => {
+//     validateInvestigation()
+//   }
+
+
+//   return (
+//     <>
+//       {confirmBoxvisible?.show && (
+//         <Confirm
+//           alertMessage={confirmBoxvisible?.alertMessage}
+//           lableMessage={confirmBoxvisible?.lableMessage}
+//           confirmBoxvisible={confirmBoxvisible}
+//         >
+//           {confirmBoxvisible?.chidren}
+//         </Confirm>
+//       )}
+//       {/* {bodyData.map((ele)=> ele.Qty * ele.Rate)} */}
+//       <div className="card patient_registration border">
+//         <Heading
+//           title={"Search Criteria"}
+//           isBreadcrumb={true}
+          
+//         />
+//         {Object.keys(singlePatientData)?.length === 0 ? (
+//           <SearchComponentByUHIDMobileName onClick={handleSinglePatientData} />
+//         ) : (
+//           <DetailCard
+//             ModalComponent={ModalComponent}
+//             singlePatientData={singlePatientData}
+//             payloadData={payloadData}
+//             setPayloadData={setPayloadData}
+//             sendReset={sendReset}
+//             visible={visible}
+//             setVisible={setVisible}
+//             bindDetailAPI={handleSinglePatientData}
+//             UHID={UHID ?? false}
+//             setRelationData={setRelationData}
+//             lastVisitData={lastVisitData}
+//             lastVisitItemData={lastVisitItemData}
+//           />
+//         )}
+//       </div>
+
+//       <TestPayment
+//         testPaymentState={testPaymentState}
+//         setTestPaymentState={setTestPaymentState}
+//         payloadData={payloadData}
+//         setPayloadData={setPayloadData}
+//         singlePatientData={singlePatientData}
+//         setTestAddingTable={setTestAddingTable}
+//         testAddingTableState={testAddingTableState}
+//         handlePaymentGateWay={handlePaymentGateWay}
+//         TestData={TestData ?? []}
+//         UHID={UHID ?? false}
+//         advanceData={advanceData}
+     
+//       />
+
+
+//       <TestAddingTable
+//         bodyData={testAddingTableState}
+//         setBodyData={setTestAddingTable}
+//         handlePaymentGateWay={handlePaymentGateWay}
+//         paymentControlModeState={paymentControlModeState}
+//         advanceData={advanceData}
+//         singlePatientData={singlePatientData}
+//         payloadData={payloadData}
+//         discounts={discounts}
+//         THEAD={THEAD}
+//         handleChange={handleChange}
+//         UHID={UHID ?? false}
+//       />
+
+//       {/* Payment Component */}
+//       <PaymentGateway
+//         screenType={paymentControlModeState}
+//         setScreenType={setPaymentControlModeState}
+//         paymentMethod={paymentMethod}
+//         setPaymentMethod={setPaymentMethod}
+//         discounts={discounts}
+//         testAddingTableState={testAddingTableState}
+//         button={
+//           <button className="button" onClick={handleOPDServiceAPI}>
+//             {t("Save")}
+//           </button>
+//         }
+//       />
+
+//       <OverLay
+//         visible={visible}
+//         setVisible={setVisible}
+//         Header={renderComponent?.name}
+//       >
+//         {renderComponent?.component}
+//       </OverLay>
+
+//       {renderNotification}
+//     </>
+//   );
+// }
+
+// const DetailCard = ({
+//   ModalComponent,
+//   singlePatientData,
+//   payloadData,
+//   setPayloadData,
+//   sendReset,
+//   visible,
+//   setVisible,
+//   bindDetailAPI,
+//   UHID,
+
+// }) => {
+//   const [t] = useTranslation();
+//   const dispatch = useDispatch();
+//   let ip = useLocalStorage("ip", "get");
+//   const [handleModelData, setHandleModelData] = useState({});
+//   const [modalData, setModalData] = useState({});
+
+//   const setIsOpen = () => {
+//     setHandleModelData((val) => ({ ...val, isOpen: false }));
+//   };
+
+//   // const OPDServiceBookinglist = async (PanelID) => {
+//   //   //anand
+//   //   try {
+//   //     let payload = {
+//   //       "PatientID": singlePatientData?.PatientID ? singlePatientData?.PatientID : "",
+//   //       "Type": 0,
+//   //       "TransactionId": singlePatientData?.TransactionID ? singlePatientData?.TransactionID : "",
+//   //       PannelID: PanelID ? PanelID : singlePatientData?.PanelID
+//   //     }
+
+//   //     const response = await OPDServiceBookingChecklist(payload);
+//   //     if (response?.success) {
+       
+     
+//   //     }
+//   //     else {
+        
+    
+//   //     }
+
+//   //   } catch (error) {
+//   //     console.error("Error saving Pro Name:", error);
+
+//   //   }
+//   // }
+//   // api call
+  
+//   const handleDataInDetailView = useMemo(() => {
+//     const data = [
+//       {
+//         label: t("PatientID"),
+//         value: `${singlePatientData?.PatientID}`,
+//       },
+
+//       {
+//         label: t("Patient Name"),
+//         value: `${singlePatientData?.Title} ${singlePatientData?.PName}`,
+//       },
+//       {
+//         label: t("Gender/Age"),
+//         value: `${singlePatientData?.Gender} / ${singlePatientData?.Age}`,
+//       },
+//       // {
+//       //   label: t("Contact No."),
+//       //   value: singlePatientData?.Mobile,
+//       // },
+
+//       {
+//         label: t("Address"),
+//         value: singlePatientData.House_No,
+//       },
+
+//       {
+//         label: t("Outstanding"),
+//         value: singlePatientData?.Outstanding ?? "0.00",
+//       },
+//     ];
+
+//     return data;
+//   }, [singlePatientData]);
+ 
+
+
+//   // useEffect(() => {
+   
+//   //   OPDServiceBookinglist();
+//   // }, []);
+
+//   let PatientRegistrationArg = {
+//     PatientID: singlePatientData?.PatientID,
+//     setVisible: setVisible,
+//     bindDetailAPI: bindDetailAPI,
+    
+//   };
+
+
+
+//   return (
+//     <>
+//       {handleModelData?.isOpen && (
+//         <Modal
+//           visible={handleModelData?.isOpen}
+//           setVisible={setIsOpen}
+//           modalWidth={handleModelData?.width}
+//           Header={t(handleModelData?.label)}
+//           buttonType={"submit"}
+//           buttons={handleModelData?.extrabutton}
+//           buttonName={handleModelData?.buttonName}
+//           modalData={modalData}
+//           setModalData={setModalData}
+//           footer={handleModelData?.footer}
+//           handleAPI={handleModelData?.handleInsertAPI}
+//         >
+//           {handleModelData?.Component}
+//         </Modal>
+//       )}
+//       <DetailsCardForDefaultValue
+//         singlePatientData={handleDataInDetailView}
+//         PatientRegistrationArg={PatientRegistrationArg}
+//         ModalComponent={ModalComponent}
+//         sendReset={sendReset}
+//         show={UHID}
+//       >
+      
+//       </DetailsCardForDefaultValue>
+
+    
+//     </>
+//   );
+// };
+
+
+
 import { useTranslation } from "react-i18next";
 import Heading from "../../../components/UI/Heading";
 import ReactSelect from "../../../components/formComponent/ReactSelect";
@@ -1265,38 +2107,7 @@ const DetailCard = ({
         show={UHID}
       >
         <>
-          {/* <div className="col-xl-2 col-md-4 col-sm-6 col-12">
-            <MultiSelect
-              name="Relation"
-              // id="Relation"
-              placeholder={t("Relation")}
-              onChange={(e) => {
-                setPayloadData({
-                  ...payloadData,
-                  PatientRelationData: e.value,
-                });
-              }}
-              options={singlePatientData?.PatientRelationData?.map(
-                (ele, i) => ({
-                  label: ele?.RelationName,
-                  value: ele?.RelationID,
-                })
-              )}
-              className="multiselect"
-              value={payloadData?.PatientRelationData}
-            />
-          </div> */}
-          {/* <Input
-            type="text"
-            className="form-control required-fields"
-            id="Mobile"
-            name="Mobile"
-            onChange={handleChange}
-            value={singlePatientData?.Mobile}
-            lable={t("Contact No.")}
-            placeholder=" "
-            respclass="col-xl-2 col-md-3 col-sm-6 col-12"
-          /> */}
+         
           <Input
             type="text"
             className="form-control"
@@ -1660,14 +2471,7 @@ const DetailCard = ({
             </div>
           </Card>
         )}
-        {/* {lastVisitData && (
-
-          <NotificationVisitCard data={lastVisitData} />
-        )}
-        {lastVisitItemData && (
-
-          <NotificationVisitCard data={lastVisitItemData} />
-        )} */}
+       
       </div>
     </>
   );

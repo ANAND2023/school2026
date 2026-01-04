@@ -71,4 +71,8 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 
 
 
+// registrtion start.......
+EnquiryCreateenquiry:"Enquiry/createenquiry",
+GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
+// registrtion end.......
 }

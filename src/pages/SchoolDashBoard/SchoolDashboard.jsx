@@ -6,6 +6,8 @@ import FeesChart from "./FeesChart";
 import AttendanceMeter from "./AttendanceMeter";
 import GenderRatioChart from "./GenderRatioChart";
 import ClassWiseStudentChart from "./ClassWiseStudentChart";
+import EnquiryDashboard from "./EnquiryDashboard";
+import AccountantDashboard from "./AccountantDashboard";
 
 const SchoolDashboard = () => {
   return (
@@ -14,12 +16,12 @@ const SchoolDashboard = () => {
 
       {/* Top Stats */}
       <Row className="g-3 mb-4">
-        <StatsCard title="Students" value="75,643" />
-        <StatsCard title="Leaders" value="425" />
-        <StatsCard title="Vacancies" value="43" highlight />
-        <StatsCard title="Mentors" value="12" />
-        <StatsCard title="APP Cohort" value="34" />
-        <StatsCard title="ALP Cohort" value="128" />
+        <StatsCard title="Admission" value="143" />
+        <StatsCard title="Students" value="643" />
+        <StatsCard title="Teacher" value="43" highlight />
+        <StatsCard title="Staff" value="12" />
+        <StatsCard title="Present Student" value="600" />
+        <StatsCard title="Present Teacher" value="28" />
       </Row>
 
       {/* Charts Section */}
@@ -43,7 +45,7 @@ const SchoolDashboard = () => {
           </Card>
         </Col>
       </Row>
-      <Row className="g-4">
+      <Row className="g-4 mb-4">
         <Col md={4}>
           <Card className="shadow-sm">
             <Card.Body>
@@ -70,6 +72,32 @@ const SchoolDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
+      </Row>
+      <Row className="g-4 mb-4">
+        <Col md={12}>
+          <Card 
+          // className="shadow-sm"
+          >
+            <Card.Body>
+              {/* <Card.Title>Enquiry</Card.Title> */}
+              <EnquiryDashboard />
+            </Card.Body>
+          </Card>
+        </Col>
+       
+      </Row>
+      <Row className="g-4 mb-4">
+        <Col md={12}>
+          <Card 
+          // className="shadow-sm"
+          >
+            <Card.Body>
+              {/* <Card.Title>Enquiry</Card.Title> */}
+              <AccountantDashboard />
+            </Card.Body>
+          </Card>
+        </Col>
+       
       </Row>
     </Container>
   );

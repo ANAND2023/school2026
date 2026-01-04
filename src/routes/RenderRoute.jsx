@@ -504,8 +504,8 @@ const allRoutes = {
       layout: Layout,
       path: "/opd-servicebooking",
       component: lazy(
-        () => import("@app/components/Admission/Admission.jsx")
-        // () => import("@app/pages/frontOffice/OPD/OPDServiceBooking.jsx")
+        // () => import("@app/components/Admission/Admission.jsx")
+        () => import("@app/pages/frontOffice/OPD/OPDServiceBooking.jsx")
       ),
       exact: true,
     },

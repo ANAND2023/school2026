@@ -310,6 +310,7 @@ export default function IPDBillingStatusReport() {
       console.error(err);
     }
   };
+  console.log("GetEmployeeWiseCenter",GetEmployeeWiseCenter)
   return (
     <>
       <div className="card patient_registration border">
@@ -330,16 +331,41 @@ export default function IPDBillingStatusReport() {
             requiredClassName={true}
           /> */}
           <ReportsMultiSelect
+  name="centre"
+  placeholderName="Centre"
+  respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+  values={values}
+  setValues={setValues}
+  dynamicOptions={[
+    { code: 1, name: "MOHANDAI OSWAL HOSPITAL" },
+    { code: 2, name: "ww OSWAL HOSPITAL" }
+  ]}
+  labelKey="name"
+  valueKey="code"
+  requiredClassName={true}
+/>
+
+          {/* <ReportsMultiSelect
             name="centre"
             placeholderName="Centre"
             respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             values={values}
             setValues={setValues}
-            dynamicOptions={GetEmployeeWiseCenter}
+            dynamicOptions={[
+              {
+    "code": 1,
+    "name": "MOHANDAI OSWAL HOSPITAL"
+}
+,{
+    "code": 2,
+    "name": "ww OSWAL HOSPITAL"
+},
+            ]}
+            // dynamicOptions={GetEmployeeWiseCenter}
             labelKey="CentreName"
             valueKey="CentreID"
             requiredClassName={true}
-          />
+          /> */}
 
           {/* <ReactSelect
             placeholderName={t("Date Filter Type")}
