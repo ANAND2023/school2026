@@ -75,4 +75,13 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 EnquiryCreateenquiry:"Enquiry/createenquiry",
 GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
 // registrtion end.......
+
+
+
+
+
+  // MenuManagment start ....
+MenuManagmentcreatemenubulk:"MenuManagment/create-menu-bulk"
+  // MenuManagment start ....
+
 }

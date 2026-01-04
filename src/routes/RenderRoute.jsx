@@ -59,6 +59,7 @@ function RenderRoute() {
 
   const getAllUrls = [];
   getAllUrls.push("/academicmaster");
+  getAllUrls.push("/menu");
 
 
 
@@ -601,6 +602,15 @@ const allRoutes = {
       path: "/academicmaster",
       component: lazy(
         () => import("@app/components/Master/AcademicMaster.jsx")
+      ),
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/menu",
+      component: lazy(
+        () => import("@app/components/Master/MenuMaster/Menu.jsx")
       ),
       exact: true,
     },

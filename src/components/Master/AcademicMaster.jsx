@@ -32,7 +32,7 @@ const AcademicMaster = () => {
     ];
   return (
     <div>
-      {/* <StudentProfile/>
+      <StudentProfile/>
       <FeesPayment/>
       <CreateAcademicYear/>
       <ClassMaster/>
@@ -49,7 +49,7 @@ const AcademicMaster = () => {
       <CreateScholarship/>
       <CreateTax/>
       <Admission/>
-      <Registration/> */}
+      <Registration/>
       <ReactTabs tabs={tabs} />
     </div>
   )
