@@ -1,9 +1,10 @@
-
+const baseUrlMaster = "master/api/v1/";
 export const apiUrls = {
   // Auth
 
  loginAdmin: "identity/api/v1/auth/login",
  BranchMastersGetBranch: "master/api/v1/BranchMasters/GetBranch",
+ getModules: "master/api/v1/MenuManagment/get-modules",
 //  loginAdmin: "Auth/login",
 
  Rolescreaterole: "Roles/createrole",
@@ -82,7 +83,8 @@ GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
 
 
   // MenuManagment start ....
-MenuManagmentcreatemenubulk:"MenuManagment/create-menu-bulk"
+MenuManagmentcreatemenubulk:`${baseUrlMaster}MenuManagment/create-menu-bulk`,
+MenuManagmentgetmenus:`${baseUrlMaster}MenuManagment/get-menus`,
   // MenuManagment start ....
 
 }

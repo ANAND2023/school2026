@@ -69,7 +69,7 @@ export const CentreWisePanelControlCache = createAsyncThunk(
 export const getEmployeeWise = createAsyncThunk(
   "centre",
   async ({ employeeId, OrganizationId }, { dispatch }) => {
-  
+
     const options = {
       method: "POST",
       data: {
@@ -86,9 +86,9 @@ export const getEmployeeWise = createAsyncThunk(
       );
       dispatch(setLoading(false));
       const prevData = useLocalStorage("userData", "get");
-      const newData = { ...prevData, defaultCentre: data?.data[2]?.organizationId };
-      useLocalStorage("userData", "set",newData);
-        debugger
+      const newData = { ...prevData, defaultCentre: data?.data[2]?.id };
+      useLocalStorage("userData", "set", newData);
+      debugger
       return data;
     } catch {
       dispatch(setLoading(false));
@@ -159,25 +159,6 @@ export const BindFrameMenuByRoleID = createAsyncThunk(
   }
 );
 
-export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
-  "GetRoleList",
-  async ({ centreID, employeeID }, { dispatch }) => {
-    const options = {
-      method: "GET",
-    };
-    dispatch(setLoading(true));
-    try {
-      const data = await makeApiRequest(
-        `${apiUrls.getRoleList}?centerID=${centreID}&employeeID=${employeeID}`,
-        options
-      );
-      dispatch(setLoading(false));
-      return data;
-    } catch {
-      dispatch(setLoading(false));
-    }
-  }
-);
 // export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
 //   "GetRoleList",
 //   async ({ centreID, employeeID }, { dispatch }) => {
@@ -197,6 +178,35 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
 //     }
 //   }
 // );
+export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
+  "GetRoleList",
+  async ({ orgId, branchId }, { dispatch }) => {
+    const options = {
+      method: "POST",
+      data: {
+        "searchText": "",
+        "isAll": 0,
+        "orgId": orgId,
+        "branchId": branchId,
+        "isActive": 1
+      }
+    };
+    dispatch(setLoading(true));
+    try {
+      const data = await makeApiRequest(
+        `${apiUrls.getModules}`,
+        options
+      );
+      const prevData = useLocalStorage("userData", "get");
+      const newData = { ...prevData, defaultRole: data?.data[0]?.id };
+      useLocalStorage("userData", "set", newData);
+      dispatch(setLoading(false));
+      return data;
+    } catch {
+      dispatch(setLoading(false));
+    }
+  }
+);
 
 export const GetBindReferDoctor = createAsyncThunk(
   "GetBindDoctorList",
