@@ -46,7 +46,7 @@ const Header = React.memo(() => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
-  
+
   const navbarVariant = useSelector((state) => state.ui.navbarVariant);
   const headerBorder = useSelector((state) => state.ui.headerBorder);
   const screenSize = useSelector((state) => state.ui.screenSize);
@@ -75,7 +75,7 @@ const Header = React.memo(() => {
     };
 
     window.addEventListener('storage', handleStorageChange);
-    
+
     // Poll for changes (since storage event doesn't fire in same tab)
     const interval = setInterval(() => {
       handleStorageChange();
@@ -150,7 +150,7 @@ const Header = React.memo(() => {
 
   useEffect(() => {
     if (localData?.UserId) {
-      dispatch(getEmployeeWise({ 
+      dispatch(getEmployeeWise({
         employeeId: localData?.UserId,
         OrganizationId: localData?.OrganizationId
       }));
@@ -173,14 +173,17 @@ const Header = React.memo(() => {
       const apiResp = await handleUpdateClaims(value, localData?.defaultCentre);
       await dispatch(
         GetBindMenu({
-          RoleID: value,
+          employeeId: localData?.UserId,
+          roleId: value,
+          branchId: localData?.defaultCentre,
+          organizationId: localData?.OrganizationId
         })
       );
-      useLocalStorage("userData", "set", { 
-        ...localData, 
-        defaultRole: value, 
-        deptLedgerNo: apiResp?.data?.loginResponse?.deptLedgerNo, 
-        roleName: apiResp?.data?.loginResponse?.roleName 
+      useLocalStorage("userData", "set", {
+        ...localData,
+        defaultRole: value,
+        deptLedgerNo: apiResp?.data?.loginResponse?.deptLedgerNo,
+        roleName: apiResp?.data?.loginResponse?.roleName
       });
       navigate("/dashboard");
     } catch (error) {
@@ -225,14 +228,14 @@ const Header = React.memo(() => {
   // const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || "null";
   const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
   const activeRole = GetRoleList?.find(r => r.id == localData?.defaultRole) || null;
-  console.log(activeCentre,"activeCentre")
+  console.log(activeCentre, "activeCentre")
   return (
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>
       {/* LEFT SECTION */}
       <div className="md-header-left">
-        <button 
+        <button
           className="md-icon-btn"
-          onClick={handleToggleSidebar} 
+          onClick={handleToggleSidebar}
           title="Toggle Sidebar"
         >
           <Menu size={20} />
@@ -240,18 +243,18 @@ const Header = React.memo(() => {
 
         {/* Centre Selector */}
         <div className="md-selector-wrapper d-none-mobile" style={{ position: 'relative' }}>
-          <button 
+          <button
             className="md-selector-btn"
             style={{ borderColor: currentTheme.primary + '30' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Building2 size={16} style={{ color: currentTheme.primary }} />
-              <span style={{ 
-                whiteSpace: 'nowrap', 
-                overflow: 'hidden', 
-                textOverflow: 'ellipsis', 
-                maxWidth: '180px', 
-                display: 'block' 
+              <span style={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                maxWidth: '180px',
+                display: 'block'
               }}>
                 {activeCentre?.name || "Select Branch"}
               </span>
@@ -261,9 +264,9 @@ const Header = React.memo(() => {
           <select
             className="md-select-overlay"
             value={localData?.defaultCentre}
-            onChange={(e)=>handleChangeCentre(e)}
+            onChange={(e) => handleChangeCentre(e)}
           >
-            {console.log(localData?.defaultCentre,"localData?.defaultCentre")}
+            {console.log(localData?.defaultCentre, "localData?.defaultCentre")}
             {GetEmployeeWiseCenter?.map((ele) => (
               <option key={ele.id} value={ele.id}>{ele.name}</option>
             ))}
@@ -272,17 +275,17 @@ const Header = React.memo(() => {
 
         {/* Role Selector */}
         <div className="md-selector-wrapper d-none-mobile" style={{ position: 'relative' }}>
-          <button 
+          <button
             className="md-selector-btn"
             style={{ borderColor: currentTheme.primary + '30' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ 
-                width: '8px', 
-                height: '8px', 
-                borderRadius: '50%', 
-                backgroundColor: currentTheme.primary, 
-                display: 'inline-block' 
+              <span style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: currentTheme.primary,
+                display: 'inline-block'
               }}></span>
               <span>{activeRole?.name || "Select Module"}</span>
             </div>
@@ -291,7 +294,7 @@ const Header = React.memo(() => {
           <select
             className="md-select-overlay"
             value={localData?.defaultRole}
-            onChange={(e)=>handleChangeRole(e)}
+            onChange={(e) => handleChangeRole(e)}
           >
             {GetRoleList?.map((ele) => (
               <option key={ele.id} value={ele.id}>{ele.name}</option>
@@ -302,12 +305,12 @@ const Header = React.memo(() => {
 
       {/* RIGHT SECTION */}
       <div className="md-header-right">
-        <button 
-          className="md-icon-btn" 
-          onClick={handleThemeToggle} 
+        <button
+          className="md-icon-btn"
+          onClick={handleThemeToggle}
           title="Switch Theme"
-          style={{ 
-            color: isDarkMode ? currentTheme.primary : '#64748b' 
+          style={{
+            color: isDarkMode ? currentTheme.primary : '#64748b'
           }}
         >
           {isDarkMode ? <Moon size={18} /> : <Sun size={18} />}
@@ -319,20 +322,20 @@ const Header = React.memo(() => {
         </button>
 
         <div className="md-user-profile">
-          <div className="d-none-mobile" style={{ 
-            textAlign: 'right', 
-            lineHeight: '1.2', 
-            marginRight: '8px' 
+          <div className="d-none-mobile" style={{
+            textAlign: 'right',
+            lineHeight: '1.2',
+            marginRight: '8px'
           }}>
-            <div style={{ 
-              fontSize: '0.85rem', 
-              fontWeight: '600', 
-              color: '#1e293b' 
+            <div style={{
+              fontSize: '0.85rem',
+              fontWeight: '600',
+              color: '#1e293b'
             }}>
               {localData?.empName}
             </div>
           </div>
-          <div 
+          <div
             className="md-avatar"
             style={{
               background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.primary}dd)`
@@ -342,10 +345,10 @@ const Header = React.memo(() => {
           </div>
         </div>
 
-        <button 
-          className="md-icon-btn" 
-          style={{ color: '#ef4444' }} 
-          onClick={logOut} 
+        <button
+          className="md-icon-btn"
+          style={{ color: '#ef4444' }}
+          onClick={logOut}
           title="Logout"
         >
           <LogOut size={18} />
@@ -568,7 +571,7 @@ export default Header;
 //       {/* LEFT SECTION */}
 //       <div className="md-header-left">
 //         <button className="md-icon-btn"
-//          onClick={handleToggleSidebar} 
+//          onClick={handleToggleSidebar}
 //           // onMouseEnter={handleToggleSidebar}
 //          title="Toggle Sidebar">
 //           <Menu size={20} />
@@ -747,11 +750,11 @@ export default Header;
 //     }
 //   };
 
-  // const handleThemeToggle = () => {
-  //   setIsDarkMode(!isDarkMode);
-  //   // Add logic to switch theme context/css if needed
-  //   // document.body.classList.toggle('dark-mode');
-  // };
+// const handleThemeToggle = () => {
+//   setIsDarkMode(!isDarkMode);
+//   // Add logic to switch theme context/css if needed
+//   // document.body.classList.toggle('dark-mode');
+// };
 
 //   console.log(GetRoleList, "GetRoleList")
 
@@ -784,8 +787,8 @@ export default Header;
 //     loadTranslations(localData?.empLanguageCode, localData?.empLanguage);
 //   }, [dispatch]);
 
-  // const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || null;
-  // const activeRole = GetRoleList?.find(r => r.roleID == localData?.defaultRole) || null;
+// const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || null;
+// const activeRole = GetRoleList?.find(r => r.roleID == localData?.defaultRole) || null;
 
 //   return (
 //     <header className="md-header">

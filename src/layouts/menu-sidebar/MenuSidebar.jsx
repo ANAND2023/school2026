@@ -707,10 +707,10 @@ const THEMES = {
 export const MENU = {
   commonComponent: [
     {
-      menuName: "Dashboard",
+      name: "Dashboard",
       icon: "fas fa-tachometer-alt nav-icon",
-      children: [
-        { childrenName: "Dashboard", icon: "fas fa-regular fa-user", url: "/dashboard", breadcrumb: "Dashboard" },
+      subMenus: [
+        { name: "Dashboard", icon: "fas fa-regular fa-user", pageUrl: "/dashboard", breadcrumb: "Dashboard" },
       ],
     },
   ],
@@ -755,8 +755,9 @@ const MenuSidebar = () => {
   const filteredMenu = useMemo(() => {
     if (!query) return menuData;
     return menuData.map(category => {
-      const matchingChildren = category.children?.filter(child => 
-        child.childrenName?.toLowerCase().includes(query.toLowerCase())
+      debugger
+      const matchingChildren = category.subMenus?.filter(child => 
+        child.name?.toLowerCase().includes(query.toLowerCase())
       );
       if (matchingChildren?.length > 0) return { ...category, children: matchingChildren };
       return null;
@@ -887,14 +888,14 @@ const MenuSidebar = () => {
            
              if (!group) return null;
              
-             const isExpanded = !!expandedMenus[group.menuName];
+             const isExpanded = !!expandedMenus[group.name];
              const MainIcon = getIcon(group.icon);
 
-             if (query && !filteredMenu.find(m => m?.menuName === group.menuName)) return null;
+             if (query && !filteredMenu.find(m => m?.name === group.name)) return null;
 
              const childrenToRender = query 
-                ? (filteredMenu.find(m => m?.menuName === group.menuName)?.children || [])
-                : group.children;
+                ? (filteredMenu.find(m => m?.name === group.name)?.subMenus || [])
+                : group.subMenus;
 
              return (
                <div key={index} className="md-menu-group">
@@ -920,7 +921,7 @@ const MenuSidebar = () => {
                  >
                     <div className="flex items-center gap-3">
                         <MainIcon size={16} className="md-group-icon" />
-                        <span className="md-group-title">{t(group.menuName)}</span>
+                        <span className="md-group-title">{t(group.name)}</span>
                     </div>
                     {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                  </div>
@@ -933,12 +934,12 @@ const MenuSidebar = () => {
                  >
                    {childrenToRender?.map((child, cIndex) => {
                       const ChildIcon = getIcon(child.icon);
-                      const isActive = location.pathname === (child.url || child.path);
+                      const isActive = location.pathname === (child.pageUrl || child.path);
                       
                       return (
                         <NavLink 
                           key={cIndex}
-                          to={child.url || child.path || "#"}
+                          to={child.pageUrl || "#"}
                           state={{ data: child.breadcrumb }}
                           className={`md-nav-item ${isActive ? 'active' : ''}`}
                           onClick={handleCloseMobile}
@@ -974,7 +975,7 @@ const MenuSidebar = () => {
                                 <ChildIcon size={16} />
                               )}
                            </div>
-                           <span className="md-nav-text">{t(child.childrenName || child.name)}</span>
+                           <span className="md-nav-text">{t(child.name )}</span>
                         </NavLink>
                       );
                    })}

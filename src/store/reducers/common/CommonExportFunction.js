@@ -96,17 +96,44 @@ export const getEmployeeWise = createAsyncThunk(
   }
 );
 
+// export const GetBindMenu = createAsyncThunk(
+//   "BindMenu",
+//   async ({ RoleID }, { dispatch }) => {
+//     // console.log("RoleID", RoleID);
+//     const options = {
+//       method: "GET",
+//     };
+//     try {
+//       dispatch(setLoading(true));
+//       const data = await makeApiRequest(
+//         `${apiUrls.BindMenuList}?RoleID=${RoleID}`,
+//         options
+//       );
+//       dispatch(setLoading(false));
+//       return data;
+//     } catch {
+//       dispatch(setLoading(false));
+//     }
+//   }
+// );
+
 export const GetBindMenu = createAsyncThunk(
   "BindMenu",
-  async ({ RoleID }, { dispatch }) => {
+  async ({ employeeId, roleId, branchId, organizationId }, { dispatch }) => {
     // console.log("RoleID", RoleID);
     const options = {
-      method: "GET",
+      method: "POST",
+      data: {
+        "employeeId": employeeId,
+        "roleId": roleId,
+        "branchId": branchId,
+        "organizationId": organizationId
+      }
     };
     try {
       dispatch(setLoading(true));
       const data = await makeApiRequest(
-        `${apiUrls.BindMenuList}?RoleID=${RoleID}`,
+        `${apiUrls.getMenuWithSubmenus}`,
         options
       );
       dispatch(setLoading(false));

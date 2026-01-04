@@ -31,11 +31,14 @@ function RenderRoute() {
         })
       );
 
-      // await dispatch(
-      //   GetBindMenu({
-      //     RoleID: localData?.defaultRole,
-      //   })
-      // );
+      await dispatch(
+        GetBindMenu({
+            employeeId: localData?.UserId,  
+            roleId : localData?.defaultRole,
+            branchId : localData?.defaultCentre, 
+            organizationId : localData?.OrganizationId 
+        })
+      );
 
       // await dispatch(GetBindResourceList());
 
@@ -302,10 +305,16 @@ function RenderRoute() {
   getAllUrls.push("/component-creation");
   getAllUrls.push("/poststock");
   getAllUrls.push("/discard-blood-stock");
+  // GetMenuList?.length > 0 &&
+  //   [...GetMenuList]?.forEach((menu) => {
+  //     menu?.children.forEach((child) => {
+  //       getAllUrls.push(child.url.toLowerCase());
+  //     });
+  //   });
   GetMenuList?.length > 0 &&
     [...GetMenuList]?.forEach((menu) => {
-      menu?.children.forEach((child) => {
-        getAllUrls.push(child.url.toLowerCase());
+      menu?.subMenus.forEach((child) => {
+        getAllUrls.push(child.pageUrl.toLowerCase());
       });
     });
 
@@ -315,6 +324,7 @@ function RenderRoute() {
 
 
   // Filter and bind routes to getAllUrls
+  console.log(GetMenuList,"GetMenuList")
   const bindroutes = allRoutes["roleRoutes"].reduce((acc, current) => {
     if (getAllUrls.includes(current?.path.toLowerCase())) {
       acc.push(current);
