@@ -2,7 +2,8 @@
 export const apiUrls = {
   // Auth
 
- loginAdmin: "auth/login",
+ loginAdmin: "identity/api/v1/auth/login",
+ BranchMastersGetBranch: "master/api/v1/BranchMasters/GetBranch",
 //  loginAdmin: "Auth/login",
 
  Rolescreaterole: "Roles/createrole",

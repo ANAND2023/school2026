@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import makeApiRequest from "../../../networkServices/axiosInstance";
-import { apiUrls } from "../../../networkServices/apiEndpoints";
+// import { apiUrls } from "../../../networkServices/apiEndpoints";
 import { getLocalIP, notify } from "../../../utils/utils";
 import { setLoading } from "../loadingSlice/loadingSlice";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { jwtDecode } from "jwt-decode";
-import { schoolApiEndpoints } from "../../../networkServices/schoolEnpoints";
+import { apiUrls } from "../../../networkServices/SchoolApiEndPoint";
 
 const initialState = {
   user: {},
@@ -24,9 +24,13 @@ export const signInAction = createAsyncThunk(
     };
     try {
       dispatch(setLoading(true));
-      const data = await makeApiRequest(schoolApiEndpoints?.login, options);
+      const data = await makeApiRequest(apiUrls?.loginAdmin, options);
       dispatch(setLoading(false));
-      return data;
+      debugger
+      const user = jwtDecode(data?.data?.accessToken);
+      return {userData: user,
+          accessToken:data?.data?.accessToken
+      };
     } catch {
       dispatch(setLoading(false));
     }
@@ -45,19 +49,20 @@ export const authSlice = createSlice({
         state.success = false;
       })
       .addCase(signInAction.fulfilled, (state, { payload }) => {
+        debugger
         state.user = payload;
         state.loading = false;
         state.success = true;
         state.error = "";
-        state.message = payload.message;
+        state.message = payload.message || "Login Successfully";
         payload?.success === false
           ? notify(payload.Message, "error")
           : notify(payload.Message, "success");
           
-        if (payload?.success) {
-          useLocalStorage("userData", "set", payload?.data?.userDetails);
-          useLocalStorage("token", "set", payload?.data?.token);
-          useLocalStorage("ip", "set", "10.0.2.175")
+        if (payload?.accessToken) {
+          useLocalStorage("userData", "set", payload?.userData);
+          useLocalStorage("accessToken", "set", payload?.accessToken);
+          useLocalStorage("ip", "set", "0.0.0.0")
         //   getLocalIP(ip => {
         //     useLocalStorage("ip", "set", ip?ip:"10.0.2.175")
         // });

@@ -22,21 +22,22 @@ function RenderRoute() {
   const [waitForRoute, setWaitForRoute] = useState(true);
 
   const fetchData = async () => {
+    debugger
     try {
-      await dispatch(
-        GetRoleListByEmployeeIDAndCentreID({
-          employeeID: localData?.employeeID,
-          centreID: localData?.centreID,
-        })
-      );
+      // await dispatch(
+      //   GetRoleListByEmployeeIDAndCentreID({
+      //    employeeId: localData?.UserId,
+      //   OrganizationId: localData?.OrganizationId,
+      //   })
+      // );
 
-      await dispatch(
-        GetBindMenu({
-          RoleID: localData?.defaultRole,
-        })
-      );
+      // await dispatch(
+      //   GetBindMenu({
+      //     RoleID: localData?.defaultRole,
+      //   })
+      // );
 
-      await dispatch(GetBindResourceList());
+      // await dispatch(GetBindResourceList());
 
       setWaitForRoute(false);
     } catch (error) {
