@@ -142,8 +142,8 @@ const Header = React.memo(() => {
 
     await dispatch(
       GetRoleListByEmployeeIDAndCentreID({
-        employeeID: localData?.employeeID,
-        centreID: value,
+        branchId: localData?.defaultCentre,
+        orgId: localData?.OrganizationId,
       })
     );
   };
@@ -223,8 +223,8 @@ const Header = React.memo(() => {
   }, []);
 
   // const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || "null";
-  const activeCentre = GetEmployeeWiseCenter?.find(c => c.organizationId == localData?.defaultCentre) || "null";
-  const activeRole = GetRoleList?.find(r => r.roleID == localData?.defaultRole) || "null";
+  const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
+  const activeRole = GetRoleList?.find(r => r.id == localData?.defaultRole) || null;
   console.log(activeCentre,"activeCentre")
   return (
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>
@@ -265,7 +265,7 @@ const Header = React.memo(() => {
           >
             {console.log(localData?.defaultCentre,"localData?.defaultCentre")}
             {GetEmployeeWiseCenter?.map((ele) => (
-              <option key={ele.id} value={ele.organizationId}>{ele.name}</option>
+              <option key={ele.id} value={ele.id}>{ele.name}</option>
             ))}
           </select>
         </div>
@@ -284,7 +284,7 @@ const Header = React.memo(() => {
                 backgroundColor: currentTheme.primary, 
                 display: 'inline-block' 
               }}></span>
-              <span>{activeRole?.roleName || "Select Module"}</span>
+              <span>{activeRole?.name || "Select Module"}</span>
             </div>
             <ChevronDown size={14} style={{ color: '#94a3b8' }} />
           </button>
@@ -294,7 +294,7 @@ const Header = React.memo(() => {
             onChange={(e)=>handleChangeRole(e)}
           >
             {GetRoleList?.map((ele) => (
-              <option key={ele.roleID} value={ele.roleID}>{ele.roleName}</option>
+              <option key={ele.id} value={ele.id}>{ele.name}</option>
             ))}
           </select>
         </div>

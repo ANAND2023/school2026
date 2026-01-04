@@ -24,12 +24,12 @@ function RenderRoute() {
   const fetchData = async () => {
     debugger
     try {
-      // await dispatch(
-      //   GetRoleListByEmployeeIDAndCentreID({
-      //    employeeId: localData?.UserId,
-      //   OrganizationId: localData?.OrganizationId,
-      //   })
-      // );
+      await dispatch(
+        GetRoleListByEmployeeIDAndCentreID({
+          branchId: localData?.defaultCentre,
+          orgId: localData?.OrganizationId,
+        })
+      );
 
       // await dispatch(
       //   GetBindMenu({
@@ -88,7 +88,7 @@ function RenderRoute() {
 
 
 
-  
+
   getAllUrls.push("/display-name-master");
   getAllUrls.push("/doctor-departmentMapping");
   getAllUrls.push("/voucher-audit");
@@ -333,7 +333,7 @@ function RenderRoute() {
         rtl={false}
         pauseOnHover
       /> */}
-        <Toaster
+      <Toaster
         position="top-center"
         reverseOrder={false}
       />
@@ -516,7 +516,7 @@ const allRoutes = {
       path: "/Lab-Package-Include",
       component: lazy(
         () => import("@app/components/Registration/Registration.jsx")
-    
+
         // () => import("@app/pages/frontOffice/OPD/OPDServiceBooking.jsx")
       ),
       exact: true,
@@ -733,7 +733,7 @@ const allRoutes = {
       ),
       exact: true,
     },
-  
+
 
     {
       Guard: Authenticated,
@@ -1046,7 +1046,7 @@ const allRoutes = {
       ),
       exact: true,
     },
-    
+
     {
       Guard: Authenticated,
       layout: Layout,
@@ -1917,7 +1917,7 @@ const allRoutes = {
       ),
       exact: true,
     },
-  
+
     {
       Guard: Authenticated,
       layout: Layout,
@@ -4290,7 +4290,7 @@ const allRoutes = {
       ),
       exact: true,
     },
-   
+
     {
       Guard: Authenticated,
       layout: Layout,
