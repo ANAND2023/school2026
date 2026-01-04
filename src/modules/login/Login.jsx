@@ -191,7 +191,7 @@
 
 
 
-  
+
 // const [values,setValues]=useState({
 //   userName:""
 // ,password:""
@@ -227,11 +227,11 @@
 
 //   return (
 //     <div className="login-page-wrapper">
-      
+
 //       {/* LEFT SIDE: Blue Background with Illustration */}
 //       <div className="login-left-section">
 //         <div className="brand-name">Digital Vidya Saarthi</div>
-        
+
 //         <div className="illustration-container">
 //           <img src={
 //             ILLUSTRATION_URL
@@ -249,14 +249,14 @@
 //       {/* RIGHT SIDE: White Background with Form */}
 //       <div className="login-right-section">
 //         <div className="form-container">
-          
+
 //           <div className="header-text">
 //             <h2>Samaritans English Medium Sr. Sec. School</h2>
 //             <p className="sub-header">Parents & Students Sign In</p>
 //           </div>
 
 //           <form onSubmit={handleSubmit} className="login-form">
-            
+
 //             <div className="input-group">
 //               <input
 //                 type="text"
@@ -361,7 +361,12 @@ const Login = () => {
       if (Object.keys(errors).length > 0) return;
 
       try {
-        let loginData = await dispatch(signInAction(values));
+        let loginData = await dispatch(signInAction(
+          {
+            "userNameOrEmail": values.userName,
+            "password": values?.password
+          }
+        ));
 
         if (!loginData?.payload?.success) {
           notify(loginData?.payload?.message, "error");
@@ -386,19 +391,19 @@ const Login = () => {
 
   return (
     <div className="login-page-wrapper">
-      
+
       {/* LEFT SIDE: Blue Background with Illustration */}
       <div className="login-left-section">
         <div className="brand-name">Digital Vidya Saarthi</div>
-        
+
         <div className="illustration-container">
           <img src={
             ILLUSTRATION_URL
-            } alt="Login Illustration" className="hero-image" />
+          } alt="Login Illustration" className="hero-image" />
         </div>
 
         <div className="left-content-text">
-          <h1>A few more clicks to <br/> sign in to your account.</h1>
+          <h1>A few more clicks to <br /> sign in to your account.</h1>
         </div>
 
         {/* The White Curve Overlay */}
@@ -408,14 +413,14 @@ const Login = () => {
       {/* RIGHT SIDE: White Background with Form */}
       <div className="login-right-section">
         <div className="form-container">
-          
+
           <div className="header-text">
             <h2>Samaritans English Medium Sr. Sec. School</h2>
             <p className="sub-header">Parents & Students Sign In</p>
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
-            
+
             <div className="input-group">
               <input
                 type="text"
@@ -442,8 +447,8 @@ const Login = () => {
 
             <div className="form-extras">
               <label className="checkbox-container">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   name="rememberMe"
                   onChange={handleChange}
                 />

@@ -130,10 +130,10 @@ const Header = React.memo(() => {
 
   const handleChangeCentre = async (e) => {
     const { value } = e?.target;
-
+    debugger
     await handleUpdateClaims(localData?.defaultRole, value);
 
-    window.location.reload();
+    // window.location.reload();
 
     await useLocalStorage("userData", "set", {
       ...localData,
@@ -149,8 +149,11 @@ const Header = React.memo(() => {
   };
 
   useEffect(() => {
-    if (localData?.employeeID) {
-      dispatch(getEmployeeWise({ employeeID: localData?.employeeID }));
+    if (localData?.UserId) {
+      dispatch(getEmployeeWise({ 
+        employeeId: localData?.UserId,
+        OrganizationId: localData?.OrganizationId
+      }));
     }
   }, [dispatch]);
 
@@ -219,9 +222,10 @@ const Header = React.memo(() => {
     );
   }, []);
 
-  const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || null;
-  const activeRole = GetRoleList?.find(r => r.roleID == localData?.defaultRole) || null;
-
+  // const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || "null";
+  const activeCentre = GetEmployeeWiseCenter?.find(c => c.organizationId == localData?.defaultCentre) || "null";
+  const activeRole = GetRoleList?.find(r => r.roleID == localData?.defaultRole) || "null";
+  console.log(activeCentre,"activeCentre")
   return (
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>
       {/* LEFT SECTION */}
@@ -249,7 +253,7 @@ const Header = React.memo(() => {
                 maxWidth: '180px', 
                 display: 'block' 
               }}>
-                {activeCentre?.CentreName || "Select Centre"}
+                {activeCentre?.name || "Select Branch"}
               </span>
             </div>
             <ChevronDown size={14} style={{ color: '#94a3b8' }} />
@@ -259,8 +263,9 @@ const Header = React.memo(() => {
             value={localData?.defaultCentre}
             onChange={(e)=>handleChangeCentre(e)}
           >
+            {console.log(localData?.defaultCentre,"localData?.defaultCentre")}
             {GetEmployeeWiseCenter?.map((ele) => (
-              <option key={ele.CentreID} value={ele.CentreID}>{ele.CentreName}</option>
+              <option key={ele.id} value={ele.organizationId}>{ele.name}</option>
             ))}
           </select>
         </div>
@@ -279,7 +284,7 @@ const Header = React.memo(() => {
                 backgroundColor: currentTheme.primary, 
                 display: 'inline-block' 
               }}></span>
-              <span>{activeRole?.roleName || "Select Role"}</span>
+              <span>{activeRole?.roleName || "Select Module"}</span>
             </div>
             <ChevronDown size={14} style={{ color: '#94a3b8' }} />
           </button>

@@ -51,7 +51,7 @@ const logOut = () => {
 };
 
 const makeApiRequest = async (url, options, header) => {
-  const localData = useLocalStorage("token", "get");
+  const localData = useLocalStorage("accessToken", "get");
   const validUser = useLocalStorage("userData", "get");
   const { method, data } = options;
   const lowerCaseMethod = method.toLowerCase();
@@ -67,7 +67,7 @@ const makeApiRequest = async (url, options, header) => {
   };
 
   const finalUrl = validUser
-    ? `${url}${parameterChecker()}userValidateID=${validUser?.userValidateID}`
+    ? `${url}`
     : url;
   try {
     store.dispatch(setLoading(true));

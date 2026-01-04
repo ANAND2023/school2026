@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setLoading } from "../loadingSlice/loadingSlice";
-import { apiUrls } from "../../../networkServices/apiEndpoints";
+import { apiUrls } from "../../../networkServices/SchoolApiEndPoint";
 import makeApiRequest from "../../../networkServices/axiosInstance";
 import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import store from "../../store";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 export const CentreWiseCacheByCenterID = createAsyncThunk(
   "CentreWiseCache",
@@ -46,19 +47,48 @@ export const CentreWisePanelControlCache = createAsyncThunk(
   }
 );
 
+// export const getEmployeeWise = createAsyncThunk(
+//   "centre",
+//   async ({ employeeID }, { dispatch }) => {
+//     const options = {
+//       method: "GET",
+//     };
+//     dispatch(setLoading(true));
+//     try {
+//       const data = await makeApiRequest(
+//         `${apiUrls.EmployeeWiseCentreList}?EmployeeId=${employeeID}`,
+//         options
+//       );
+//       dispatch(setLoading(false));
+//       return data;
+//     } catch {
+//       dispatch(setLoading(false));
+//     }
+//   }
+// );
 export const getEmployeeWise = createAsyncThunk(
   "centre",
-  async ({ employeeID }, { dispatch }) => {
+  async ({ employeeId, OrganizationId }, { dispatch }) => {
+  
     const options = {
-      method: "GET",
+      method: "POST",
+      data: {
+        "employeeId": employeeId,
+        "organisationID": OrganizationId,
+        "isAll": 0
+      }
     };
     dispatch(setLoading(true));
     try {
       const data = await makeApiRequest(
-        `${apiUrls.EmployeeWiseCentreList}?EmployeeId=${employeeID}`,
+        `${apiUrls?.BranchMastersGetBranch}`,
         options
       );
       dispatch(setLoading(false));
+      const prevData = useLocalStorage("userData", "get");
+      const newData = { ...prevData, defaultCentre: data?.data[2]?.organizationId };
+      useLocalStorage("userData", "set",newData);
+        debugger
       return data;
     } catch {
       dispatch(setLoading(false));
@@ -148,6 +178,25 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
     }
   }
 );
+// export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
+//   "GetRoleList",
+//   async ({ centreID, employeeID }, { dispatch }) => {
+//     const options = {
+//       method: "GET",
+//     };
+//     dispatch(setLoading(true));
+//     try {
+//       const data = await makeApiRequest(
+//         `${apiUrls.getRoleList}?centerID=${centreID}&employeeID=${employeeID}`,
+//         options
+//       );
+//       dispatch(setLoading(false));
+//       return data;
+//     } catch {
+//       dispatch(setLoading(false));
+//     }
+//   }
+// );
 
 export const GetBindReferDoctor = createAsyncThunk(
   "GetBindDoctorList",
@@ -311,8 +360,8 @@ export const GetPatientDocument = async (PID) => {
     store.dispatch(setLoading(false));
     throw error;
   }
-}; 
- 
+};
+
 
 
 export const ReferenceTypeInsert = createAsyncThunk(
@@ -566,3 +615,32 @@ export const GetAuthorization = createAsyncThunk(
     }
   }
 );
+
+
+// school api calls
+
+// export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
+//   "GetRoleList",
+//   async ({ employeeId, OrganizationId }, { dispatch }) => {
+//     debugger
+//     const options = {
+//       method: "POST",
+//       data: {
+//         "employeeId": employeeId,
+//         "organisationID": OrganizationId,
+//         "isAll": 0
+//       }
+//     };
+//     dispatch(setLoading(true));
+//     try {
+//       const data = await makeApiRequest(
+//         `${apiUrls?.BranchMastersGetBranch}`,
+//         options
+//       );
+//       dispatch(setLoading(false));
+//       return data;
+//     } catch {
+//       dispatch(setLoading(false));
+//     }
+//   }
+// );
