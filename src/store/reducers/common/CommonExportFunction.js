@@ -66,35 +66,7 @@ export const CentreWisePanelControlCache = createAsyncThunk(
 //     }
 //   }
 // );
-export const getEmployeeWise = createAsyncThunk(
-  "centre",
-  async ({ employeeId, OrganizationId }, { dispatch }) => {
 
-    const options = {
-      method: "POST",
-      data: {
-        "employeeId": employeeId,
-        "organisationID": OrganizationId,
-        "isAll": 0
-      }
-    };
-    dispatch(setLoading(true));
-    try {
-      const data = await makeApiRequest(
-        `${apiUrls?.BranchMastersGetBranch}`,
-        options
-      );
-      dispatch(setLoading(false));
-      const prevData = useLocalStorage("userData", "get");
-      const newData = { ...prevData, defaultCentre: data?.data[2]?.id };
-      useLocalStorage("userData", "set", newData);
-      debugger
-      return data;
-    } catch {
-      dispatch(setLoading(false));
-    }
-  }
-);
 
 // export const GetBindMenu = createAsyncThunk(
 //   "BindMenu",
@@ -205,9 +177,39 @@ export const BindFrameMenuByRoleID = createAsyncThunk(
 //     }
 //   }
 // );
+export const getEmployeeWise = createAsyncThunk(
+  "centre",
+  async ({ employeeId, OrganizationId }, { dispatch }) => {
+
+    const options = {
+      method: "POST",
+      data: {
+        "employeeId": employeeId,
+        "organisationID": OrganizationId,
+        "isAll": 0
+      }
+    };
+    dispatch(setLoading(true));
+    try {
+      const data = await makeApiRequest(
+        `${apiUrls?.BranchMastersGetBranch}`,
+        options
+      );
+      dispatch(setLoading(false));
+      const prevData = useLocalStorage("userData", "get");
+      const newData = { ...prevData, defaultCentre: data?.data[2]?.id };
+      useLocalStorage("userData", "set", newData);
+      debugger
+      return data;
+    } catch {
+      dispatch(setLoading(false));
+    }
+  }
+);
 export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
   "GetRoleList",
   async ({ orgId, branchId }, { dispatch }) => {
+    debugger
     const options = {
       method: "POST",
       data: {
@@ -234,6 +236,7 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
     }
   }
 );
+
 
 export const GetBindReferDoctor = createAsyncThunk(
   "GetBindDoctorList",

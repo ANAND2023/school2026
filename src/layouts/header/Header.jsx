@@ -157,15 +157,15 @@ const Header = React.memo(() => {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(
-      getNotification({
-        RoleID: localData?.defaultRole,
-        EmployeeID: localData?.employeeID,
-        CentreID: localData?.defaultCentre,
-      })
-    );
-  }, []);
+  // useEffect(() => {
+  //   dispatch(
+  //     getNotification({
+  //       RoleID: localData?.defaultRole,
+  //       EmployeeID: localData?.employeeID,
+  //       CentreID: localData?.defaultCentre,
+  //     })
+  //   );
+  // }, []);
 
   const handleChangeRole = async (e) => {
     const { value } = e.target
@@ -214,16 +214,16 @@ const Header = React.memo(() => {
     }
   };
 
-  useEffect(() => {
-    dispatch(getBindCategory());
-    loadTranslations(localData?.empLanguageCode, localData?.empLanguage)
+  // useEffect(() => {
+  //   dispatch(getBindCategory());
+  //   loadTranslations(localData?.empLanguageCode, localData?.empLanguage)
 
-    dispatch(
-      getBindPanelList({
-        PanelGroup: "ALL",
-      })
-    );
-  }, []);
+  //   dispatch(
+  //     getBindPanelList({
+  //       PanelGroup: "ALL",
+  //     })
+  //   );
+  // }, []);
 
   // const activeCentre = GetEmployeeWiseCenter?.find(c => c.CentreID == localData?.defaultCentre) || "null";
   const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
