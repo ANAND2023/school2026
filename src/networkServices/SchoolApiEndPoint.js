@@ -43,16 +43,19 @@ GetAllSubjects:"academicmaster/GetAllSubjects",
 // class end ....
 
 // branch start ...
-CreateBranch:"branchmasters/CreateBranch",
-
-GetAllBranches:"branchmasters/GetBranch",
+// CreateBranch:"branchmasters/CreateBranch",
+CreateBranch:`${baseUrlMaster}branchmasters/CreateBranch`,
+GetAllBranches:`${baseUrlMaster}branchmasters/GetBranch`,
+// GetAllBranches:"branchmasters/GetBranch",
 Createorganisation:"organizationmaster/createorganisation",
-GetAllOrganisation:"organizationmaster/GetAllOrganisation",
+// GetAllOrganisation:"organizationmaster/GetAllOrganisation",
+GetAllOrganisation:`${baseUrlMaster}organizationmaster/GetAllOrganisation`,
 // branch End ...
   
 // Fee Master Start .....
-CreateBankAccount:"feemaster/CreateBankAccount",
-GetAllBankAccounts:"feemaster/GetAllBankAccounts",
+CreateBankAccount:`${baseUrlMaster}feemaster/CreateBankAccount`,
+// GetAllBankAccounts:"feemaster/GetAllBankAccounts",
+GetAllBankAccounts:`${baseUrlMaster}feemaster/GetAllBankAccounts`,
 CreateFeeConcession:"feemaster/CreateFeeConcession",
 GetAllFeeConcessions:"feemaster/GetAllFeeConcessions",
 CreateFeeHead:"feemaster/CreateFeeHead",

@@ -15,7 +15,7 @@ function Branch() {
 
   /* ================= INITIAL DATA ================= */
   const initialData = {
-    organisationId: "",
+    organisationId: "5bbf859d-9907-4117-aead-c260d030d335",
     name: "",
     address: {
       street: "",
@@ -67,8 +67,13 @@ function Branch() {
 
   /* ================= API ================= */
   const getData = async () => {
+    const payload={
+  "employeeId": "",
+  "organisationID": values?.organisationId,
+  "isAll": 1
+}
     try {
-      const res = await GetAllBranches();
+      const res = await GetAllBranches(payload);
       if (res?.success) setTableData(res.data);
       else notify(res?.message, "error");
     } catch {
@@ -77,7 +82,7 @@ function Branch() {
   };
 
   useEffect(() => {
-    // getData();
+    getData();
   }, []);
 
   const handleSave = async () => {
@@ -117,19 +122,7 @@ function Branch() {
         <Heading title={t("Branch Master")} isBreadcrumb={false} />
 
         <div className="row p-2">
-          {/* ===== BASIC ===== */}
-          {/* <Input
-                        type="number"
-                        className="form-control required-fields"
-                        id="subjectCode"
-                        name="subjectCode"
-                        value={values?.subjectCode ? values?.subjectCode : ""}
-                        // onChange={handleChange}
-                        lable={t("Subject Code")}
-                        placeholder=" "
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true} */}
-                        
+          
           <Input 
           className="form-control required-fields"
           name="organisationId" value={values.organisationId} lable="Organisation Id"
@@ -229,23 +222,33 @@ function Branch() {
           </div>
         </div>
 
-        {/* ===== TABLE ===== */}
         <Tables
-          thead={[{ name: "Branch" }, { name: "Action" }]}
-          tbody={tableData?.map((item) => ({
-            Branch: item?.name,
-            action: (
-              <div className="row gap-2">
-                <button className="btn btn-sm">
-                  <i className="bi bi-pencil-square"></i>
-                </button>
-                <button className="btn btn-sm">
-                  <i className="bi bi-trash3"></i>
-                </button>
-              </div>
-            ),
-          }))}
-        />
+                    thead={[
+                        { name: "Name" },
+                       
+                        { name: "Action" }
+                    ]}
+                    tbody={tableData.map((item, index) => ({
+                        name: item.name,
+                       
+                        action: (
+                            <div className="d-flex gap-2">
+                                <button
+                                    className="btn btn-sm btn-warning"
+                                    onClick={() => handleEdit(item)}
+                                >
+                                    ✏️
+                                </button>
+                                <button
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    🗑️
+                                </button>
+                            </div>
+                        )
+                    }))}
+                />
       </div>
     </>
   );
