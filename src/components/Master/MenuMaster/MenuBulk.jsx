@@ -87,8 +87,6 @@ const MenuBulk = () => {
         }
     };
     const handleGetMenus = async () => {
-
-        debugger
         const payload =
         {
             "searchText": "",
@@ -97,21 +95,6 @@ const MenuBulk = () => {
             "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
             "isActive": 0
         }
-
-        // [
-        //   {
-        //     name: values.name,
-        //     code: values.code,
-        //     icon: values.icon,
-        //     displayOrder: Number(values.displayOrder),
-        //     branchId: "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
-        //     // branchId: values.branchId?.value,
-        //     orgId:"5bbf859d-9907-4117-aead-c260d030d335"
-        //     // orgId: values.orgId
-        //   }
-        // ];
-
-        // console.log("FINAL PAYLOAD 👉", payload);
 
         try {
             const res = await MenuManagmentgetmenus(payload);
@@ -211,7 +194,10 @@ const MenuBulk = () => {
                         respclass="col-xl-2 col-md-4 col-sm-6 col-12"
                         name="branchId"
                         // dynamicOptions={branchList}
-                        dynamicOptions={GetEmployeeWiseCenter}
+                        dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+                            value: ele.id,
+                            label: ele.name
+                        }))}
                         handleChange={handleSelect}
                         value={values.branchId}
                         className="form-control"
@@ -235,15 +221,18 @@ const MenuBulk = () => {
                         { name: "Code" },
                         { name: "Order" },
                         { name: "Icon" },
+                        { name: "Branch" },
                         { name: "Action" }
                     ]}
                     tbody={tableData.map((item, index) => ({
                         name: item.name,
                         code: item.code,
                         Order: item.displayOrder,
+                      
                         // Icon:<span><i className="fa fa-solid fa-user"></i></span> ,
                         Icon: <i className={`${item.icon} me-2`}></i>,
                         // Icon: item.icon,
+                          Branch: item.Branch,
                         action: (
                             <div className="d-flex gap-2">
                                 <button

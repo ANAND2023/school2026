@@ -80,7 +80,7 @@ const ModuleEmployeeMap = () => {
 
   return (
     <div className="card p-2">
-      <Heading title="Module Master" isBreadcrumb={false} />
+      <Heading title="Module Employee Mapping" isBreadcrumb={false} />
 
       {/* ================= FORM ================= */}
       <div className="row p-2 g-2">

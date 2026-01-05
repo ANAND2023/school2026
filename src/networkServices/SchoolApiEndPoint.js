@@ -84,7 +84,11 @@ GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
 
   // MenuManagment start ....
 MenuManagmentcreatemenubulk:`${baseUrlMaster}MenuManagment/create-menu-bulk`,
+MenuManagmentcreatesubmenubulk:`${baseUrlMaster}MenuManagment/create-submenu-bulk`,
 MenuManagmentgetmenus:`${baseUrlMaster}MenuManagment/get-menus`,
+MenuManagmentgetsubmenus:`${baseUrlMaster}MenuManagment/get-submenus`,
+MenuManagmentCreateModuleBulk:`${baseUrlMaster}MenuManagment/create-module-bulk`,
+MenuManagmentGeModuleBulk:`${baseUrlMaster}MenuManagment/get-modules`,
   // MenuManagment start ....
 
 }

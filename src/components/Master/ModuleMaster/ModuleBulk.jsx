@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../../components/formComponent/Input";
 import Tables from "../../../components/UI/customTable";
 import ReactSelect from "../../formComponent/ReactSelect";
 import Heading from "../../UI/Heading";
 import { notify } from "../../../utils/utils";
-import { MenuCreatebulk } from "../../../networkServices/MenuMaster";
+import { MenuCreatebulk, MenuManagmentCreateModuleBulk, MenuManagmentGeModuleBulk } from "../../../networkServices/MenuMaster";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getEmployeeWise } from "../../../store/reducers/common/CommonExportFunction";
 
 const ModuleBulk = () => {
+        const localData = useLocalStorage("userData", "get");
+        const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
+            (state) => state?.CommonSlice
+        );
+        const dispatch = useDispatch();
   const initialData = {
     name: "",
     code: "",
@@ -43,7 +52,10 @@ const ModuleBulk = () => {
       return;
     }
 
-    const payload = [
+    const payload = 
+    
+
+    [
       {
         name: values.name,
         code: values.code,
@@ -58,11 +70,57 @@ const ModuleBulk = () => {
     console.log("FINAL PAYLOAD 👉", payload);
 
     try {
-      const res = await MenuCreatebulk(payload);
+      const res = await MenuManagmentCreateModuleBulk(payload);
       if (res?.success) {
-        setTableData(prev => [...prev, payload[0]]);
+        // setTableData(prev => [...prev, payload[0]]);
         setValues(initialData);
-        notify("Module Saved Successfully", "success");
+        notify(res?.message, "success");
+      } else {
+        notify(res?.message, "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
+  const getModuleBulk = async () => {
+   
+
+    const payload = 
+      {
+            "searchText": "",
+            "isAll": 1,
+            "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
+            "branchId": values.branchId?.value ?? "",
+            // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
+            "isActive": 0
+        }
+// {
+//   "searchText": "",
+//   "isAll": 0,
+//   "orgId": "string",
+//   "branchId": "string",
+//   "isActive": 0
+// }
+    // [
+    //   {
+    //     name: values.name,
+    //     code: values.code,
+    //     description: values.description,
+    //     icon: values.icon,
+    //     displayOrder: Number(values.displayOrder),
+    //     branchId: values.branchId?.value,
+    //     orgId: values.orgId
+    //   }
+    // ];
+
+    console.log("FINAL PAYLOAD 👉", payload);
+
+    try {
+      const res = await MenuManagmentGeModuleBulk(payload);
+      if (res?.success) {
+        setTableData(res?.data);
+        // setValues(initialData);
+        notify(res?.message, "success");
       } else {
         notify(res?.message, "error");
       }
@@ -78,6 +136,17 @@ const ModuleBulk = () => {
     setTableData(data);
   };
 
+    useEffect(() => {
+          if (localData?.UserId) {
+              dispatch(getEmployeeWise({
+                  employeeId: localData?.UserId,
+                  OrganizationId: localData?.OrganizationId
+              }));
+          }
+      }, [dispatch]);
+      useEffect(() => {
+          getModuleBulk();
+      }, []);
   return (
     <>
       <div className="card p-2">
@@ -85,6 +154,19 @@ const ModuleBulk = () => {
 
         {/* ================= FORM ================= */}
         <div className="row p-2">
+            <ReactSelect
+                                    placeholderName="Branch"
+                                    respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                                    name="branchId"
+                                    // dynamicOptions={branchList}
+                                    dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+                                        value: ele.id,
+                                        label: ele.name
+                                    }))}
+                                    handleChange={handleSelect}
+                                    value={values.branchId}
+                                    className="form-control"
+                                />
           <Input
             type="text"
             name="name"
@@ -134,7 +216,7 @@ const ModuleBulk = () => {
             onChange={handleChange}
             className="form-control"
           />
-
+{/* 
           <ReactSelect
             placeholderName="Branch"
             respclass="col-xl-2 col-md-4 col-sm-6 col-12"
@@ -142,7 +224,7 @@ const ModuleBulk = () => {
             dynamicOptions={branchList}
             handleChange={handleSelect}
             value={values.branchId}
-          />
+          /> */}
 
           <div className="col-12 text-end mt-2">
             <button
