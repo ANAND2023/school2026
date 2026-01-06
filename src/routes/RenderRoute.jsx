@@ -125,6 +125,7 @@ function RenderRoute() {
   getAllUrls.push("/revenue-analysis-dashboard");
   getAllUrls.push("/set-doctors");
   getAllUrls.push("/display-doctors");
+  getAllUrls.push("/menu");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
