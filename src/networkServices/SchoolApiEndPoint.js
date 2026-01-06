@@ -1,11 +1,10 @@
-
+const baseUrlMaster = "master/api/v1/";
 export const apiUrls = {
   // Auth
 
  loginAdmin: "identity/api/v1/auth/login",
  BranchMastersGetBranch: "master/api/v1/BranchMasters/GetBranch",
  getModules: "master/api/v1/MenuManagment/get-modules",
- getMenuWithSubmenus: "master/api/v1/MenuManagment/get-menu-with-submenus",
 //  loginAdmin: "Auth/login",
 
  Rolescreaterole: "Roles/createrole",
@@ -44,16 +43,19 @@ GetAllSubjects:"academicmaster/GetAllSubjects",
 // class end ....
 
 // branch start ...
-CreateBranch:"branchmasters/CreateBranch",
-
-GetAllBranches:"branchmasters/GetBranch",
+// CreateBranch:"branchmasters/CreateBranch",
+CreateBranch:`${baseUrlMaster}branchmasters/CreateBranch`,
+GetAllBranches:`${baseUrlMaster}branchmasters/GetBranch`,
+// GetAllBranches:"branchmasters/GetBranch",
 Createorganisation:"organizationmaster/createorganisation",
-GetAllOrganisation:"organizationmaster/GetAllOrganisation",
+// GetAllOrganisation:"organizationmaster/GetAllOrganisation",
+GetAllOrganisation:`${baseUrlMaster}organizationmaster/GetAllOrganisation`,
 // branch End ...
   
 // Fee Master Start .....
-CreateBankAccount:"feemaster/CreateBankAccount",
-GetAllBankAccounts:"feemaster/GetAllBankAccounts",
+CreateBankAccount:`${baseUrlMaster}feemaster/CreateBankAccount`,
+// GetAllBankAccounts:"feemaster/GetAllBankAccounts",
+GetAllBankAccounts:`${baseUrlMaster}feemaster/GetAllBankAccounts`,
 CreateFeeConcession:"feemaster/CreateFeeConcession",
 GetAllFeeConcessions:"feemaster/GetAllFeeConcessions",
 CreateFeeHead:"feemaster/CreateFeeHead",
@@ -78,4 +80,18 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 EnquiryCreateenquiry:"Enquiry/createenquiry",
 GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
 // registrtion end.......
+
+
+
+
+
+  // MenuManagment start ....
+MenuManagmentcreatemenubulk:`${baseUrlMaster}MenuManagment/create-menu-bulk`,
+MenuManagmentcreatesubmenubulk:`${baseUrlMaster}MenuManagment/create-submenu-bulk`,
+MenuManagmentgetmenus:`${baseUrlMaster}MenuManagment/get-menus`,
+MenuManagmentgetsubmenus:`${baseUrlMaster}MenuManagment/get-submenus`,
+MenuManagmentCreateModuleBulk:`${baseUrlMaster}MenuManagment/create-module-bulk`,
+MenuManagmentGeModuleBulk:`${baseUrlMaster}MenuManagment/get-modules`,
+  // MenuManagment start ....
+
 }

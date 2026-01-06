@@ -20,7 +20,7 @@ function Subject() {
     const [t] = useTranslation(); const initialData = {
         subjectCode: "",
         subjectName: "",
-        isPractical:{ label: "Yes", value: "true" },
+        isPractical: { label: "Yes", value: "true" },
 
     }
     const [values, setValues] = useState(initialData);
@@ -81,12 +81,12 @@ function Subject() {
 
         const Payload =
         {
-  "subjectName": "string",
-  "subjectCode": "string",
-  "isPractical": true
-}
+            "subjectName": "string",
+            "subjectCode": "string",
+            "isPractical": true
+        }
 
-        
+
         // {
         //     "className": values?.class_name ?? "",
         //     "classOrder": Number(values?.Order ?? 0)
@@ -112,7 +112,7 @@ function Subject() {
         handleChange(e)
 
     }
-     const handleSelect = (name, value) => {
+    const handleSelect = (name, value) => {
         setValues((prev) => ({ ...prev, [name]: value }));
     };
     return (
@@ -165,21 +165,21 @@ function Subject() {
                         isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />
-                     <ReactSelect
-                                            placeholderName={t("Is Practical")}
-                                            searchable={true}
-                                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                            id="isPractical"
-                                            name="isPractical"
-                                            removeIsClearable={true}
-                                            dynamicOptions={[
-                                                { label: "Yes", value: "true" },
-                                                { label: "No", value: "false" },
-                                            ]}
-                                            handleChange={handleSelect}
-                                            value={values?.isPractical?.value}
-                                            requiredClassName="required-fields"
-                                        />
+                    <ReactSelect
+                        placeholderName={t("Is Practical")}
+                        searchable={true}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        id="isPractical"
+                        name="isPractical"
+                        removeIsClearable={true}
+                        dynamicOptions={[
+                            { label: "Yes", value: "true" },
+                            { label: "No", value: "false" },
+                        ]}
+                        handleChange={handleSelect}
+                        value={values?.isPractical?.value}
+                        requiredClassName="required-fields"
+                    />
 
                     <div className="col-12 text-right">
                         <button

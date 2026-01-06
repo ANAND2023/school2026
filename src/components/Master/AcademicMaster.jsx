@@ -32,10 +32,10 @@ const AcademicMaster = () => {
     ];
   return (
     <div>
-      {/* <StudentProfile/>
-      <FeesPayment/>
-      <CreateAcademicYear/>
-      <ClassMaster/>
+      {/* <StudentProfile/> */}
+      {/* <FeesPayment/> */}
+      {/* <CreateAcademicYear/> */}
+      {/* <ClassMaster/>
       <SectionMaster/>
       <Subject/>
       <Branch/>

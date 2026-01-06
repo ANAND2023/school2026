@@ -191,12 +191,13 @@ function RenderRoute() {
   
   getAllUrls.push("/display-name-master");
   getAllUrls.push("/doctor-departmentMapping");
+  getAllUrls.push("/menu");
   // ... (include all other URLs as in original)
 
   GetMenuList?.length > 0 &&
     [...GetMenuList]?.forEach((menu) => {
-      menu?.subMenus.forEach((child) => {
-        getAllUrls.push(child.pageUrl.toLowerCase());
+      menu?.children.forEach((child) => {
+        getAllUrls.push(child.url.toLowerCase());
       });
     });
 
@@ -480,6 +481,15 @@ const allRoutes = {
       path: "/academicmaster",
       component: lazy(
         () => import("@app/components/Master/AcademicMaster.jsx")
+      ),
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/menu",
+      component: lazy(
+        () => import("@app/components/Master/MenuMaster/Menu.jsx")
       ),
       exact: true,
     },

@@ -74,7 +74,7 @@ function OrganizationMaster() {
   };
 
   useEffect(() => {
-    // getData();
+    getData();
   }, []);
 
   /* ================= SAVE ================= */
@@ -233,21 +233,32 @@ function OrganizationMaster() {
           </div>
         </div>
 
-        {/* ===== TABLE ===== */}
         <Tables
-          thead={[{ name: "Organization" }, { name: "Action" }]}
-          tbody={tableData?.map((item) => ({
+          thead={[
+            { name: "Sn", width: "1%" },
+            { name: "Organization", width: "70%" },
+            { name: "Action", width: "30%" }
+          ]}
+          tbody={tableData.map((item, index) => ({
+            sn: index + 1,
             Organization: item?.name,
+
             action: (
-              <div className="row gap-2">
-                <button className="btn btn-sm">
-                  <i className="bi bi-pencil-square"></i>
+              <div className="d-flex gap-2">
+                <button
+                  className="btn btn-sm btn-warning"
+                  onClick={() => handleEdit(item)}
+                >
+                  ✏️
                 </button>
-                <button className="btn btn-sm">
-                  <i className="bi bi-trash3"></i>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={() => handleDelete(index)}
+                >
+                  🗑️
                 </button>
               </div>
-            ),
+            )
           }))}
         />
       </div>

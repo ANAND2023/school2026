@@ -188,7 +188,7 @@ export const GetAllBranches = async (params) => {
   try {
     const options = {
       method: "POST",
-    //   data: params,
+      data: params,
     };
     const data = await makeApiRequest(
       `${apiUrls.GetAllBranches}`,

@@ -329,10 +329,10 @@ const Dashboard = () => {
 
   }
 
-  // useEffect(() => {
-  //   handleCommonAPIGetEmpBirthDay();
-  //   getUserRights()
-  // }, [localdata?.defaultRole]);
+  useEffect(() => {
+    handleCommonAPIGetEmpBirthDay();
+    getUserRights()
+  }, [localdata?.defaultRole]);
 
   const generateRandomColor = (numColors) => {
     const r = Math.floor(Math.random() * 255);

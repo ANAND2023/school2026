@@ -90,21 +90,15 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
 );
 export const GetBindMenu = createAsyncThunk(
   "BindMenu",
-  async ({ employeeId, roleId, branchId, organizationId }, { dispatch }) => {
+  async ({ RoleID }, { dispatch }) => {
     // console.log("RoleID", RoleID);
     const options = {
-      method: "POST",
-      data: {
-        "employeeId": employeeId,
-        "roleId": roleId,
-        "branchId": branchId,
-        "organizationId": organizationId
-      }
+      method: "GET",
     };
     try {
       dispatch(setLoading(true));
       const data = await makeApiRequest(
-        `${apiUrls.getMenuWithSubmenus}`,
+        `${apiUrls.BindMenuList}?RoleID=${RoleID}`,
         options
       );
       dispatch(setLoading(false));

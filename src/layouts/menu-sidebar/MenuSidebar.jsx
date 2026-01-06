@@ -266,7 +266,7 @@ const MenuSidebar = () => {
           {filteredMenu.map((group, index) => {
              if (!group) return null;
              
-             const isExpanded = !!expandedMenus[group.name];
+             const isExpanded = !!expandedMenus[group.menuName];
              const MainIcon = getIcon(group.icon);
              const childrenToRender = group.subMenus || [];
              const groupKey = group.id || index;
