@@ -8,10 +8,10 @@ const Footer = () => {
     <footer className="main-footer">
       <strong>
         <span>Copyright © {DateTime.now().toFormat('y')} </span>
-        <a href="https://www.itdoseinfo.com" target="_blank" rel="noopener noreferrer">
-          itdoseinfo.com
+        <a href="/" target="_blank" rel="noopener noreferrer">
+          digitalvidyasarthi.com
         </a>
-        <span>.</span>
+        <span></span>
       </strong>
       <div className="float-right d-none d-sm-inline-block">
         <b>{t('version')}  </b>

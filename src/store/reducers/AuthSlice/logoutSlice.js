@@ -20,7 +20,8 @@ export const logoutAction = createAsyncThunk(
     };
     try {
       dispatch(setLoading(true));
-      await makeApiRequest(apiUrls?.logout, options);
+      // await makeApiRequest(apiUrls?.logout, options);
+      
 
       dispatch(setLoading(false));
       // return data;

@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, lazy, useEffect, useState } from "react";
+import React, { Fragment, Suspense, lazy, useEffect, useState, useRef } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Loading from "@app/components/loader/Loading";
 import ErrorBoundary from "../layouts/error-Boundary";
@@ -9,203 +9,133 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocalStorage } from "../utils/hooks/useLocalStorage";
 import {
   GetBindMenu,
-  GetBindResourceList,
   getEmployeeWise,
   GetRoleListByEmployeeIDAndCentreID,
 } from "../store/reducers/common/CommonExportFunction";
-import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
-
-
-// ... imports
 
 function RenderRoute() {
   const { GetMenuList } = useSelector((state) => state?.CommonSlice);
-  const localData = useLocalStorage("userData", "get");
-  // const location = useLocation(); // Not strictly needed for logic
+  // Get raw value from localStorage without triggering re-renders on every update inside this component
+  const localData = JSON.parse(localStorage.getItem("userData")); 
   const dispatch = useDispatch();
-  const [waitForRoute, setWaitForRoute] = useState(true); // Default true to prevent flicker
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const [waitForRoute, setWaitForRoute] = useState(true);
+  
+  // Ref to prevent double-firing in Strict Mode or due to re-renders
+  const dataFetchedRef = useRef(false);
 
   const fetchData = async () => {
+    debugger
+    // If no user data, stop waiting and let auth guards handle redirect
+    if (!localData?.UserId) {
+      setWaitForRoute(false);
+      return;
+    }
+
     try {
       // 1. Fetch Branches
-      const employeeWiseResult = await dispatch(getEmployeeWise({
+      const employeeResult = await dispatch(getEmployeeWise({
         employeeId: localData?.UserId,
         OrganizationId: localData?.OrganizationId
-      })).unwrap(); // unwrap() ensures we get the raw data or throw error
+      })).unwrap();
 
-      const branchList = employeeWiseResult?.data;
-
+      const branchList = employeeResult?.data;
       if (!branchList || branchList.length === 0) {
-        console.warn("No branches found for user");
         setWaitForRoute(false);
         return;
       }
 
-      // 2. Determine Active Branch
-      // Prefer the one in localData, fallback to index 0
-      let activeBranchId = localData?.defaultCentre;
-      const isBranchValid = branchList.find(b => b.id == activeBranchId);
+      // 2. Determine Active Branch (Prefer LS value, fallback to 1st item)
+      let currentBranchId = localData?.defaultCentre;
+      const isBranchValid = branchList.find(b => b.id == currentBranchId);
       
-      if (!activeBranchId || !isBranchValid) {
-        activeBranchId = branchList[0]?.id;
-        // Update local helper var (LocalStorage is updated in Thunk, but we need the ID now)
+      if (!currentBranchId || !isBranchValid) {
+        currentBranchId = branchList[0]?.id;
+        // Update Redux/LS silently if needed, but we use the ID for next call immediately
       }
 
       // 3. Fetch Roles
       const roleResult = await dispatch(
         GetRoleListByEmployeeIDAndCentreID({
-          branchId: activeBranchId,
+          branchId: currentBranchId,
           orgId: localData?.OrganizationId,
         })
       ).unwrap();
 
       const roleList = roleResult?.data;
-      
-      // 4. Determine Active Role
-      let activeRoleId = localData?.defaultRole;
-      const isRoleValid = roleList?.find(r => r.id == activeRoleId);
-
-      if(!activeRoleId || !isRoleValid) {
-         activeRoleId = roleList && roleList.length > 0 ? roleList[0].id : null;
+      if (!roleList || roleList.length === 0) {
+        setWaitForRoute(false);
+        return;
       }
 
-      if (!activeRoleId) {
-         console.warn("No roles found");
-         setWaitForRoute(false);
-         return;
+      // 4. Determine Active Role
+      let currentRoleId = localData?.defaultRole;
+      const isRoleValid = roleList.find(r => r.id == currentRoleId);
+      
+      if (!currentRoleId || !isRoleValid) {
+        currentRoleId = roleList[0]?.id;
       }
 
       // 5. Fetch Menu
       await dispatch(
         GetBindMenu({
           employeeId: localData?.UserId,
-          roleId: activeRoleId,
-          branchId: activeBranchId,
+          roleId: currentRoleId,
+          branchId: currentBranchId,
           organizationId: localData?.OrganizationId
         })
       );
 
       setWaitForRoute(false);
     } catch (error) {
-      console.error("Error fetching initialization data:", error);
+      console.error("Initialization error:", error);
       setWaitForRoute(false);
     }
   };
 
   useEffect(() => {
-    if (localData?.UserId) {
-        if(!hasInitialized && (!GetMenuList || GetMenuList.length === 0)) {
-            setHasInitialized(true);
-            fetchData();
-        } else {
-            // Data already loaded or user not logged in
-            setWaitForRoute(false);
-        }
-    } else {
-        // No user data, stop waiting (let router redirect to login)
-        setWaitForRoute(false);
+    // If we already have the menu, don't fetch again
+    if (GetMenuList && GetMenuList.length > 0) {
+      setWaitForRoute(false);
+      return;
     }
-  }, [localData, hasInitialized]); 
+
+    // Only fetch if we haven't fetched yet
+    if (dataFetchedRef.current) return;
+    
+    if (localData?.UserId) {
+      dataFetchedRef.current = true;
+      fetchData();
+    } else {
+      setWaitForRoute(false);
+    }
+  }, []); // Empty dependency array = run once on mount
 
   if (waitForRoute) {
     return <Loading />;
   }
 
-  // ... Rest of your component (route mapping)
-
-// function RenderRoute() {
-//   const { GetMenuList } = useSelector((state) => state?.CommonSlice);
-//   const localData = useLocalStorage("userData", "get");
-//   const location = useLocation();
-//   const dispatch = useDispatch();
-//   const [waitForRoute, setWaitForRoute] = useState(false);
-//   const [hasInitialized, setHasInitialized] = useState(false);
-
-//   const { GetEmployeeWiseCenter } = useSelector(
-//     (state) => state?.CommonSlice
-//   );
-
-//   const fetchData = async () => {
-//     try {
-      
-//       // First dispatch - wait for it to complete
-//       const employeeWiseResult = await dispatch(getEmployeeWise({
-//         employeeId: localData?.UserId,
-//         OrganizationId: localData?.OrganizationId
-//       }));
-
-//       // Check if we have data before proceeding
-//       const employeeData = employeeWiseResult?.payload?.data || GetEmployeeWiseCenter?.data;
-//       debugger
-//       if (!employeeData || employeeData.length === 0) {
-//         setWaitForRoute(false);
-//         return;
-//       }
-
-//       // Second dispatch
-//       await dispatch(
-//         GetRoleListByEmployeeIDAndCentreID({
-//           branchId: employeeData[2]?.id,
-//           orgId: localData?.OrganizationId,
-//         })
-//       );
-
-//       // Third dispatch
-//       await dispatch(
-//         GetBindMenu({
-//           employeeId: localData?.UserId,
-//           roleId: localData?.defaultRole,
-//           branchId: employeeData[2]?.id,
-//           organizationId: localData?.OrganizationId
-//         })
-//       );
-
-//       setWaitForRoute(false);
-//     } catch (error) {
-//       console.error("Error fetching data:", error);
-//       setWaitForRoute(false);
-//     }
-//   };
-//   console.log(waitForRoute,"waitForRoute")
-//   useEffect(() => {
-//     // Only run once when component mounts and data is available
-//     if (localData && !hasInitialized && GetMenuList?.length === 0) {
-//       setHasInitialized(true);
-//       fetchData();
-//     } else if (localData && !hasInitialized && GetMenuList?.length > 0) {
-//       // Menu already loaded, just set flag
-//       setHasInitialized(true);
-//       setWaitForRoute(false);
-//     }
-//   }, [localData]); // Remove location and GetEmployeeWiseCenter from dependencies
-
-//   if (waitForRoute) {
-//     return <Loading />;
-//   }
-
+  // --- Route Mapping Logic ---
   const getAllUrls = [];
-  getAllUrls.push("/academicmaster");
-  // ... rest of your URLs remain the same ...
   
+  // Add static routes
+  getAllUrls.push("/academicmaster");
   getAllUrls.push("/display-name-master");
   getAllUrls.push("/doctor-departmentMapping");
-  getAllUrls.push("/menu");
-  // ... (include all other URLs as in original)
-
-  GetMenuList?.length > 0 &&
-    [...GetMenuList]?.forEach((menu) => {
-      menu?.children.forEach((child) => {
-        getAllUrls.push(child.url.toLowerCase());
-      });
-    });
-
   getAllUrls.push("/revenue-analysis-dashboard");
   getAllUrls.push("/set-doctors");
   getAllUrls.push("/display-doctors");
 
-  // Filter and bind routes to getAllUrls
+  // Add dynamic routes from Menu
+  if (GetMenuList?.length > 0) {
+    GetMenuList.forEach((menu) => {
+      menu?.subMenus?.forEach((child) => {
+        if(child.pageUrl) getAllUrls.push(child.pageUrl.toLowerCase());
+      });
+    });
+  }
+
+  // Filter routes based on permissions
   const bindroutes = allRoutes["roleRoutes"].reduce((acc, current) => {
     if (getAllUrls.includes(current?.path.toLowerCase())) {
       acc.push(current);
@@ -215,36 +145,30 @@ function RenderRoute() {
 
   return (
     <>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-      />
+      <Toaster position="top-center" reverseOrder={false} />
       <ErrorBoundary fallback={<h1>Oops-Page failed to load</h1>}>
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route path="/" element={<Navigate to="/login" />} />
-            {[...allRoutes["commonRoutes"], ...bindroutes]?.map(
-              (route, index) => {
-                const Component = route?.component;
-                const Layout = route?.layout || Fragment;
-                const Guard = route?.Guard || Fragment;
-
-                return (
-                  <Route
-                    path={route?.path}
-                    exact={route?.exact}
-                    key={index}
-                    element={
-                      <Guard>
-                        <Layout>
-                          <Component />
-                        </Layout>
-                      </Guard>
-                    }
-                  />
-                );
-              }
-            )}
+            {[...allRoutes["commonRoutes"], ...bindroutes]?.map((route, index) => {
+              const Component = route?.component;
+              const Layout = route?.layout || Fragment;
+              const Guard = route?.Guard || Fragment;
+              return (
+                <Route
+                  path={route?.path}
+                  exact={route?.exact}
+                  key={index}
+                  element={
+                    <Guard>
+                      <Layout>
+                        <Component />
+                      </Layout>
+                    </Guard>
+                  }
+                />
+              );
+            })}
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Suspense>
@@ -254,6 +178,8 @@ function RenderRoute() {
 }
 
 export default RenderRoute;
+
+
 
 const allRoutes = {
   commonRoutes: [

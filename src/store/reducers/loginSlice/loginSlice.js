@@ -28,8 +28,11 @@ export const signInAction = createAsyncThunk(
       dispatch(setLoading(false));
       debugger
       const user = jwtDecode(data?.data?.accessToken);
-      return {userData: user,
-          accessToken:data?.data?.accessToken
+      return {
+        userData: user, 
+        accessToken: data?.data?.accessToken,
+        message: data?.message || "Login Successfully!",
+        success: data?.success
       };
     } catch {
       dispatch(setLoading(false));
@@ -58,15 +61,15 @@ export const authSlice = createSlice({
         payload?.success === false
           ? notify(payload.Message, "error")
           : notify(payload.Message, "success");
-          
+
         if (payload?.accessToken) {
           useLocalStorage("userData", "set", payload?.userData);
           useLocalStorage("accessToken", "set", payload?.accessToken);
           useLocalStorage("ip", "set", "0.0.0.0")
-        //   getLocalIP(ip => {
-        //     useLocalStorage("ip", "set", ip?ip:"10.0.2.175")
-        // });
-     
+          //   getLocalIP(ip => {
+          //     useLocalStorage("ip", "set", ip?ip:"10.0.2.175")
+          // });
+
         }
       })
       .addCase(signInAction.rejected, (state, { error }) => {
