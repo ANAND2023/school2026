@@ -202,6 +202,24 @@ export const GetAllBranches = async (params) => {
   }
 };
 
+export const EmployeeBranchMapping = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.EmployeeBranchMapping}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 export const Createorganisation = async (params) => {
   store.dispatch(setLoading(true));
   try {

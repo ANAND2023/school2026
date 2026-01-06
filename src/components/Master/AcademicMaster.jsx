@@ -20,11 +20,13 @@ import StudentProfile from '../Student/StudentProfile'
 import ReactTabs from '../School/ReactTabs'
 import { Home, User, Settings, Mail, Bell, TrendingUp, Award, Heart } from 'lucide-react';
 import Permission from './Permission'
+import ModuleBulk from './ModuleMaster/ModuleBulk'
 
 const AcademicMaster = () => {
     const tabs = [
       { id: 'Organization', label: 'Organization', icon: Home, color: '#6f42c1', component: <OrganizationMaster/> },
-      { id: 'BankAccount', label: 'BankAccount', icon: User, color: '#0d6efd', component: <CreateBankAccount/> },
+      // { id: 'BankAccount', label: 'BankAccount', icon: User, color: '#0d6efd', component: <CreateBankAccount/> },
+      { id: 'Branch', label: 'Branch', icon: User, color: '#0d6efd', component: <ModuleBulk/> },
       { id: 'User', label: 'User', icon: Mail, color: '#0dcaf0', component: <User/> },
       { id: 'Permission', label: 'Permission', icon: Bell, color: '#ffc107', component: <Permission/> },
       { id: 'Branch', label: 'Branch', icon: TrendingUp, color: '#198754', component: <Branch/> },

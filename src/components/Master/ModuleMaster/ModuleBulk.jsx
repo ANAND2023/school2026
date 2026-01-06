@@ -11,11 +11,11 @@ import { useDispatch } from "react-redux";
 import { getEmployeeWise } from "../../../store/reducers/common/CommonExportFunction";
 
 const ModuleBulk = () => {
-        const localData = useLocalStorage("userData", "get");
-        const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
-            (state) => state?.CommonSlice
-        );
-        const dispatch = useDispatch();
+  const localData = useLocalStorage("userData", "get");
+  const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
+    (state) => state?.CommonSlice
+  );
+  const dispatch = useDispatch();
   const initialData = {
     name: "",
     code: "",
@@ -29,11 +29,6 @@ const ModuleBulk = () => {
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
 
-  /* ================= OPTIONS ================= */
-  const branchList = [
-    { label: "Main Branch", value: "BR001" },
-    { label: "City Branch", value: "BR002" }
-  ];
 
   /* ================= HANDLERS ================= */
   const handleChange = (e) => {
@@ -52,20 +47,20 @@ const ModuleBulk = () => {
       return;
     }
 
-    const payload = 
-    
+    const payload =
 
-    [
-      {
-        name: values.name,
-        code: values.code,
-        description: values.description,
-        icon: values.icon,
-        displayOrder: Number(values.displayOrder),
-        branchId: values.branchId?.value,
-        orgId: values.orgId
-      }
-    ];
+
+      [
+        {
+          name: values.name,
+          code: values.code,
+          description: values.description,
+          icon: values.icon,
+          displayOrder: Number(values.displayOrder),
+          branchId: values.branchId?.value,
+          orgId: values.orgId
+        }
+      ];
 
     console.log("FINAL PAYLOAD 👉", payload);
 
@@ -83,38 +78,18 @@ const ModuleBulk = () => {
     }
   };
   const getModuleBulk = async () => {
-   
 
-    const payload = 
-      {
-            "searchText": "",
-            "isAll": 1,
-            "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-            "branchId": values.branchId?.value ?? "",
-            // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
-            "isActive": 0
-        }
-// {
-//   "searchText": "",
-//   "isAll": 0,
-//   "orgId": "string",
-//   "branchId": "string",
-//   "isActive": 0
-// }
-    // [
-    //   {
-    //     name: values.name,
-    //     code: values.code,
-    //     description: values.description,
-    //     icon: values.icon,
-    //     displayOrder: Number(values.displayOrder),
-    //     branchId: values.branchId?.value,
-    //     orgId: values.orgId
-    //   }
-    // ];
 
-    console.log("FINAL PAYLOAD 👉", payload);
-
+    const payload =
+    {
+      "searchText": "",
+      "isAll": 1,
+      "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
+      "branchId": values.branchId?.value ?? "",
+      // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
+      "isActive": 0
+    }
+ 
     try {
       const res = await MenuManagmentGeModuleBulk(payload);
       if (res?.success) {
@@ -136,17 +111,17 @@ const ModuleBulk = () => {
     setTableData(data);
   };
 
-    useEffect(() => {
-          if (localData?.UserId) {
-              dispatch(getEmployeeWise({
-                  employeeId: localData?.UserId,
-                  OrganizationId: localData?.OrganizationId
-              }));
-          }
-      }, [dispatch]);
-      useEffect(() => {
-          getModuleBulk();
-      }, []);
+  useEffect(() => {
+    if (localData?.UserId) {
+      dispatch(getEmployeeWise({
+        employeeId: localData?.UserId,
+        OrganizationId: localData?.OrganizationId
+      }));
+    }
+  }, [dispatch]);
+  useEffect(() => {
+    getModuleBulk();
+  }, []);
   return (
     <>
       <div className="card p-2">
@@ -154,19 +129,19 @@ const ModuleBulk = () => {
 
         {/* ================= FORM ================= */}
         <div className="row p-2">
-            <ReactSelect
-                                    placeholderName="Branch"
-                                    respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-                                    name="branchId"
-                                    // dynamicOptions={branchList}
-                                    dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
-                                        value: ele.id,
-                                        label: ele.name
-                                    }))}
-                                    handleChange={handleSelect}
-                                    value={values.branchId}
-                                    className="form-control"
-                                />
+          <ReactSelect
+            placeholderName="Branch"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            name="branchId"
+            // dynamicOptions={branchList}
+            dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+              value: ele.id,
+              label: ele.name
+            }))}
+            handleChange={handleSelect}
+            value={values.branchId}
+            className="form-control"
+          />
           <Input
             type="text"
             name="name"
@@ -216,7 +191,7 @@ const ModuleBulk = () => {
             onChange={handleChange}
             className="form-control"
           />
-{/* 
+          {/* 
           <ReactSelect
             placeholderName="Branch"
             respclass="col-xl-2 col-md-4 col-sm-6 col-12"

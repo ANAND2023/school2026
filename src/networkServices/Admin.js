@@ -1,4 +1,4 @@
-import { apiUrls } from "./apiEndpoints";
+import { apiUrls } from "./SchoolApiEndPoint";
 import makeApiRequest from "./axiosInstance";
 import { setLoading } from "../store/reducers/loadingSlice/loadingSlice";
 import store from "../store/store";
@@ -146,3 +146,45 @@ export const Permissionsdelete = async (roleId) => {
 };
 
 // permission End ...................
+
+
+// user start ...   
+
+export const UsersCreateUser = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.UsersCreateUser}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const UsersGetAllUsers = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.UsersGetAllUsers}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+// user end ...   

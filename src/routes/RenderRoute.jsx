@@ -126,6 +126,7 @@ function RenderRoute() {
   getAllUrls.push("/set-doctors");
   getAllUrls.push("/display-doctors");
   getAllUrls.push("/menu");
+  getAllUrls.push("/mapping-master");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -4160,6 +4161,14 @@ const allRoutes = {
       ),
       exact: true,
     },
+
+
+
+
+
+
+
+
     {
       Guard: Authenticated,
       layout: Layout,
@@ -4167,6 +4176,16 @@ const allRoutes = {
       component: lazy(
         () => import("@app/pages/EnquirySubMenu.jsx")
       ),
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/mapping-master",
+      component: lazy(
+        () => import("@app/components/Master/MappingMaster.jsx")
+      ),
+    //  C:\Users\Anand\Desktop\school\school2026\src\components\Master\MappingMaster.jsx
       exact: true,
     },
 

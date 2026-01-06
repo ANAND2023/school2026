@@ -1,4 +1,5 @@
 const baseUrlMaster = "master/api/v1/";
+const mainUrl = "identity/api/v1/";
 export const apiUrls = {
   // Auth
 
@@ -47,6 +48,10 @@ GetAllSubjects:"academicmaster/GetAllSubjects",
 // CreateBranch:"branchmasters/CreateBranch",
 CreateBranch:`${baseUrlMaster}branchmasters/CreateBranch`,
 GetAllBranches:`${baseUrlMaster}branchmasters/GetBranch`,
+EmployeeBranchMapping:`${baseUrlMaster}BranchMasters/EmployeeBranchMapping`,
+MenuManagmentgetModuleSubmenuMappings:`${baseUrlMaster}MenuManagment/get-module-submenu-mappings`,
+createEmployeeSubmenuMappingBulk:`${baseUrlMaster}MenuManagment/create-employee-submenu-mapping-bulk`,
+
 // GetAllBranches:"branchmasters/GetBranch",
 Createorganisation:"organizationmaster/createorganisation",
 // GetAllOrganisation:"organizationmaster/GetAllOrganisation",
@@ -95,4 +100,16 @@ MenuManagmentCreateModuleBulk:`${baseUrlMaster}MenuManagment/create-module-bulk`
 MenuManagmentGeModuleBulk:`${baseUrlMaster}MenuManagment/get-modules`,
   // MenuManagment start ....
 
+
+
+  // Users Start ....
+
+  // identity/api/v1/Users/createusers
+  UsersCreateUser:`${mainUrl}Users/createusers`,
+  UsersGetAllUsers:`${mainUrl}Users/getallusers`,
+  // Usersgetallusers:`${mainUrl}Users/getallusers`,
+  // Usersgetuserbyid:`${mainUrl}Users/getuserbyid`,
+  // Usersupdateuser:`${mainUrl}Users/updateuser`,
+  // Usersdeleteuser:`${mainUrl}Users/deleteuser`,
+  // Users end ....
 }
