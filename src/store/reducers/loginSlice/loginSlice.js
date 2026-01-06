@@ -59,8 +59,8 @@ export const authSlice = createSlice({
         state.error = "";
         state.message = payload.message || "Login Successfully";
         payload?.success === false
-          ? notify(payload.Message, "error")
-          : notify(payload.Message, "success");
+          ? notify(payload.message, "error")
+          : notify(payload.message, "success");
 
         if (payload?.accessToken) {
           useLocalStorage("userData", "set", payload?.userData);

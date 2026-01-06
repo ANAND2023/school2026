@@ -662,12 +662,12 @@ const Header = React.memo(() => {
   //   );
   // }, []);
 
-  useEffect(() => {
-    if (routeFlag && signout.success) {
-      window.location.reload();
-      navigate("/login");
-    }
-  }, [signout.success]);
+  // useEffect(() => {
+  //   if (routeFlag && signout.success) {
+  //     // window.location.reload();
+  //     // navigate("/login");
+  //   }
+  // }, [signout.success]);
 
   let translation = {}
   const loadTranslations = async (lng, lngkey) => {
