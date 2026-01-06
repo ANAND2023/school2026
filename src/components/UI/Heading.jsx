@@ -34,8 +34,9 @@ function Heading({
 
   const findChildByUrl = (menuArray, url) => {
     for (let menu of menuArray) {
-      for (let child of menu.children) {
-        if (child.url === url) {
+      for (let child of menu?.subMenus) {
+        // debugger
+        if (child?.pageUrl === url) {
           return child;
         }
       }
