@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import EDPSeeMoreList from "../../pages/EDP/EDPSeeMoreList";
 import SlideScreen from "../front-office/SlideScreen";
 import SeeMoreSlideScreen from "./SeeMoreSlideScreen";
-import { BindFrameMenuByRoleID } from "../../store/reducers/common/CommonExportFunction";
+// import { BindFrameMenuByRoleID } from "../../store/reducers/common/CommonExportFunction";
 
 function Heading({
   title,

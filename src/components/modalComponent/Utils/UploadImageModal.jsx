@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import nurse from "../../../assets/image/nurse.png";
 import { useDispatch, useSelector } from "react-redux";
-import { GetPanelDocument } from "../../../store/reducers/common/CommonExportFunction";
+// import { GetPanelDocument } from "../../../store/reducers/common/CommonExportFunction";
 import Modal from "../Modal";
 import WebcamCapture from "../../commonComponents/WebcamCapture";
 import { useTranslation } from "react-i18next";
