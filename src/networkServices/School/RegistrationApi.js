@@ -7,6 +7,44 @@ import makeApiRequest from "../axiosInstance";
 
 
 
+export const StudentRegister = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.StudentRegister}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const StudentGetstudent = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.StudentGetstudent}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
 export const EnquiryCreateenquiry = async (params) => {
   store.dispatch(setLoading(true));
   try {
@@ -25,6 +63,7 @@ export const EnquiryCreateenquiry = async (params) => {
     console.error("Error Found", error);
   }
 };
+
 export const GetEnquiriesByRange = async (params) => {
   store.dispatch(setLoading(true));
   try {

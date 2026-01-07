@@ -1,5 +1,7 @@
 const baseUrlMaster = "master/api/v1/";
 const mainUrl = "identity/api/v1/";
+const feeUrl = "fee/api/v1/";
+const studentUrl = "student/api/v1/";
 export const apiUrls = {
   // Auth
 
@@ -59,6 +61,12 @@ GetAllOrganisation:`${baseUrlMaster}organizationmaster/GetAllOrganisation`,
 // branch End ...
   
 // Fee Master Start .....
+createcategory:`${feeUrl}Category/createcategory`,
+updatecategory:`${feeUrl}Category/updatecategory`,
+GetAllCategory:`${feeUrl}Category/GetAllCategory`,
+InsertSubCategory:`${feeUrl}SubCategory/InsertSubCategory`,
+GetAllSubCategory:`${feeUrl}SubCategory/GetAllSubCategory`,
+UpdateSubCategory:`${feeUrl}SubCategory/UpdateSubCategory`,
 CreateBankAccount:`${baseUrlMaster}feemaster/CreateBankAccount`,
 // GetAllBankAccounts:"feemaster/GetAllBankAccounts",
 GetAllBankAccounts:`${baseUrlMaster}feemaster/GetAllBankAccounts`,
@@ -82,9 +90,19 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 
 
 
-// registrtion start.......
+// Enquiry start.......
 EnquiryCreateenquiry:"Enquiry/createenquiry",
 GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
+// Enquiry end.......
+
+
+
+
+// registrtion start.......
+
+StudentRegister:`${studentUrl}Student/register`,
+StudentGetstudent:`${studentUrl}Student/getstudent/00000000-0000-0000-0000-000000000000`,
+
 // registrtion end.......
 
 

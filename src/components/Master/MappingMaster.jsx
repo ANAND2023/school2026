@@ -7,6 +7,10 @@ import ModuleEmployeeMapping from './BranchMaster/ModuleEmployeeMapping';
 import ReactTabs from '../School/ReactTabs';
 import ModuleSubmenuMapping from './BranchMaster/ModuleSubmenuMapping';
 import EmployeeSubMenuMapping from './BranchMaster/EmployeeSubMenuMapping';
+import CategoryMaster from './FeeMaster/CategoryMaster';
+import SubCategoryMaster from './FeeMaster/SubCategoryMaster';
+import StudentRegistration from '../School/Registration/StudentRegistration';
+import AllRegistration from '../School/Registration/AllRegistration';
 
 const MappingMaster = () => {
       const tabs = [
@@ -26,8 +30,11 @@ const MappingMaster = () => {
     ];
   return (
     <div>
-    
- <ReactTabs tabs={tabs} />
+<AllRegistration/>
+<StudentRegistration/>
+    {/* <CategoryMaster/>
+    <SubCategoryMaster/> */}
+ {/* <ReactTabs tabs={tabs} /> */}
     </div>
   )
 }

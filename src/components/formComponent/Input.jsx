@@ -125,7 +125,7 @@ function Input({
             className={className}
             id={id}
             name={name}
-            placeholder={placeholder}
+            placeholder={placeholder??""}
             value={isUpperCase?value?.toUpperCase():value}
             onKeyDown={onKeyDown}
             key={key}
