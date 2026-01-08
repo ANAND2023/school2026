@@ -4,9 +4,15 @@ import Input from "../formComponent/Input";
 import Tables from "../UI/customTable";
 import Heading from "../UI/Heading";
 import { notify } from "../../utils/utils";
-import { EnquiryCreate, GetAllEnquiries } from "../../networkServices/School/RegistrationApi";
+import { EnquiryCreate, GetAllEnquiries, GetEnquiriesByRange } from "../../networkServices/School/RegistrationApi";
+import { useTranslation } from "react-i18next";
+import DatePicker from "../formComponent/DatePicker";
+import moment from "moment";
+import ReactSelect from "../formComponent/ReactSelect";
 
 const Enquiry = () => {
+     const [t] = useTranslation();
+       const { VITE_DATE_FORMAT } = import.meta.env;
   /* ================= STATE ================= */
 //   const initialData = {
 //     id: null,
@@ -23,6 +29,8 @@ const Enquiry = () => {
 //     remarks: ""
 //   };
 const initialData = {
+    toDate: new Date(),
+    fromDate: new Date(),
   id: 1,
   studentName: "Rahul Kumar",
   fatherName: "Suresh Kumar",
@@ -33,7 +41,7 @@ const initialData = {
   previousClass: "8th",
   previousPercentage: "78",
   desiredClass: "9th",
-  isInterested: true,
+  isInterested:  { label: "Yes", value: true },
   remarks: "Parent is interested in admission from next academic session"
 };
 
@@ -46,7 +54,29 @@ const initialData = {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
-
+    const handleSelect = (name, option) => {
+        setValues((prev) => ({ ...prev, [name]: option }));
+    };
+  const handleSearch = async () => {
+    
+    const payload = {
+      startDate: moment(values.fromDate).format("YYYY-MM-DD"),
+      endDate: moment(values.toDate).format("YYYY-MM-DD")
+    }
+    try {
+      const response = await GetEnquiriesByRange(payload);
+      if (response?.success) {
+        setTableData(response?.data);
+        notify(response?.message, "success")
+      }
+      else {
+        setTableData([])
+        notify(response?.message, "error")
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
   /* ================= SAVE / UPDATE ================= */
   const handleSave = async () => {
     if (!values.studentName || !values.mobileNumber) {
@@ -64,7 +94,7 @@ const initialData = {
       previousClass: values.previousClass,
       previousPercentage: Number(values.previousPercentage),
       desiredClass: values.desiredClass,
-      isInterested: values.isInterested,
+      isInterested: values.isInterested?.value,
       remarks: values.remarks
     };
 
@@ -88,16 +118,16 @@ const initialData = {
   };
 
   /* ================= GET LIST ================= */
-  const getAllEnquiry = async () => {
-    try {
-      const res = await GetAllEnquiries();
-      if (res?.success) {
-        setTableData(res?.data);
-      }
-    } catch {
-      notify("Failed to load enquiries", "error");
-    }
-  };
+//   const getAllEnquiry = async () => {
+//     try {
+//       const res = await GetAllEnquiries();
+//       if (res?.success) {
+//         setTableData(res?.data);
+//       }
+//     } catch {
+//       notify("Failed to load enquiries", "error");
+//     }
+//   };
 
   /* ================= EDIT ================= */
   const handleEdit = (item) => {
@@ -119,7 +149,7 @@ const initialData = {
   };
 
   useEffect(() => {
-    getAllEnquiry();
+    handleSearch();
   }, []);
 
   /* ================= UI ================= */
@@ -132,80 +162,126 @@ const initialData = {
         <Input name="studentName" lable="Student Name"
           value={values.studentName}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="fatherName" lable="Father Name"
           value={values.fatherName}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="enquirerName" lable="Enquirer Name"
           value={values.enquirerName}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="mobileNumber" lable="Mobile Number"
           value={values.mobileNumber}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="alternateMobileNumber" lable="Alternate Mobile"
           value={values.alternateMobileNumber}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="previousSchoolName" lable="Previous School"
           value={values.previousSchoolName}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="previousClass" lable="Previous Class"
           value={values.previousClass}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="previousPercentage" lable="Previous Percentage"
           value={values.previousPercentage}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="desiredClass" lable="Desired Class"
           value={values.desiredClass}
           className="form-control"
-          respclass="col-md-3"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
 
         <Input name="remarks" lable="Remarks"
           value={values.remarks}
           className="form-control"
-          respclass="col-md-6"
+          respclass="col-xl-2 col-md-4 col-sm-4 col-12"
           onChange={handleChange}
         />
-
-        <div className="col-md-3 d-flex align-items-end justify-content-end">
+<ReactSelect
+                            placeholderName="Is Interested"
+                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                            name="isInterested"
+                            dynamicOptions={[
+                                { label: "Yes", value: true },
+                                { label: "No", value: false }
+                            ]}
+                            handleChange={handleSelect}
+                            value={values.isInterested?.value}
+                        />
+        <div className="col-xl-2 col-md-4 col-sm-4 col-12 d-flex align-items-end justify-content-end">
           <button className="btn btn-sm btn-primary" onClick={handleSave}>
             {isEdit ? "Update" : "Save"}
           </button>
         </div>
       </div>
+          <Heading title="Get Student Enquiry" isBreadcrumb={false} />
 
+  <div className="row  p-2">
+          <DatePicker
+            id="fromDate"
+            name="fromDate"
+            placeholder={VITE_DATE_FORMAT}
+            lable={t("From cDate")}
+            className="custom-calendar"
+            value={values?.fromDate}
+            handleChange={handleChange}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            maxDate={values?.toDate}
+          />
+          <DatePicker
+            id="toDate"
+            name="toDate"
+            placeholder={VITE_DATE_FORMAT}
+            lable={t("To Date")}
+            className="custom-calendar"
+            value={values?.toDate}
+            handleChange={handleChange}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            maxDate={new Date()}
+          />
+          <div className="col-xl-2 col-md-4 col-sm-4 col-12">
+            <button
+              onClick={handleSearch}
+              // className="btn btn-lg btn-success"
+              className="btn btn-sm btn-primary"
+              type="button"
+            >
+              {t("Search")}
+            </button>
+          </div>
+
+        </div>
       {/* ================= TABLE ================= */}
       <Tables
         thead={[

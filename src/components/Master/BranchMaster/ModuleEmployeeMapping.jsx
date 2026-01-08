@@ -12,6 +12,7 @@ import { MenuManagmentGeModuleBulk } from "../../../networkServices/MenuMaster";
 
 const ModuleEmployeeMapping = () => {
   const localData = useLocalStorage("userData", "get");
+  console.log("localData",localData)
   const initialData = {
     employeeId: null,
     employeeName: "",
@@ -64,15 +65,15 @@ const ModuleEmployeeMapping = () => {
       SAVE
   ======================== */
   const handleSave = async () => {
-    if (!values.employeeId || !values.moduleId || !values.branchId) {
+    if (!values.moduleId || !values.branchId) {
       notify("Employee, Module & Branch required", "error");
       return;
     }
 
     const payload = [
       {
-        employeeId: values.employeeId,
-        employeeName: values.employeeName,
+          employeeId: localData?.UserId,
+        employeeName: "Ajeet Kumar",
         moduleId: values.moduleId,
         moduleName: values.moduleName,
         branchId: values.branchId,

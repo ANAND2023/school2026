@@ -91,7 +91,7 @@ export const GetEnquiriesByRange = async (params) => {
     //   data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.GetEnquiriesByRange}/?startDate=${params.startDate}&endDate=${params.endDate}`,
+      `${apiUrls.GetEnquiriesByRange}/startDate=${params.startDate}&endDate=${params.endDate}`,
       options
     );
     store.dispatch(setLoading(false));

@@ -53,6 +53,7 @@ CreateBranch:`${baseUrlMaster}branchmasters/CreateBranch`,
 GetAllBranches:`${baseUrlMaster}branchmasters/GetBranch`,
 EmployeeBranchMapping:`${baseUrlMaster}BranchMasters/EmployeeBranchMapping`,
 MenuManagmentgetModuleSubmenuMappings:`${baseUrlMaster}MenuManagment/get-module-submenu-mappings`,
+CreateModuleSubmenuMappingBulk:`${baseUrlMaster}MenuManagment/create-module-submenu-mapping-bulk`,
 createEmployeeSubmenuMappingBulk:`${baseUrlMaster}MenuManagment/create-employee-submenu-mapping-bulk`,
 
 // GetAllBranches:"branchmasters/GetBranch",
@@ -102,6 +103,7 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 // GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
 EnquiryCreate:`${studentUrl}Enquiry/createenquiry`,
 getallenquiries:`${studentUrl}Enquiry/getallenquiries`,
+GetEnquiriesByRange:`${studentUrl}Enquiry/GetEnquiriesByDateRange`,
 
 // Enquiry end.......
 

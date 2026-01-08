@@ -108,18 +108,18 @@ function Registration() {
       console.log("error", error)
     }
   }
-//   const handleOpen = () => {
-//   setValues(initialData); // reset
-//   setHandleModelData(prev => ({
-//     ...prev,
-//     isOpen: true,
-//   }));
-// };
+  //   const handleOpen = () => {
+  //   setValues(initialData); // reset
+  //   setHandleModelData(prev => ({
+  //     ...prev,
+  //     isOpen: true,
+  //   }));
+  // };
 
-const handleChangeModel = (data) => {
-    
-    console.log("handleChangeRejectModeldata",data)
-    
+  const handleChangeModel = (data) => {
+
+    console.log("handleChangeRejectModeldata", data)
+
     setModalData(data);
   };
   const handleOpen = () => {
@@ -130,7 +130,7 @@ const handleChangeModel = (data) => {
       isOpen: true,
       // modalData: data,
       Component: (
-        <RegistrationForm handleChangeModel={handleChangeModel}/>
+        <RegistrationForm handleChangeModel={handleChangeModel} />
       ),
       handleInsertAPI: handleSave,
       extrabutton: <></>,
@@ -175,8 +175,8 @@ const handleChangeModel = (data) => {
           handleAPI={handleModelData?.handleInsertAPI}
         >
           {handleModelData?.Component}
-           {/* <RegistrationForm  values={values} setValues={setValues}  /> */}
-   
+          {/* <RegistrationForm  values={values} setValues={setValues}  /> */}
+
         </Modal>
       )}
 
@@ -218,16 +218,16 @@ const handleChangeModel = (data) => {
             maxDate={new Date()}
           />
           <div className="col-xl-2 col-md-4 col-sm-4 col-12">
-<button
-            onClick={handleSearch}
-            // className="btn btn-lg btn-success"
-            className="btn btn-sm btn-primary"
-            type="button"
-          >
-            {t("Search")}
-          </button>
+            <button
+              onClick={handleSearch}
+              // className="btn btn-lg btn-success"
+              className="btn btn-sm btn-primary"
+              type="button"
+            >
+              {t("Search")}
+            </button>
           </div>
-          
+
         </div>
         <Heading title={t("Parent Details")} isBreadcrumb={false} />
         {tableData?.length > 0 && <>

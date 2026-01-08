@@ -2,75 +2,108 @@ import React, { useEffect, useState } from "react";
 import ReactSelect from "../../formComponent/ReactSelect";
 import Tables from "../../UI/customTable";
 import Heading from "../../UI/Heading";
-import { notify } from "../../../utils/ustil2";
+
 import {
   EmployeeBranchMapping,
   GetAllBranches
 } from "../../../networkServices/AcademicYear";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
-import { MenuManagmentGeModuleBulk, MenuManagmentgetModuleSubmenuMappings, MenuManagmentgetsubmenus } from "../../../networkServices/MenuMaster";
+import { CreateModuleSubmenuMappingBulk, MenuManagmentGeModuleBulk, MenuManagmentgetModuleSubmenuMappings, MenuManagmentgetsubmenus } from "../../../networkServices/MenuMaster";
+import { notify } from "../../../utils/utils";
+import Input from "../../formComponent/Input";
 
 const ModuleSubmenuMapping = () => {
   const localData = useLocalStorage("userData", "get");
+  console.log("localData", localData)
   const initialData = {
-    
-    subMenuId: {},
-  
-    moduleId: null,
-    moduleName: "",
-  
+    subMenu: {},
+    branch: {},
+    module: {},
+order: "",
     // orgId: localData?.OrganizationId
   };
 
   const [values, setValues] = useState(initialData);
+  console.log("values",values)
   const [tableData, setTableData] = useState([]);
   const [subMenu, setSubMenu] = useState([]);
   const [module, setModule] = useState([]);
-
-
+  const [branch, setBranch] = useState([]);
+    const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
   const handleSelect = (name, option) => {
-    if (!option) return;
+        setValues((prev) => ({ ...prev, [name]: option }));
+    };
+  // const handleSelect = (name, option) => {
+  //   if (!option) return;
 
-    if (name === "subMenuId") {
-      setValues((prev) => ({
-        ...prev,
-        subMenuId: option.value,
-        subMenuName: option.label
-      }));
+  //   if (name === "subMenuId") {
+  //     setValues((prev) => ({
+  //       ...prev,
+  //       subMenuId: option.value,
+  //       subMenuName: option.label
+  //     }));
+  //   }
+
+  //   if (name === "moduleId") {
+  //     setValues((prev) => ({
+  //       ...prev,
+  //       moduleId: option.value,
+  //       moduleName: option.label
+  //     }));
+  //   }
+  //   if (name === "moduleId") {
+  //     setValues((prev) => ({
+  //       ...prev,
+  //       moduleId: option.value,
+  //       moduleName: option.label
+  //     }));
+  //   }
+
+
+  // };
+  const getData = async () => {
+    const payload = {
+      "employeeId": "",
+      "organisationID": localData?.OrganizationId,
+      "isAll": 1
     }
-
-    if (name === "moduleId") {
-      setValues((prev) => ({
-        ...prev,
-        moduleId: option.value,
-        moduleName: option.label
-      }));
+    try {
+      const res = await GetAllBranches(payload);
+      if (res?.success)
+        setBranch(res.data);
+      else notify(res?.message, "error");
+    } catch {
+      notify("Error fetching data", "error");
     }
-
-   
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
   /* =======================
       SAVE
   ======================== */
-  const handleSave = async () => {
-    if (!values.moduleId || !values.subMenuId) {
+  const getMapping = async () => {
+    if (!values.module || !values.subMenu) {
       notify("Module & SubMenu required", "error");
       return;
     }
 
-    const payload = 
-      {
-  "moduleId": values.moduleId,
-  "subMenuId": values.subMenuId
-}
+    const payload =
+    {
+      "moduleId": values.module?.value,
+      "subMenuId": values.subMenu?.value
+    }
     try {
       const res = await MenuManagmentgetModuleSubmenuMappings(payload);
-
+      debugger
       if (res?.success) {
         notify(res?.message, "success");
-       
-        setValues(initialData);
+        setTableData(res?.data)
+        // setValues(initialData);
       } else {
         notify(res?.message || "Failed", "error");
       }
@@ -78,31 +111,68 @@ const ModuleSubmenuMapping = () => {
       notify("Something went wrong", "error");
     }
   };
-   const GetSubMenus = async () => {
-          const payload =
-          {
-              "searchText": "",
-              "isAll": 1,
-              "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-              "branchId":  "",
-              // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
-              "isActive": 0
-          }
-  
-          try {
-              const res = await MenuManagmentgetsubmenus(payload);
-              if (res?.success) {
-                  setSubMenu(res?.data);
-  
-  
-              } else {
-                  notify(res?.message, "error");
-              }
-          } catch (error) {
-              notify("Something went wrong", "error");
-          }
-      };
- const getModuleBulk = async () => {
+  const handleSave = async () => {
+  if (!values.module || !values.subMenu) {
+      notify("Module & SubMenu required", "error");
+      return;
+    }
+
+
+    const payload =
+      [
+        {
+          "moduleId": values.module?.value,
+          "moduleName": values.module?.label,
+          "subMenuId": values.subMenu?.value,
+          "subMenuName": values.subMenu?.label,
+          "displayOrder": values.order,
+          "branchId": values.branch?.value,
+          "orgId": localData?.OrganizationId
+        }
+      ]
+    // {
+    //   "moduleId": values.moduleId,
+    //   "subMenuId": values.subMenuId
+    // }
+    try {
+      const res = await CreateModuleSubmenuMappingBulk(payload);
+      debugger
+      if (res?.success) {
+        notify(res?.message, "success");
+        setTableData(res?.data)
+        // setValues(initialData);
+      } else {
+        notify(res?.message || "Failed", "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
+  const GetSubMenus = async () => {
+    const payload =
+    {
+      "searchText": "",
+      "isAll": 1,
+      "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
+      "branchId": "",
+      // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
+      "isActive": 0
+    }
+
+    try {
+      const res = await MenuManagmentgetsubmenus(payload);
+      if (res?.success) {
+        setSubMenu(res?.data);
+
+
+      } else {
+        notify(res?.message, "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
+  const getModuleBulk = async () => {
 
 
     const payload =
@@ -110,11 +180,11 @@ const ModuleSubmenuMapping = () => {
       "searchText": "",
       "isAll": 1,
       "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-      "branchId":  "",
+      "branchId": "",
       // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
       "isActive": 0
     }
- 
+
     try {
       const res = await MenuManagmentGeModuleBulk(payload);
       if (res?.success) {
@@ -132,7 +202,7 @@ const ModuleSubmenuMapping = () => {
 
 
   useEffect(() => {
-   
+
     GetSubMenus();
     getModuleBulk();
   }, []);
@@ -151,9 +221,19 @@ const ModuleSubmenuMapping = () => {
 
         {/* ================= FORM ================= */}
         <div className="row p-2">
-          
- <ReactSelect
-            name="subMenuId"
+          <ReactSelect
+            name="branch"
+            placeholderName="Select Branch"
+            dynamicOptions={branch?.map((ele) => ({
+              label: ele?.name,
+              value: ele?.id
+            }))}
+            value={values.branch}
+            respclass="col-xl-4 col-md-6 col-sm-12"
+            handleChange={handleSelect}
+          />
+          <ReactSelect
+            name="subMenu"
             placeholderName="Select SubMenu"
             dynamicOptions={subMenu?.map((ele) => ({
               label: ele?.name,
@@ -161,10 +241,10 @@ const ModuleSubmenuMapping = () => {
             }))}
             respclass="col-xl-3 col-md-6 col-sm-12"
             handleChange={handleSelect}
-            value={values.subMenuId}
+            value={values.subMenu}
           />
           <ReactSelect
-            name="moduleId"
+            name="module"
             placeholderName="Select Module"
             dynamicOptions={module?.map((ele) => ({
               label: ele?.name,
@@ -172,14 +252,27 @@ const ModuleSubmenuMapping = () => {
             }))}
             respclass="col-xl-3 col-md-6 col-sm-12"
             handleChange={handleSelect}
-            value={values.moduleId}
+            value={values.module}
           />
+<Input
+          name="order"
+          placeholder=""
+          value={values.order}
+          lable="Display Order"
+          respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+           className="form-control"
+          onChange={handleChange}
+        />
 
-         
 
-          <div className="col-xl-3 col-12 text-end mt-4">
+          <div className="col-xl-3 col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
-              Save Mapping
+              Mapping
+            </button>
+          </div>
+          <div className="col-xl-3 col-12 text-end">
+            <button className="btn btn-sm btn-primary" onClick={getMapping}>
+              Get Mapping
             </button>
           </div>
         </div>
@@ -187,15 +280,16 @@ const ModuleSubmenuMapping = () => {
         {/* ================= TABLE ================= */}
         <Tables
           thead={[
-            { name: "Employee" },
-            { name: "Module" },
-            { name: "Branch" },
+            { name: "module Name" },
+            { name: "SubMenu Name" },
+            { name: "Display Order" },
             { name: "Action" }
           ]}
           tbody={tableData.map((item, index) => ({
-            employeeName: item.employeeName,
             moduleName: item.moduleName,
-            branchId: item.branchId,
+            subMenuName: item.subMenuName,
+            displayOrder: item.displayOrder=="0"?"0":item.displayOrder,
+
             action: (
               <button
                 className="btn btn-sm btn-danger"
