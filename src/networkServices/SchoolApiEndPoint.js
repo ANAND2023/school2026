@@ -2,6 +2,7 @@ const baseUrlMaster = "master/api/v1/";
 const mainUrl = "identity/api/v1/";
 const feeUrl = "fee/api/v1/";
 const studentUrl = "student/api/v1/";
+// student/api/v1/Enquiry/createenquiry
 export const apiUrls = {
   // Auth
 
@@ -67,7 +68,14 @@ GetAllCategory:`${feeUrl}Category/GetAllCategory`,
 InsertSubCategory:`${feeUrl}SubCategory/InsertSubCategory`,
 GetAllSubCategory:`${feeUrl}SubCategory/GetAllSubCategory`,
 UpdateSubCategory:`${feeUrl}SubCategory/UpdateSubCategory`,
+ItemInsertItemMaster:`${feeUrl}Item/InsertItemMaster`,
+GetAllItemMaster:`${feeUrl}Item/GetAllItemMaster`,
+UpdateItemMaster:`${feeUrl}Item/UpdateItemMaster`,
+
+
+
 CreateBankAccount:`${baseUrlMaster}feemaster/CreateBankAccount`,
+
 // GetAllBankAccounts:"feemaster/GetAllBankAccounts",
 GetAllBankAccounts:`${baseUrlMaster}feemaster/GetAllBankAccounts`,
 CreateFeeConcession:"feemaster/CreateFeeConcession",
@@ -91,8 +99,10 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 
 
 // Enquiry start.......
-EnquiryCreateenquiry:"Enquiry/createenquiry",
-GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
+// GetEnquiriesByRange:"Enquiry/GetEnquiriesByDateRange",
+EnquiryCreate:`${studentUrl}Enquiry/createenquiry`,
+getallenquiries:`${studentUrl}Enquiry/getallenquiries`,
+
 // Enquiry end.......
 
 

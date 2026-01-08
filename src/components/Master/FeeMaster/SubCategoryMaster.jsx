@@ -106,7 +106,7 @@ const update={
 
   return (
     <div className="card p-2">
-      <Heading title="Category Master" isBreadcrumb={false} />
+      <Heading title="Sub Category Master" isBreadcrumb={false} />
 
       {/* ================= FORM ================= */}
       <div className="row p-2">

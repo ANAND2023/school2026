@@ -45,7 +45,7 @@ export const StudentGetstudent = async (params) => {
   }
 };
 
-export const EnquiryCreateenquiry = async (params) => {
+export const EnquiryCreate = async (params) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
@@ -53,7 +53,26 @@ export const EnquiryCreateenquiry = async (params) => {
       data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.EnquiryCreateenquiry}`,
+      `${apiUrls.EnquiryCreate}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetAllEnquiries = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.getallenquiries}`,
       options
     );
     store.dispatch(setLoading(false));

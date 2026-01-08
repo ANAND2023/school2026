@@ -127,6 +127,8 @@ function RenderRoute() {
   getAllUrls.push("/display-doctors");
   getAllUrls.push("/menu");
   getAllUrls.push("/mapping-master");
+  getAllUrls.push("/fee-master");
+  getAllUrls.push("/enq");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -4188,7 +4190,27 @@ const allRoutes = {
     //  C:\Users\Anand\Desktop\school\school2026\src\components\Master\MappingMaster.jsx
       exact: true,
     },
-
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/fee-master",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/FeeMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/enq",
+      component: lazy(
+        () => import("@app/components/EnquiryMaster/Enquiry.jsx")
+      ),
+    
+      exact: true,
+    },
+// C:\Users\Anand\Desktop\school\school2026\src\components\EnquiryMaster\Enquiry.jsx
     // Mortuary End
   ],
 };

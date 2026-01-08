@@ -121,6 +121,63 @@ export const GetAllSubCategory = async (params) => {
   }
 };
 
+export const ItemInsertItemMaster = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.ItemInsertItemMaster}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetAllItemMaster = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetAllItemMaster}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const UpdateItemMaster = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.UpdateItemMaster}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
 export const AddBankAccount = async (params) => {
   store.dispatch(setLoading(true));
   try {
