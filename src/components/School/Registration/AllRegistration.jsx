@@ -11,9 +11,11 @@ import { StudentGetstudent } from "../../../networkServices/School/RegistrationA
 import StudentRegistration from "./StudentRegistration";
 import Input from "../../formComponent/Input";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+import ColorCodingSearch from "../../commonComponents/ColorCodingSearch";
+import StudentProfile from "../../Student/StudentProfile";
 
 function AllRegistration() {
-   const localData = useLocalStorage("userData", "get");
+  const localData = useLocalStorage("userData", "get");
   const [t] = useTranslation();
   const [tableData, setTableData] = useState([]);
   const { VITE_DATE_FORMAT } = import.meta.env;
@@ -57,16 +59,16 @@ function AllRegistration() {
   const handleSearch = async () => {
     const payload =
     {
-  "studentMasterId":"",
-  "studentId":values.StudentID,
-  "firstName": values.firstName,
-  "mobile": values.Contact,
-  "email": "",
-  "fromDate": moment(values.fromDate).format("YYYY-MM-DD"),
-  "toDate":moment(values.toDate).format("YYYY-MM-DD")
-}
-    
-   
+      "studentMasterId": null,
+      "studentId": values.StudentID,
+      "firstName": values.firstName,
+      "mobile": values.Contact,
+      "email": "",
+      "fromDate": moment(values.fromDate).format("YYYY-MM-DD"),
+      "toDate": moment(values.toDate).format("YYYY-MM-DD")
+    }
+
+
     try {
       const response = await StudentGetstudent(payload);
       if (response?.success) {
@@ -129,14 +131,42 @@ function AllRegistration() {
     { name: t("class") },
     { name: t("mobile") },
     { name: t("parents") },
+    { name: t("Action") },
 
   ];
 
   useEffect(() => {
     handleSearch()
   }, [])
+  const getRowClass = (row) => {
+    console.log("row data =>", row);
+
+    if (row?.status === "0") {
+      return "color-indicator-24-bg";
+    }
+    else if (row?.status === "1") {
+      return "color-indicator-2-bg";
+    }
+    else {
+      return "color-indicator-4-bg";
+    }
+  };
+
+  const handleOpenStudentProfile = (data) => {
+    setModalData(data);
+    setHandleModelData({  
+      isOpen: true,
+      width: "80vw",
+      label: t("Student Profile"),
+      Component: <StudentProfile modalData={data} setModalData={setModalData} />,
+      extrabutton: <></>,
+      footer: <></>
+    });
+  }
+
   return (
     <>
+      {/* <StudentProfile /> */}
       {handleModelData?.isOpen && (
         <Modal
           visible={handleModelData?.isOpen}
@@ -230,7 +260,12 @@ function AllRegistration() {
           </div>
 
         </div>
-        <Heading title={t(" Details")} isBreadcrumb={false} />
+        {/* <Heading title={t(" Details")} isBreadcrumb={false} /> */}
+        <Heading title="Student Reg Details" isBreadcrumb={false} secondTitle={
+          <> <ColorCodingSearch color={"color-indicator-24-bg"} label={t("Admission Done")} />
+            <ColorCodingSearch color={"color-indicator-2-bg"} label={t("Registration")} />
+          </>
+        } />
         {tableData?.length > 0 && <>
           <Tables
             thead={thead}
@@ -245,9 +280,9 @@ function AllRegistration() {
               class: ele?.academics[0]?.class,
               mobile: `${ele?.phone},${ele?.alternatePhone} `,
               parents: ele?.parents?.map(p => (`${p?.name},`)),
-
+              action: <i className="fa fa-eye" onClick={() => handleOpenStudentProfile(ele)}></i>
             }))}
-
+            getRowClass={getRowClass}
           />
 
         </>}
