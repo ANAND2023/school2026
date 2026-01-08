@@ -10,15 +10,19 @@ import Modal from "../../modalComponent/Modal";
 import { StudentGetstudent } from "../../../networkServices/School/RegistrationApi";
 import StudentRegistration from "./StudentRegistration";
 import Input from "../../formComponent/Input";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 function AllRegistration() {
+   const localData = useLocalStorage("userData", "get");
   const [t] = useTranslation();
   const [tableData, setTableData] = useState([]);
   const { VITE_DATE_FORMAT } = import.meta.env;
 
 
   const initialData = {
-    studentName: "",
+    StudentID: "",
+    firstName: "",
+    Contact: "",
     fatherName: "",
     enquirerName: "",
     mobileNumber: "",
@@ -51,12 +55,20 @@ function AllRegistration() {
   };
 
   const handleSearch = async () => {
-    const payload = {
-      startDate: moment(values.fromDate).format("YYYY-MM-DD"),
-      endDate: moment(values.toDate).format("YYYY-MM-DD")
-    }
+    const payload =
+    {
+  "studentMasterId":"",
+  "studentId":values.StudentID,
+  "firstName": values.firstName,
+  "mobile": values.Contact,
+  "email": "",
+  "fromDate": moment(values.fromDate).format("YYYY-MM-DD"),
+  "toDate":moment(values.toDate).format("YYYY-MM-DD")
+}
+    
+   
     try {
-      const response = await StudentGetstudent();
+      const response = await StudentGetstudent(payload);
       if (response?.success) {
         setTableData(response?.data);
         notify(response?.message, "success")
@@ -68,18 +80,18 @@ function AllRegistration() {
       console.log("error", error)
     }
   }
-//   const handleOpen = () => {
-//   setValues(initialData); // reset
-//   setHandleModelData(prev => ({
-//     ...prev,
-//     isOpen: true,
-//   }));
-// };
+  //   const handleOpen = () => {
+  //   setValues(initialData); // reset
+  //   setHandleModelData(prev => ({
+  //     ...prev,
+  //     isOpen: true,
+  //   }));
+  // };
 
-const handleChangeModel = (data) => {
-    
-    console.log("handleChangeRejectModeldata",data)
-    
+  const handleChangeModel = (data) => {
+
+    console.log("handleChangeRejectModeldata", data)
+
     setModalData(data);
   };
   const handleOpen = () => {
@@ -90,9 +102,9 @@ const handleChangeModel = (data) => {
       isOpen: true,
       // modalData: data,
       Component: (
-        <StudentRegistration handleChangeModel={handleChangeModel}/>
+        <StudentRegistration handleChangeModel={handleChangeModel} />
       ),
-    //   handleInsertAPI: handleSave,
+      //   handleInsertAPI: handleSave,
       extrabutton: <></>,
       footer: <></>
     });
@@ -120,9 +132,9 @@ const handleChangeModel = (data) => {
 
   ];
 
-  useEffect(()=>{
+  useEffect(() => {
     handleSearch()
-  },[])
+  }, [])
   return (
     <>
       {handleModelData?.isOpen && (
@@ -140,8 +152,8 @@ const handleChangeModel = (data) => {
           handleAPI={handleModelData?.handleInsertAPI}
         >
           {handleModelData?.Component}
-           {/* <RegistrationForm  values={values} setValues={setValues}  /> */}
-   
+          {/* <RegistrationForm  values={values} setValues={setValues}  /> */}
+
         </Modal>
       )}
 
@@ -160,22 +172,30 @@ const handleChangeModel = (data) => {
           </div>}
         />
         <div className="row  p-2">
-            <Input
-                                        className="form-control"
-                                        name="StudentID"
-                                        lable="Student ID"
-                                        value={values.StudentID}
-                                        onChange={handleChange}
-                                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                    />
-            <Input
-                                        className="form-control"
-                                        name="Contact"
-                                        lable="Contact"
-                                        value={values.Contact}
-                                        onChange={handleChange}
-                                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                    />
+          <Input
+            className="form-control"
+            name="StudentID"
+            lable="Student ID"
+            value={values.StudentID}
+            onChange={handleChange}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+          />
+          <Input
+            className="form-control"
+            name="firstName"
+            lable="First Name"
+            value={values.firstName}
+            onChange={handleChange}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+          />
+          <Input
+            className="form-control"
+            name="Contact"
+            lable="Contact"
+            value={values.Contact}
+            onChange={handleChange}
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+          />
           <DatePicker
             id="fromDate"
             name="fromDate"
@@ -199,18 +219,18 @@ const handleChangeModel = (data) => {
             maxDate={new Date()}
           />
           <div className="col-xl-2 col-md-4 col-sm-4 col-12">
-<button
-            onClick={handleSearch}
-            // className="btn btn-lg btn-success"
-            className="btn btn-sm btn-primary"
-            type="button"
-          >
-            {t("Search")}
-          </button>
+            <button
+              onClick={handleSearch}
+              // className="btn btn-lg btn-success"
+              className="btn btn-sm btn-primary"
+              type="button"
+            >
+              {t("Search")}
+            </button>
           </div>
-          
+
         </div>
-        <Heading title={t("Parent Details")} isBreadcrumb={false} />
+        <Heading title={t(" Details")} isBreadcrumb={false} />
         {tableData?.length > 0 && <>
           <Tables
             thead={thead}

@@ -113,7 +113,7 @@ GetEnquiriesByRange:`${studentUrl}Enquiry/GetEnquiriesByDateRange`,
 // registrtion start.......
 
 StudentRegister:`${studentUrl}Student/register`,
-StudentGetstudent:`${studentUrl}Student/getstudent/00000000-0000-0000-0000-000000000000`,
+StudentGetstudent:`${studentUrl}Student/getstudentlist`,
 
 // registrtion end.......
 

@@ -30,8 +30,8 @@ export const StudentGetstudent = async (params) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
-      method: "GET",
-      // data: params,
+      method: "POST",
+      data: params,
     };
     const data = await makeApiRequest(
       `${apiUrls.StudentGetstudent}`,

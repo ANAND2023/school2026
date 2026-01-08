@@ -7,7 +7,6 @@ import ModuleEmployeeMapping from './BranchMaster/ModuleEmployeeMapping';
 import ReactTabs from '../School/ReactTabs';
 import ModuleSubmenuMapping from './BranchMaster/ModuleSubmenuMapping';
 import EmployeeSubMenuMapping from './BranchMaster/EmployeeSubMenuMapping';
-
 const MappingMaster = () => {
       const tabs = [
     //   { id: 'Module', label: 'Module', icon: Home, color: '#6f42c1', component: <ModuleBulk/> },
@@ -26,9 +25,6 @@ const MappingMaster = () => {
     ];
   return (
     <div>
-{/* <AllRegistration/>
-<StudentRegistration/> */}
- 
  <ReactTabs tabs={tabs} />
     </div>
   )

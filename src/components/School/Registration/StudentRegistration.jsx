@@ -76,8 +76,8 @@ const initialData = {
             documentNumber: "TC2023/458",
             documentType: 1,
             documentUpload: "base64_tc",
-            sessionId: 2024,
-            yearId: 2024
+            sessionId: 0,
+            yearId: 0
         }
     ],
     otherDetail: {
@@ -178,8 +178,8 @@ const StudentRegistration = () => {
                     documentNumber: "",
                     documentType: 1,
                     documentUpload: "",
-                    sessionId: 2024,
-                    yearId: 2024
+                    sessionId: 0,
+                    yearId: 0
                 }
             ]
         }));
@@ -198,10 +198,10 @@ const StudentRegistration = () => {
 
             const payload = {
                 title: values?.title?.value,
-                firstName: values?.firstName?.value,
-                lastName: values?.lastName?.value,
-                dateOfBirth: values?.dateOfBirth?.value,
-                gender: values?.gender?.value,
+                firstName: values?.firstName,
+                lastName: values?.lastName,
+                dateOfBirth: values?.dateOfBirth,
+                gender: values?.gender?.value==="Male"?1:values?.gender?.value==="Female"?2:3,
                 phone: values?.phone,
                 altPhone: values?.altPhone,
                 email: values?.email,
@@ -278,7 +278,9 @@ const StudentRegistration = () => {
                 studentDocuments: values?.studentDocuments?.map(doc => ({
                     documentNumber: doc.documentNumber,
                     documentType: doc.documentType,
-                    documentUpload: doc.documentUpload
+                    documentUpload: doc.documentUpload,
+                     sessionId: 2026,
+                        yearId: 2026
                 })),
 
                 // [
@@ -297,7 +299,7 @@ const StudentRegistration = () => {
                 }
             }
 
-            const response = await StudentRegister(values);
+            const response = await StudentRegister(payload);
             if (response?.success) {
                 notify(response?.message, "success");
             } else {
