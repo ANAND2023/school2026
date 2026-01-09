@@ -131,6 +131,7 @@ function RenderRoute() {
   getAllUrls.push("/enq");
   getAllUrls.push("/registration");
   getAllUrls.push("/registration-form");
+  getAllUrls.push("/admission");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -4234,7 +4235,16 @@ const allRoutes = {
     
       exact: true,
     },
-// C:\Users\Anand\Desktop\school\school2026\src\components\EnquiryMaster\Enquiry.jsx
-    // Mortuary End
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/admission",
+      component: lazy(
+        () => import("@app/components/Master/Admission/Admission.jsx")
+      ),
+    
+      exact: true,
+    },
+// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Admission\Admission.jsx
   ],
 };

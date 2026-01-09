@@ -26,7 +26,7 @@ export const StudentRegister = async (params) => {
   }
 };
 
-export const StudentGetstudent = async (params) => {
+export const getRegistrationlist = async (params) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
@@ -34,7 +34,25 @@ export const StudentGetstudent = async (params) => {
       data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.StudentGetstudent}`,
+      `${apiUrls.getRegistrationlist}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const Registrationbulkcreate = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.Registrationbulkcreate}`,
       options
     );
     store.dispatch(setLoading(false));
@@ -92,6 +110,26 @@ export const GetEnquiriesByRange = async (params) => {
     };
     const data = await makeApiRequest(
       `${apiUrls.GetEnquiriesByRange}/startDate=${params.startDate}&endDate=${params.endDate}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+
+export const getadmissionlist = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.getadmissionlist}`,
       options
     );
     store.dispatch(setLoading(false));

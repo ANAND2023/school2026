@@ -112,10 +112,19 @@ GetEnquiriesByRange:`${studentUrl}Enquiry/GetEnquiriesByDateRange`,
 
 // registrtion start.......
 
-StudentRegister:`${studentUrl}Student/register`,
-StudentGetstudent:`${studentUrl}Student/getstudentlist`,
+StudentRegister:`${studentUrl}Registration/Create`,
+// StudentGetstudent:`${studentUrl}Student/getstudentlist`,
+getRegistrationlist:`${studentUrl}Registration/getregistrationlist`,
+Registrationbulkcreate:`${studentUrl}Registration/bulkcreate`,
 
 // registrtion end.......
+
+
+// admission start.......
+
+getadmissionlist:`${studentUrl}Admission/getadmissionlist`,
+
+// admission end.......
 
 
 
