@@ -568,7 +568,7 @@ const Header = React.memo(() => {
   // --- CHANGED: Improved Branch Change Logic ---
   const handleChangeCentre = async (e) => {
     const newCentreId = e?.target?.value;
-    debugger
+    
     
 
     // 2. Fetch Roles for the new centre

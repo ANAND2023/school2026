@@ -32,8 +32,8 @@ export const apiUrls = {
 
 
 // academicmaster Start .....
-CreateAcademicYear:"academicmaster/CreateAcademicYear",
-GetAllAcademicYears:"academicmaster/GetAllAcademicYears",
+// CreateAcademicYear:"academicmaster/CreateAcademicYear",
+// GetAllAcademicYears:"academicmaster/GetAllAcademicYears",
 
 
 // academicmaster End .....
@@ -49,6 +49,10 @@ CreateSubjectClassMapping:`${baseUrlMaster}AcademicMaster/CreateSubjectClassMapp
 GetAllSubjectClassMappings:`${baseUrlMaster}AcademicMaster/GetAllSubjectClassMappings`,
 CreateBoard:`${baseUrlMaster}AcademicMaster/CreateBoard`,
 GetAllBoards:`${baseUrlMaster}AcademicMaster/GetAllBoards`,
+CreateAcademicYear:`${baseUrlMaster}AcademicMaster/CreateAcademicYear`,
+GetAllAcademicYears:`${baseUrlMaster}AcademicMaster/GetAllAcademicYears`,
+CreateGradingSystem:`${baseUrlMaster}AcademicMaster/CreateGradingSystem`,
+GetAllGradingSystems:`${baseUrlMaster}AcademicMaster/GetAllGradingSystems`,
 
 // class end ....
 

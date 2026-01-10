@@ -2,40 +2,28 @@ import React, { useEffect, useState } from "react";
 import Tables from "../../UI/customTable";
 import ReactSelect from "../../formComponent/ReactSelect";
 import Heading from "../../UI/Heading";
-import { notify } from "../../../utils/utils";
+import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import { createEmployeeSubmenuMappingBulk, MenuCreatebulk, MenuManagmentgetsubmenus } from "../../../networkServices/MenuMaster";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { GetAllBranches } from "../../../networkServices/AcademicYear";
+import { GetAllUsers } from "../../../networkServices/Admin";
 
 const EmployeeSubMenuMapping = () => {
   const localData = useLocalStorage("userData", "get");
   const initialData = {
-    employeeId: null,
-    employeeName: "",
-    subMenuId: null,
-    subMenuName: "",
-    branchId: null,
+    employeeId: {},
+
+    subMenuId: {},
+  
+    branchId: {},
     orgId: localData?.OrganizationId
   };
   const [branch, setBranch] = useState([]);
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
  const [subMenu, setSubMenu] = useState([]);
-  /* ================= OPTIONS ================= */
-  const employeeList = [
-    { label: "Rahul Sharma", value: "EMP001" },
-    { label: "Ankit Verma", value: "EMP002" }
-  ];
-
-  const subMenuList = [
-    { label: "Student Master", value: "SUB001" },
-    { label: "Fee Master", value: "SUB002" }
-  ];
-
-  const branchList = [
-    { label: "Main Branch", value: "BR001" },
-    { label: "City Branch", value: "BR002" }
-  ];
+ const [allUser, setAllUser] = useState([]);
+ 
 
   const getBranch = async () => {
      const payload = {
@@ -77,28 +65,33 @@ const EmployeeSubMenuMapping = () => {
             }
         };
   const handleSelect = (name, option) => {
-    if (name === "employeeId") {
-      setValues(prev => ({
+          setValues(prev => ({
         ...prev,
-        employeeId: option,
-        employeeName: option.label
+        [name]: option,
+       
       }));
-    }
+    // if (name === "employeeId") {
+    //   setValues(prev => ({
+    //     ...prev,
+    //     employeeId: option,
+    //     employeeName: option.label
+    //   }));
+    // }
 
-    if (name === "subMenuId") {
-      setValues(prev => ({
-        ...prev,
-        subMenuId: option,
-        subMenuName: option.label
-      }));
-    }
+    // if (name === "subMenuId") {
+    //   setValues(prev => ({
+    //     ...prev,
+    //     subMenuId: option,
+    //     subMenuName: option.label
+    //   }));
+    // }
 
-    if (name === "branchId") {
-      setValues(prev => ({
-        ...prev,
-        branchId: option
-      }));
-    }
+    // if (name === "branchId") {
+    //   setValues(prev => ({
+    //     ...prev,
+    //     branchId: option
+    //   }));
+    // }
   };
 
   /* ================= SAVE ================= */
@@ -111,9 +104,9 @@ const EmployeeSubMenuMapping = () => {
     const payload = [
       {
         employeeId: values.employeeId.value,
-        employeeName: values.employeeName,
+        employeeName: values.employeeId?.label,
         subMenuId: values.subMenuId.value,
-        subMenuName: values.subMenuName,
+        subMenuName: values.subMenuId?.label,
         branchId: values.branchId?.value,
         orgId: values.orgId
       }
@@ -138,9 +131,29 @@ const EmployeeSubMenuMapping = () => {
     data.splice(index, 1);
     setTableData(data);
   };
+  const getAllUsers = async () => {
+    const payload = {
+      "pageNumber": 1,
+      "pageSize": 30,
+      "search": null,
+      "lockedOnly": false
+    }
 
+    try {
+      const res = await GetAllUsers(payload);
+      if (res?.success) {
+        notify(res?.message, "success");
+        setAllUser(res?.data?.items || []);
+      } else {
+        notify(res?.message || "Failed", "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
   useEffect(() => {
     GetSubMenus();
+    getAllUsers();
     getBranch();
   }, []);
 
@@ -151,22 +164,31 @@ const EmployeeSubMenuMapping = () => {
 
         {/* ================= FORM ================= */}
         <div className="row p-2">
-          <ReactSelect
+          {/* <ReactSelect
             placeholderName="Employee"
             respclass="col-xl-3 col-md-4 col-sm-6 col-12"
             name="employeeId"
             dynamicOptions={employeeList}
             handleChange={handleSelect}
             value={values.employeeId}
-          />
+          /> */}
 
+<ReactSelect
+            name="employeeId"
+            placeholderName="Select Employee"
+            // dynamicOptions={allUser}
+            dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            handleChange={handleSelect}
+            value={values.employeeId?.value}
+          />
           <ReactSelect
             placeholderName="Sub Menu"
             respclass="col-xl-3 col-md-4 col-sm-6 col-12"
             name="subMenuId"
             dynamicOptions={subMenu?.map(item => ({ label: item.name, value: item.id }))}
             handleChange={handleSelect}
-            value={values.subMenuId}
+            value={values.subMenuId?.value}
           />
  <ReactSelect
             name="branchId"
@@ -177,7 +199,7 @@ const EmployeeSubMenuMapping = () => {
             }))}
             respclass="col-xl-3 col-md-6 col-sm-12"
             handleChange={handleSelect}
-            value={values.branchId}
+            value={values.branchId?.value}
           />
           {/* <ReactSelect
             placeholderName="Branch"

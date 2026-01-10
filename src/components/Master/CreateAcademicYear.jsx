@@ -25,18 +25,7 @@ function CreateAcademicYear() {
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState(
         [
-            {
-                Name: "Admission",
-                descripiton: "Testing"
-            },
-            {
-                Name: "Registration",
-                descripiton: "Testing"
-            },
-            {
-                Name: "Class",
-                descripiton: "Testing"
-            },
+
         ]
     );
     const [handleModelData, setHandleModelData] = useState({});
@@ -58,7 +47,7 @@ function CreateAcademicYear() {
     };
 
     const handleSave = async () => {
-        debugger
+
         const Payload =
         {
             "yearName": values?.yearName,
@@ -103,12 +92,13 @@ function CreateAcademicYear() {
         try {
             const response = await GetAllAcademicYears();
             if (response?.success) {
-
+                setTableData(response?.data)
             } else {
                 notify(response?.message, "error");
-
+                setTableData([])
             }
         } catch (error) {
+            setTableData([])
             notify("Error saving reason", "error");
         }
     };
@@ -137,7 +127,7 @@ function CreateAcademicYear() {
             )}
 
             <div className="card p-1">
-                <Heading title={t("Role Master")} isBreadcrumb={false} />
+                <Heading title={t("Academic Year")} isBreadcrumb={false} />
 
                 <div className="row p-2">
                     <Input
@@ -162,7 +152,7 @@ function CreateAcademicYear() {
                         handleChange={handleChange}
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         className="custom-calendar"
-                        maxDate={values?.startDate}
+                    // maxDate={values?.startDate}
                     />
                     <DatePicker
                         id="endDate"
@@ -173,7 +163,7 @@ function CreateAcademicYear() {
                         handleChange={handleChange}
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         className="custom-calendar"
-                        maxDate={values?.endDate}
+                    // maxDate={values?.endDate}
                     />
 
                     <ReactSelect
@@ -194,8 +184,8 @@ function CreateAcademicYear() {
                     {/* <div className="col-12 text-right"> */}
                     <button
                         onClick={handleSave}
-                        // className="btn btn-sm btn-primary"
-                        className="btn btn-outline-success"
+                        className="btn btn-sm btn-primary"
+                        // className="btn btn-outline-success"
                         type="button"
                     >
                         {t("Save")}
@@ -203,11 +193,12 @@ function CreateAcademicYear() {
                     {/* </div> */}
                 </div>
                 <Tables
-                    thead={[{ name: "Roles", }, { name: "descripiton" }, { name: "Action" }]}
+                    thead={[{ name: "Name", }, { name: "Date" }, { name: "isCurrent" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            Name: item.Name,
-                            descripiton: item.descripiton,
+                            yearName: item.yearName,
+                            Date: `${moment(item.startDate).format("DD-MM-YYYY")} TO ${moment(item?.endDate).format("DD-MM-YYYY")}`,
+                            isCurrent: item.isCurrent ? "yes" : "No",
                             action: <>
 
                                 <div

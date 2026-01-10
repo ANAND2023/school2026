@@ -138,6 +138,9 @@ function RenderRoute() {
   getAllUrls.push("/subject-master");
   getAllUrls.push("/subject-class-mapping");
   getAllUrls.push("/board");
+  getAllUrls.push("/academic-year");
+  getAllUrls.push("/grading-system");
+  getAllUrls.push("/create-syllabus");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -4307,6 +4310,36 @@ const allRoutes = {
       path: "/board",
       component: lazy(
         () => import("@app/components/Master/CreateBoard.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/academic-year",
+      component: lazy(
+        () => import("@app/components/Master/CreateAcademicYear.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/grading-system",
+      component: lazy(
+        () => import("@app/components/Master/GradingSystem.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/create-syllabus",
+      component: lazy(
+        () => import("@app/components/Master/CreateSyllabus.jsx")
       ),
     
       exact: true,

@@ -5,11 +5,11 @@ import Heading from "../../components/UI/Heading";
 import { notify } from "../../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
-import { GetAllUsers, UsersCreateUser } from "../../networkServices/Admin";
+import { CreateGradingSystem, GetAllGradingSystems } from "../../networkServices/AcademicYear";
 // 👉 apni API import karo
 // import { CreateUser, GetUsers } from "../../networkServices/UserMaster";
 
-const Users = () => {
+const GradingSystem = () => {
   const dispatch = useDispatch();
   const localData = useLocalStorage("userData", "get");
   console.log("localData", localData)
@@ -17,11 +17,11 @@ const Users = () => {
       INITIAL STATE
   ======================== */
   const initialData = {
-    userName: "",
-    fullName: "",
-    email: "",
-    password: "Dvs@1234",
-    orgId: localData?.OrganizationId // login se normally
+    gradeName: "",
+    minPercentage: "",
+    maxPercentage: "",
+    Remark: "",
+   
   };
 
   const [values, setValues] = useState(initialData);
@@ -43,30 +43,32 @@ const Users = () => {
   ======================== */
   const handleSave = async () => {
     if (
-      !values.userName ||
-      !values.fullName ||
-      !values.email ||
-      !values.password
+      !values.gradeName ||
+      !values.minPercentage ||
+      !values.maxPercentage 
+     
     ) {
       notify("All fields are required", "error");
       return;
     }
 
-    const payload = {
-      userName: values.userName,
-      fullName: values.fullName,
-      email: values.email,
-      password: values.password,
-      orgId: values.orgId
-    };
+    const payload = 
+    
+    {
+  "gradeName":values?.gradeName,
+  "minPercentage": values?.minPercentage,
+  "maxPercentage": values?.maxPercentage,
+  "remark": values?.Remark
+}
+
 
 
     try {
-      const res = await UsersCreateUser(payload);
+      const res = await CreateGradingSystem(payload);
       
       if (res?.success) {
         notify(res?.message, "success");
-        getAllUsers()
+        getGrading()
         // setTableData((prev) => [...prev, payload]);
         setValues(initialData);
       } else {
@@ -76,25 +78,12 @@ const Users = () => {
       notify("Something went wrong", "error");
     }
   };
-  const getAllUsers = async () => {
-
-
-    const payload = {
-      "pageNumber": 1,
-      "pageSize": 30,
-      "search": null,
-      "lockedOnly": false
-    }
-
+  const getGrading = async () => {
     try {
-      const res = await GetAllUsers(payload);
-
-      // 🔴 demo purpose (remove this block when API ready)
-      //   const res = { success: true };
-
+      const res = await GetAllGradingSystems();
       if (res?.success) {
         notify(res?.message, "success");
-        setTableData(res?.data?.items || []);
+        setTableData(res?.data || []);
         setValues(initialData);
       } else {
         notify(res?.message || "Failed", "error");
@@ -127,7 +116,7 @@ const Users = () => {
     notify("User Deleted", "success");
   };
   useEffect(() => {
-    getAllUsers();
+    getGrading();
   }, []);
   return (
     <>
@@ -138,45 +127,46 @@ const Users = () => {
         <div className="row p-2">
           <Input
             type="text"
-            name="userName"
-            value={values.userName}
-            lable="Username"
+            name="gradeName"
+            value={values.gradeName}
+            lable="Grade Name"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
             className="form-control"
           />
 
+          <Input
+            type="number"
+            name="minPercentage"
+            value={values.minPercentage}
+            lable="Min Percentage"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            onChange={handleChange}
+            className="form-control"
+          />
+
+          <Input
+            type="number"
+            name="maxPercentage"
+            value={values.maxPercentage}
+            lable="Max Percentage"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            onChange={handleChange}
+            className="form-control"
+          />
           <Input
             type="text"
-            name="fullName"
-            value={values.fullName}
-            lable="Full Name"
+            name="Remark"
+            value={values.Remark}
+            lable="Max Percentage"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
             className="form-control"
           />
 
-          <Input
-            type="email"
-            name="email"
-            value={values.email}
-            lable="Email"
-            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-            onChange={handleChange}
-            className="form-control"
-          />
-
-          <Input
-            type="text"
-            name="password"
-            value={values.password}
-            lable="Password"
-            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-            onChange={handleChange}
-            className="form-control"
-          />
+          
           <button className="btn btn-sm btn-primary" onClick={handleSave}>
-            Save User
+            Save 
           </button>
           {/* <div className="col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
@@ -188,15 +178,17 @@ const Users = () => {
         {/* ================= TABLE ================= */}
         <Tables
           thead={[
-            { name: "Username" },
-            { name: "Full Name" },
-            { name: "Email" },
+            { name: "Grade Name" },
+            { name: "Min Percentage" },
+            { name: "Max Percentage" },
+            { name: "Remark" },
             { name: "Action" }
           ]}
           tbody={tableData.map((item, index) => ({
-            userName: item.userName,
-            fullName: item.fullName,
-            email: item.email,
+            gradeName: item.gradeName,
+            minPercentage: item.minPercentage,
+            maxPercentage: item.maxPercentage,
+            remark: item.remark,
             action: <>
 
               <div
@@ -229,4 +221,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default GradingSystem;

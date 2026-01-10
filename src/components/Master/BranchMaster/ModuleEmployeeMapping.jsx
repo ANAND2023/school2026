@@ -215,7 +215,7 @@ const ModuleEmployeeMapping = () => {
             placeholderName="Select Employee"
             // dynamicOptions={allUser}
             dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
-            respclass="col-xl-4 col-md-6 col-sm-12"
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.employeeId}
           />
@@ -226,7 +226,7 @@ const ModuleEmployeeMapping = () => {
               label: ele?.name,
               value: ele?.id
             }))}
-            respclass="col-xl-3 col-md-6 col-sm-12"
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.branchId}
           />
@@ -237,14 +237,14 @@ const ModuleEmployeeMapping = () => {
               label: ele?.name,
               value: ele?.id
             }))}
-            respclass="col-xl-3 col-md-6 col-sm-12"
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.moduleId}
           />
 
 
 
-          <div className="col-xl-3 col-12 text-end mt-4">
+          <div className=" text-end ">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Save Mapping
             </button>

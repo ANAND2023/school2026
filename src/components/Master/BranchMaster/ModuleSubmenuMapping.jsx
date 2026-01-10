@@ -229,7 +229,7 @@ order: "",
               value: ele?.id
             }))}
             value={values.branch}
-            respclass="col-xl-4 col-md-6 col-sm-12"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
           />
           <ReactSelect
@@ -239,7 +239,7 @@ order: "",
               label: ele?.name,
               value: ele?.id
             }))}
-            respclass="col-xl-3 col-md-6 col-sm-12"
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.subMenu}
           />
@@ -250,7 +250,7 @@ order: "",
               label: ele?.name,
               value: ele?.id
             }))}
-            respclass="col-xl-3 col-md-6 col-sm-12"
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.module}
           />
@@ -265,12 +265,12 @@ order: "",
         />
 
 
-          <div className="col-xl-3 col-12 text-end">
+          <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Mapping
             </button>
           </div>
-          <div className="col-xl-3 col-12 text-end">
+          <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={getMapping}>
               Get Mapping
             </button>
