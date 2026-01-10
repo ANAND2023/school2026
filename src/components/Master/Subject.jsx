@@ -20,39 +20,21 @@ function Subject() {
     const [t] = useTranslation(); const initialData = {
         subjectCode: "",
         subjectName: "",
-        isPractical: { label: "Yes", value: "true" },
+        isPractical:  { label: "No", value: "false" },
 
     }
     const [values, setValues] = useState(initialData);
-    const [tableData, setTableData] = useState(
-        [
-            {
-                class_name: "First Class",
-                Order: 1
-
-            },
-            {
-                class_name: "2",
-                Order: 2
-
-            },
-            {
-                class_name: "3",
-                Order: 3
-
-            },
-        ]
-    );
+    const [tableData, setTableData] = useState([]);
     const [handleModelData, setHandleModelData] = useState({});
 
     const [modalData, setModalData] = useState({});
-    const handleChange = (e, type, limit = 9999999999999) => {
+    const handleChange = (e) => {
         const { name, value } = e.target
-        if (type === "number" && ((limit < Number(value)) || isNaN(Number(value)))) {
+        // if (type === "number" && ((limit < Number(value)) || isNaN(Number(value)))) {
 
-        } else {
+        // } else {
             setValues((prev) => ({ ...prev, [name]: value }));
-        }
+        // }
     };
     const getData = async () => {
 
@@ -70,7 +52,7 @@ function Subject() {
     };
 
     useEffect(() => {
-        // getData()
+        getData()
     }, [])
 
     const setIsOpen = () => {
@@ -81,23 +63,19 @@ function Subject() {
 
         const Payload =
         {
-            "subjectName": "string",
-            "subjectCode": "string",
-            "isPractical": true
+            "subjectName":values?.subjectName,
+            "subjectCode": values?.subjectCode,
+            "isPractical":values?.isPractical?.value==="false"?false:true
         }
 
 
-        // {
-        //     "className": values?.class_name ?? "",
-        //     "classOrder": Number(values?.Order ?? 0)
-        // }
 
         try {
             const Response = await CreateSubject(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-                handleBindQuestions();
+              getData()
             } else {
                 notify(Response?.message, "error");
             }
@@ -149,11 +127,11 @@ function Subject() {
                         lable={t("Subject Name")}
                         placeholder=" "
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
+                        // isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />
                     <Input
-                        type="number"
+                        type="text"
                         className="form-control required-fields"
                         id="subjectCode"
                         name="subjectCode"
@@ -162,7 +140,7 @@ function Subject() {
                         lable={t("Subject Code")}
                         placeholder=" "
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
+                        // isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />
                     <ReactSelect
@@ -180,8 +158,14 @@ function Subject() {
                         value={values?.isPractical?.value}
                         requiredClassName="required-fields"
                     />
-
-                    <div className="col-12 text-right">
+ <button
+                            onClick={handleSave}
+                            className="btn btn-sm btn-primary"
+                            type="button"
+                        >
+                            {t("Save")}
+                        </button>
+                    {/* <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
@@ -189,17 +173,18 @@ function Subject() {
                         >
                             {t("Class Add")}
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
 
 
                 <Tables
-                    thead={[{ name: "Roles", }, { name: "Order" }, { name: "Action" }]}
+                    thead={[{ name: "Subject Name", }, { name: "Code" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            class_name: item.class_name,
-                            Order: item.Order,
+                            subjectName: item.subjectName,
+                            subjectCode: item.subjectCode,
+                           
                             action: <>
 
                                 <div

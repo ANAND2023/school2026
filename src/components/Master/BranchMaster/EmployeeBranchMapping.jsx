@@ -6,10 +6,12 @@ import Heading from "../../UI/Heading";
 import { notify } from "../../../utils/ustil2";
 import { EmployeeBranchMapping, GetAllBranches } from "../../../networkServices/AcademicYear";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+import { GetAllUsers } from "../../../networkServices/Admin";
+import { handleReactSelectDropDownOptions } from "../../../utils/utils";
 // import { SaveEmployeeBranchMap } from "../../networkServices/EmployeeMaster";
 
 const EmployeeBranchMap = () => {
-const localData = useLocalStorage("userData", "get");
+  const localData = useLocalStorage("userData", "get");
   const initialData = {
     employeeId: null,
     employeeName: "",
@@ -20,15 +22,10 @@ const localData = useLocalStorage("userData", "get");
 
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
+  const [allUser, setAllUser] = useState([]);
   const [branch, setBranch] = useState([]);
 
-  /* =======================
-      DUMMY OPTIONS (API se aayega)
-  ======================== */
-  const employeeList = [
-    { value: "EMP001", label: "Rahul Sharma" },
-    { value: "EMP002", label: "Ankit Verma" }
-  ];
+
 
 
 
@@ -69,12 +66,12 @@ const localData = useLocalStorage("userData", "get");
       }
     ];
 
- 
+
     try {
       const res = await EmployeeBranchMapping(payload);
 
       // demo success
-    //   const res = { success: true };
+      //   const res = { success: true };
 
       if (res?.success) {
         notify("Employee mapped successfully", "success");
@@ -88,23 +85,50 @@ const localData = useLocalStorage("userData", "get");
     }
   };
   const getData = async () => {
-    const payload={
-  "employeeId": "",
-  "organisationID": values?.organisationId,
-  "isAll": 1
-}
+    const payload = {
+      "employeeId": "",
+      "organisationID": values?.organisationId,
+      "isAll": 1
+    }
     try {
       const res = await GetAllBranches(payload);
-      if (res?.success) 
+      if (res?.success)
         setBranch(res.data);
       else notify(res?.message, "error");
     } catch {
       notify("Error fetching data", "error");
     }
   };
+const getAllUsers = async () => {
 
+
+    const payload = {
+      "pageNumber": 1,
+      "pageSize": 30,
+      "search": null,
+      "lockedOnly": false
+    }
+
+    try {
+      const res = await GetAllUsers(payload);
+
+      // 🔴 demo purpose (remove this block when API ready)
+      //   const res = { success: true };
+
+      if (res?.success) {
+        notify(res?.message, "success");
+        setAllUser(res?.data?.items || []);
+        // setValues(initialData);
+      } else {
+        notify(res?.message || "Failed", "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
   useEffect(() => {
     getData();
+    getAllUsers();
   }, []);
   /* =======================
       DELETE
@@ -126,7 +150,8 @@ const localData = useLocalStorage("userData", "get");
           <ReactSelect
             name="employeeId"
             placeholderName="Select Employee"
-            dynamicOptions={employeeList}
+            // dynamicOptions={allUser}
+              dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
             respclass="col-xl-4 col-md-6 col-sm-12"
             handleChange={handleSelect}
             value={values.employeeId}
@@ -135,9 +160,9 @@ const localData = useLocalStorage("userData", "get");
           <ReactSelect
             name="branchId"
             placeholderName="Select Branch"
-            dynamicOptions={branch?.map((ele)=>({
-                label:ele?.name,
-                value:ele?.id
+            dynamicOptions={branch?.map((ele) => ({
+              label: ele?.name,
+              value: ele?.id
             }))}
             value={values.branchId}
             respclass="col-xl-4 col-md-6 col-sm-12"

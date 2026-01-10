@@ -40,12 +40,16 @@ GetAllAcademicYears:"academicmaster/GetAllAcademicYears",
 
 // class start ....
 CreateClass:`${baseUrlMaster}academicmaster/CreateClass`,
-// CreateClass:"academicmaster/CreateClass",
-GetAllClasses:"academicmaster/GetAllClasses",
-CreateSection:"academicmaster/CreateSection",
-GetAllSections:"academicmaster/GetAllSections",
-CreateSubject:"academicmaster/CreateSubject",
-GetAllSubjects:"academicmaster/GetAllSubjects",
+GetAllClasses:`${baseUrlMaster}AcademicMaster/GetAllClasses`,
+CreateSection:`${baseUrlMaster}AcademicMaster/CreateSection`,
+GetAllSections:`${baseUrlMaster}AcademicMaster/GetAllSections`,
+CreateSubject:`${baseUrlMaster}AcademicMaster/CreateSubject`,
+GetAllSubjects:`${baseUrlMaster}AcademicMaster/GetAllSubjects`,
+CreateSubjectClassMapping:`${baseUrlMaster}AcademicMaster/CreateSubjectClassMapping`,
+GetAllSubjectClassMappings:`${baseUrlMaster}AcademicMaster/GetAllSubjectClassMappings`,
+CreateBoard:`${baseUrlMaster}AcademicMaster/CreateBoard`,
+GetAllBoards:`${baseUrlMaster}AcademicMaster/GetAllBoards`,
+
 // class end ....
 
 // branch start ...
@@ -53,6 +57,7 @@ GetAllSubjects:"academicmaster/GetAllSubjects",
 CreateBranch:`${baseUrlMaster}branchmasters/CreateBranch`,
 GetAllBranches:`${baseUrlMaster}branchmasters/GetBranch`,
 EmployeeBranchMapping:`${baseUrlMaster}BranchMasters/EmployeeBranchMapping`,
+createModuleEmployeeMapping:`${baseUrlMaster}MenuManagment/create-module-employee-mapping-bulk`,
 MenuManagmentgetModuleSubmenuMappings:`${baseUrlMaster}MenuManagment/get-module-submenu-mappings`,
 CreateModuleSubmenuMappingBulk:`${baseUrlMaster}MenuManagment/create-module-submenu-mapping-bulk`,
 createEmployeeSubmenuMappingBulk:`${baseUrlMaster}MenuManagment/create-employee-submenu-mapping-bulk`,
@@ -148,6 +153,7 @@ MenuManagmentGeModuleBulk:`${baseUrlMaster}MenuManagment/get-modules`,
   // identity/api/v1/Users/createusers
   UsersCreateUser:`${mainUrl}Users/createusers`,
   UsersGetAllUsers:`${mainUrl}Users/getallusers`,
+  // UsersGetAllUsers:`${mainUrl}Users/getallusers`,
   // Usersgetallusers:`${mainUrl}Users/getallusers`,
   // Usersgetuserbyid:`${mainUrl}Users/getuserbyid`,
   // Usersupdateuser:`${mainUrl}Users/updateuser`,

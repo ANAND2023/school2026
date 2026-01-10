@@ -132,6 +132,12 @@ function RenderRoute() {
   getAllUrls.push("/registration");
   getAllUrls.push("/registration-form");
   getAllUrls.push("/admission");
+  getAllUrls.push("/users");
+  getAllUrls.push("/class-master");
+  getAllUrls.push("/section-master");
+  getAllUrls.push("/subject-master");
+  getAllUrls.push("/subject-class-mapping");
+  getAllUrls.push("/board");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -4245,6 +4251,68 @@ const allRoutes = {
     
       exact: true,
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/users",
+      component: lazy(
+        () => import("@app/components/Master/Users.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/class-master",
+      component: lazy(
+        () => import("@app/components/Master/ClassMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/section-master",
+      component: lazy(
+        () => import("@app/components/Master/SectionMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/subject-master",
+      component: lazy(
+        () => import("@app/components/Master/Subject.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/subject-class-mapping",
+      component: lazy(
+        () => import("@app/components/Master/SubjectClassMapping.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/board",
+      component: lazy(
+        () => import("@app/components/Master/CreateBoard.jsx")
+      ),
+    
+      exact: true,
+    },
+    // src/components/Master/ClassMaster.jsx
+    // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Users.jsx
 // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Admission\Admission.jsx
   ],
 };

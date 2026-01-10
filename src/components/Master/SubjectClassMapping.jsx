@@ -12,17 +12,21 @@ import {
 
 } from "../../networkServices/blooadbankApi";
 import Modal from "../../components/modalComponent/Modal";
-import { notify } from "../../utils/utils";
-import { CreateClass, GetAllClasses } from "../../networkServices/AcademicYear";
+import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
+import { CreateClass, CreateSubject, CreateSubjectClassMapping, GetAllClasses, GetAllSubjectClassMappings, GetAllSubjects } from "../../networkServices/AcademicYear";
+import ReactSelect from "../formComponent/ReactSelect";
 
-function ClassMaster() {
+function SubjectClassMapping() {
     const [t] = useTranslation(); const initialData = {
-        class_name: "",
-        Order: "",
+        subject: {},
+        class_Name: {},
+        isMandatory: { label: "No", value: "false" },
 
     }
+    const [classes, setClasses] = useState([]);
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
+    const [subject, setSubject] = useState([]);
     const [handleModelData, setHandleModelData] = useState({});
 
     const [modalData, setModalData] = useState({});
@@ -31,13 +35,41 @@ function ClassMaster() {
         // if (type === "number" && ((limit < Number(value)) || isNaN(Number(value)))) {
 
         // } else {
-            setValues((prev) => ({ ...prev, [name]: value }));
+        setValues((prev) => ({ ...prev, [name]: value }));
         // }
+    };
+    const getSubject = async () => {
+
+        try {
+            const response = await GetAllSubjects();
+            if (response?.success) {
+                setSubject(response?.data)
+            } else {
+                notify(response?.message, "error");
+                setSubject([])
+            }
+        } catch (error) {
+            notify("Error saving reason", "error");
+        }
+    };
+    const getClass = async () => {
+
+        try {
+            const response = await GetAllClasses();
+            if (response?.success) {
+                setClasses(response?.data)
+            } else {
+                notify(response?.message, "error");
+                setTableData([])
+            }
+        } catch (error) {
+            notify("Error saving reason", "error");
+        }
     };
     const getData = async () => {
 
         try {
-            const response = await GetAllClasses();
+            const response = await GetAllSubjectClassMappings();
             if (response?.success) {
                 setTableData(response?.data)
             } else {
@@ -51,6 +83,8 @@ function ClassMaster() {
 
     useEffect(() => {
         getData()
+        getSubject()
+        getClass()
     }, [])
 
     const setIsOpen = () => {
@@ -59,18 +93,21 @@ function ClassMaster() {
 
     const handleSave = async () => {
 
-        const Payload = {
-            "className": values?.class_name ?? "",
-            "classOrder": Number(values?.Order ?? 0)
+        const Payload =
+
+        {
+            "classId": values?.class_Name?.value,
+            "subjectId": values?.subject?.value,
+            "isMandatory": values?.isMandatory?.value === "false" ? false : true
         }
 
+
         try {
-            const Response = await CreateClass(Payload);
+            const Response = await CreateSubjectClassMapping(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-                 getData()
-                // handleBindQuestions();
+                getData()
             } else {
                 notify(Response?.message, "error");
             }
@@ -85,6 +122,9 @@ function ClassMaster() {
         handleChange(e)
 
     }
+    const handleSelect = (name, value) => {
+        setValues((prev) => ({ ...prev, [name]: value }));
+    };
     return (
         <>
             {handleModelData?.isOpen && (
@@ -106,42 +146,58 @@ function ClassMaster() {
             )}
 
             <div className="card p-1">
-                <Heading title={t("Class Master")} isBreadcrumb={false} />
+                <Heading title={t("Subject Class Mapping")} isBreadcrumb={false} />
 
                 <div className="row p-2">
-                    <Input
-                        type="text"
-                        className="form-control required-fields"
-                        id="class_name"
-                        name="class_name"
-                        value={values?.class_name ? values?.class_name : ""}
-                        // onChange={handleChange}
-                        lable={t("Class Name")}
-                        placeholder=" "
+
+                    <ReactSelect
+                        placeholderName={t("Class")}
+                        searchable={true}
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
-                        onChange={(e) => handleChange(e)}
+                        id="class_Name"
+                        name="class_Name"
+                        removeIsClearable={true}
+                        // dynamicOptions={classes}
+                        dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")}
+                        handleChange={handleSelect}
+                        value={values?.class_Name?.value}
+                        requiredClassName="required-fields"
                     />
-                    <Input
-                        type="number"
-                        className="form-control required-fields"
-                        id="Order"
-                        name="Order"
-                        value={values?.Order ? values?.Order : ""}
-                        // onChange={handleChange}
-                        lable={t("Class Order")}
-                        placeholder=" "
+                    <ReactSelect
+                        placeholderName={t("Subject")}
+                        searchable={true}
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
-                        onChange={(e) => handleChange(e)}
+                        id="subject"
+                        name="subject"
+                        removeIsClearable={true}
+                        // dynamicOptions={}
+                        dynamicOptions={handleReactSelectDropDownOptions(subject, "subjectName", "id")}
+                        handleChange={handleSelect}
+                        value={values?.subject?.value}
+                        requiredClassName="required-fields"
                     />
-<button
-                            onClick={handleSave}
-                            className="btn btn-sm btn-primary"
-                            type="button"
-                        >
-                            {t("Class Add")}
-                        </button>
+                    <ReactSelect
+                        placeholderName={t("Is Mandatory")}
+                        searchable={true}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        id="isMandatory"
+                        name="isMandatory"
+                        removeIsClearable={true}
+                        dynamicOptions={[
+                            { label: "Yes", value: "true" },
+                            { label: "No", value: "false" },
+                        ]}
+                        handleChange={handleSelect}
+                        value={values?.isMandatory?.value}
+                        requiredClassName="required-fields"
+                    />
+                    <button
+                        onClick={handleSave}
+                        className="btn btn-sm btn-primary"
+                        type="button"
+                    >
+                        {t("Save")}
+                    </button>
                     {/* <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
@@ -156,11 +212,12 @@ function ClassMaster() {
 
 
                 <Tables
-                    thead={[{ name: "Roles", }, { name: "Order" }, { name: "Action" }]}
+                    thead={[{ name: "Subject Name", }, { name: "Class Name" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
+                            subjectName: item.subjectName,
                             className: item.className,
-                            classOrder: item.classOrder,
+
                             action: <>
 
                                 <div
@@ -194,4 +251,4 @@ function ClassMaster() {
     );
 }
 
-export default ClassMaster;
+export default SubjectClassMapping;

@@ -142,6 +142,44 @@ export const CreateSubject = async (params) => {
   }
 };
 
+export const CreateSubjectClassMapping = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.CreateSubjectClassMapping}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const CreateBoards = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.CreateBoard}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
 
 export const GetAllSubjects = async (params) => {
   store.dispatch(setLoading(true));
@@ -152,6 +190,43 @@ export const GetAllSubjects = async (params) => {
     };
     const data = await makeApiRequest(
       `${apiUrls.GetAllSubjects}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetAllBoards = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+    //   data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetAllBoards}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const GetAllSubjectClassMappings = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+    //   data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetAllSubjectClassMappings}`,
       options
     );
     store.dispatch(setLoading(false));
@@ -211,6 +286,24 @@ export const EmployeeBranchMapping = async (params) => {
     };
     const data = await makeApiRequest(
       `${apiUrls.EmployeeBranchMapping}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const ModuleEmployeeBranchMapping = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.createModuleEmployeeMapping}`,
       options
     );
     store.dispatch(setLoading(false));

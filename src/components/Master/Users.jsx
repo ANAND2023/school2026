@@ -5,14 +5,14 @@ import Heading from "../../components/UI/Heading";
 import { notify } from "../../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
-import { UsersCreateUser, UsersGetAllUsers } from "../../networkServices/Admin";
+import { GetAllUsers, UsersCreateUser } from "../../networkServices/Admin";
 // 👉 apni API import karo
 // import { CreateUser, GetUsers } from "../../networkServices/UserMaster";
 
 const Users = () => {
   const dispatch = useDispatch();
   const localData = useLocalStorage("userData", "get");
-console.log("localData",localData)
+  console.log("localData", localData)
   /* =======================
       INITIAL STATE
   ======================== */
@@ -20,7 +20,7 @@ console.log("localData",localData)
     userName: "",
     fullName: "",
     email: "",
-    password: "",
+    password: "Dvs@1234",
     orgId: localData?.OrganizationId // login se normally
   };
 
@@ -60,45 +60,40 @@ console.log("localData",localData)
       orgId: values.orgId
     };
 
-    console.log("FINAL USER PAYLOAD 👉", payload);
 
     try {
       const res = await UsersCreateUser(payload);
-
-      // 🔴 demo purpose (remove this block when API ready)
-    //   const res = { success: true };
-
+      debugger
       if (res?.success) {
         notify(res?.message, "success");
         // setTableData((prev) => [...prev, payload]);
         setValues(initialData);
       } else {
-        notify(res?.message || "Failed", "error");
+        notify(res?.data?.error || "Failed", "error");
       }
     } catch (error) {
       notify("Something went wrong", "error");
     }
   };
   const getAllUsers = async () => {
-    
+
 
     const payload = {
-      userName: values.userName,
-      fullName: values.fullName,
-      email: values.email,
-      password: values.password,
-      orgId: values.orgId
-    };
+      "pageNumber": 1,
+      "pageSize": 30,
+      "search": null,
+      "lockedOnly": false
+    }
 
     try {
-      const res = await UsersGetAllUsers(payload);
+      const res = await GetAllUsers(payload);
 
       // 🔴 demo purpose (remove this block when API ready)
-    //   const res = { success: true };
+      //   const res = { success: true };
 
       if (res?.success) {
         notify(res?.message, "success");
-        setTableData(res?.data || []);
+        setTableData(res?.data?.items || []);
         setValues(initialData);
       } else {
         notify(res?.message || "Failed", "error");
@@ -130,7 +125,7 @@ console.log("localData",localData)
     setTableData(data);
     notify("User Deleted", "success");
   };
-useEffect(() => {
+  useEffect(() => {
     getAllUsers();
   }, []);
   return (
@@ -145,9 +140,9 @@ useEffect(() => {
             name="userName"
             value={values.userName}
             lable="Username"
-            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
-              className="form-control"
+            className="form-control"
           />
 
           <Input
@@ -155,9 +150,9 @@ useEffect(() => {
             name="fullName"
             value={values.fullName}
             lable="Full Name"
-            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
-              className="form-control"
+            className="form-control"
           />
 
           <Input
@@ -165,26 +160,28 @@ useEffect(() => {
             name="email"
             value={values.email}
             lable="Email"
-            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
-            onChange={handleChange}
-              className="form-control"
-          />
-
-          <Input
-            type="password"
-            name="password"
-            value={values.password}
-            lable="Password"
-            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
             className="form-control"
           />
 
-          <div className="col-12 text-end mt-2">
+          <Input
+            type="text"
+            name="password"
+            value={values.password}
+            lable="Password"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+            onChange={handleChange}
+            className="form-control"
+          />
+          <button className="btn btn-sm btn-primary" onClick={handleSave}>
+            Save User
+          </button>
+          {/* <div className="col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Save User
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* ================= TABLE ================= */}
@@ -199,22 +196,31 @@ useEffect(() => {
             userName: item.userName,
             fullName: item.fullName,
             email: item.email,
-            action: (
-              <div className="d-flex gap-2">
+            action: <>
+
+              <div
+                // className="d-flex align-items-center justify-content-center gap-2"
+                className="row gap-2"
+              >
                 <button
-                  className="btn btn-sm btn-warning"
-                  onClick={() => handleEdit(item)}
+                  id="editBtn"
+                  onclick="handleEdit(item.id)"
+                  title="Edit"
+                  className="d-flex align-items-center justify-content-center"
                 >
-                  ✏️
+                  <i class=" bi-pencil-square"></i>
                 </button>
+
                 <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDelete(index)}
+                  id="deleteBtn"
+                  onclick="handleDelete(item.id)"
+                  title="Delete"
                 >
-                  🗑️
+                  <i class="bi-trash3"></i>
                 </button>
               </div>
-            )
+
+            </>,
           }))}
         />
       </div>

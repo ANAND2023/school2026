@@ -12,8 +12,8 @@ import {
 
 } from "../../networkServices/blooadbankApi";
 import Modal from "../../components/modalComponent/Modal";
-import { notify } from "../../utils/utils";
-import { CreateSection, GetAllSections } from "../../networkServices/AcademicYear";
+import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
+import { CreateSection, GetAllClasses, GetAllSections } from "../../networkServices/AcademicYear";
 import ReactSelect from "../formComponent/ReactSelect";
 
 function SectionMaster() {
@@ -22,22 +22,10 @@ function SectionMaster() {
         class_Name: { label: "1", value: "true" },
     }
     const [values, setValues] = useState(initialData);
+    const [classes, setClasses] = useState([]);
     
     const [tableData, setTableData] = useState(
-        [
-            {
-                section_name: "A",
-
-            },
-            {
-                section_name: "B",
-
-            },
-            {
-                section_name: "C",
-
-            },
-        ]
+        []
     );
     const [handleModelData, setHandleModelData] = useState({});
 
@@ -48,6 +36,24 @@ function SectionMaster() {
         setValues((prev) => ({ ...prev, [name]: value }));
 
     };
+
+
+        const getClass = async () => {
+    
+            try {
+                const response = await GetAllClasses();
+                if (response?.success) {
+                    setClasses(response?.data)
+                } else {
+                    notify(response?.message, "error");
+                    setTableData([])
+                }
+            } catch (error) {
+                notify("Error saving reason", "error");
+            }
+        };
+    
+     
  const getData = async () => {
 
         try {
@@ -64,7 +70,8 @@ function SectionMaster() {
     };
 
     useEffect(() => {
-        // getData()
+        getData()
+        getClass()
     }, [])
 
 
@@ -84,7 +91,7 @@ function SectionMaster() {
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-                handleBindQuestions();
+               getData()
             } else {
                 notify(Response?.message, "error");
             }
@@ -146,31 +153,28 @@ function SectionMaster() {
                         id="class_Name"
                         name="class_Name"
                         removeIsClearable={true}
-                        dynamicOptions={[
-                            { label: "1", value: "true" },
-                            { label: "2", value: "false" },
-                        ]}
+                        // dynamicOptions={classes}
+                                    dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
                         handleChange={handleSelect}
                         value={values?.class_Name?.value}
                         requiredClassName="required-fields"
                     />
 
-                    <div className="col-12 text-right">
-                        <button
+                    <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
                             type="button"
                         >
                             {t("Add Section")}
                         </button>
-                    </div>
                 </div>
 
                 <Tables
-                    thead={[{ name: "Section", }, { name: "Action" }]}
+                    thead={[{ name: "Section", }, { name: "Class", },{ name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            section_name: item.section_name,
+                            sectionName: item.sectionName,
+                            classId: item.classId,
 
                             action: <>
                                 <div

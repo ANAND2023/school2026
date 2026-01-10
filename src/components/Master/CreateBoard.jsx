@@ -13,12 +13,12 @@ import {
 } from "../../networkServices/blooadbankApi";
 import Modal from "../../components/modalComponent/Modal";
 import { notify } from "../../utils/utils";
-import { CreateClass, GetAllClasses } from "../../networkServices/AcademicYear";
+import { CreateBoards, CreateClass, GetAllBoards, GetAllClasses } from "../../networkServices/AcademicYear";
 
-function ClassMaster() {
+function CreateBoard() {
     const [t] = useTranslation(); const initialData = {
-        class_name: "",
-        Order: "",
+        boardName: "",
+        description: "",
 
     }
     const [values, setValues] = useState(initialData);
@@ -37,7 +37,7 @@ function ClassMaster() {
     const getData = async () => {
 
         try {
-            const response = await GetAllClasses();
+            const response = await GetAllBoards();
             if (response?.success) {
                 setTableData(response?.data)
             } else {
@@ -59,13 +59,18 @@ function ClassMaster() {
 
     const handleSave = async () => {
 
-        const Payload = {
-            "className": values?.class_name ?? "",
-            "classOrder": Number(values?.Order ?? 0)
-        }
+        const Payload = 
+        // {
+        //     "className": values?.class_name ?? "",
+        //     "classOrder": Number(values?.Order ?? 0)
+        // }
+        {
+  "boardName": values?.boardName,
+  "description":values?.description
+}
 
         try {
-            const Response = await CreateClass(Payload);
+            const Response = await CreateBoards(Payload);
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
@@ -78,13 +83,7 @@ function ClassMaster() {
             notify("Error saving reason", "error");
         }
     };
-    const handleCapitalLatter = (e) => {
 
-        let event = { ...e }
-        event.target.value = event.target.value.toUpperCase()
-        handleChange(e)
-
-    }
     return (
         <>
             {handleModelData?.isOpen && (
@@ -106,41 +105,42 @@ function ClassMaster() {
             )}
 
             <div className="card p-1">
-                <Heading title={t("Class Master")} isBreadcrumb={false} />
+                <Heading title={t("Board")} isBreadcrumb={false} />
 
                 <div className="row p-2">
                     <Input
                         type="text"
                         className="form-control required-fields"
-                        id="class_name"
-                        name="class_name"
-                        value={values?.class_name ? values?.class_name : ""}
+                        id="boardName"
+                        name="boardName"
+                        value={values?.boardName ? values?.boardName : ""}
                         // onChange={handleChange}
-                        lable={t("Class Name")}
+                        lable={t("Board Name")}
                         placeholder=" "
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
+                        // isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />
                     <Input
-                        type="number"
+                        type="text"
                         className="form-control required-fields"
-                        id="Order"
-                        name="Order"
-                        value={values?.Order ? values?.Order : ""}
+                        id="description"
+                        name="description"
+                        value={values?.description ? values?.description : ""}
                         // onChange={handleChange}
-                        lable={t("Class Order")}
+                        lable={t("description")}
                         placeholder=" "
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
+                        // isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />
+                   
 <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
                             type="button"
                         >
-                            {t("Class Add")}
+                            {t("Save")}
                         </button>
                     {/* <div className="col-12 text-right">
                         <button
@@ -156,11 +156,11 @@ function ClassMaster() {
 
 
                 <Tables
-                    thead={[{ name: "Roles", }, { name: "Order" }, { name: "Action" }]}
+                    thead={[{ name: "Name", }, { name: "Description" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            className: item.className,
-                            classOrder: item.classOrder,
+                            boardName: item.boardName,
+                            description: item.description,
                             action: <>
 
                                 <div
@@ -194,4 +194,4 @@ function ClassMaster() {
     );
 }
 
-export default ClassMaster;
+export default CreateBoard;

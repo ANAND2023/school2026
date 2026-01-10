@@ -5,14 +5,17 @@ import Heading from "../../UI/Heading";
 import { notify } from "../../../utils/ustil2";
 import {
   EmployeeBranchMapping,
-  GetAllBranches
+  GetAllBranches,
+  ModuleEmployeeBranchMapping
 } from "../../../networkServices/AcademicYear";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { MenuManagmentGeModuleBulk } from "../../../networkServices/MenuMaster";
+import { GetAllUsers } from "../../../networkServices/Admin";
+import { handleReactSelectDropDownOptions } from "../../../utils/utils";
 
 const ModuleEmployeeMapping = () => {
   const localData = useLocalStorage("userData", "get");
-  console.log("localData",localData)
+  console.log("localData", localData)
   const initialData = {
     employeeId: null,
     employeeName: "",
@@ -26,7 +29,7 @@ const ModuleEmployeeMapping = () => {
   const [tableData, setTableData] = useState([]);
   const [branch, setBranch] = useState([]);
   const [module, setModule] = useState([]);
-
+  const [allUser, setAllUser] = useState([]);
 
   const employeeList = [
     { value: "EMP001", label: "Rahul Sharma" },
@@ -35,31 +38,38 @@ const ModuleEmployeeMapping = () => {
 
 
   const handleSelect = (name, option) => {
-    if (!option) return;
-
-    if (name === "employeeId") {
-      setValues((prev) => ({
+         setValues((prev) => ({
         ...prev,
-        employeeId: option.value,
-        employeeName: option.label
+        [name]: option,
+       
       }));
-    }
-
-    if (name === "moduleId") {
-      setValues((prev) => ({
-        ...prev,
-        moduleId: option.value,
-        moduleName: option.label
-      }));
-    }
-
-    if (name === "branchId") {
-      setValues((prev) => ({
-        ...prev,
-        branchId: option.value
-      }));
-    }
   };
+  // const handleSelect = (name, option) => {
+  //   if (!option) return;
+
+  //   if (name === "employeeId") {
+  //     setValues((prev) => ({
+  //       ...prev,
+  //       employeeId: option.value,
+  //       employeeName: option.label
+  //     }));
+  //   }
+
+  //   if (name === "moduleId") {
+  //     setValues((prev) => ({
+  //       ...prev,
+  //       moduleId: option.value,
+  //       moduleName: option.label
+  //     }));
+  //   }
+
+  //   if (name === "branchId") {
+  //     setValues((prev) => ({
+  //       ...prev,
+  //       branchId: option.value
+  //     }));
+  //   }
+  // };
 
   /* =======================
       SAVE
@@ -71,23 +81,32 @@ const ModuleEmployeeMapping = () => {
     }
 
     const payload = [
-      {
-          employeeId: localData?.UserId,
-        employeeName: "Ajeet Kumar",
-        moduleId: values.moduleId,
-        moduleName: values.moduleName,
-        branchId: values.branchId,
-        orgId: values.orgId
-      }
+       {
+    "employeeId": values?.employeeId?.value??"",
+    "employeeName": values?.employeeId?.label??"",
+    "moduleId": values.moduleId?.value??"",
+    "moduleName": values.moduleId?.label??"",
+    "branchId":values.branchId?.value??"",
+    "orgId": values.orgId
+  }
+      // {
+      //   employeeId: values?.employeeId?.value,
+      //   employeeName: values?.employeeId?.label,
+      //   moduleId: values.moduleId?.value,
+      //   moduleName: values.moduleName?.label,
+      //   branchId: values.branchId?.value,
+      //   BranchName: values.branchId?.label,
+      //   OrganisationId: values.orgId
+      // }
     ];
 
     console.log("FINAL PAYLOAD 👉", payload);
 
     try {
-      const res = await EmployeeBranchMapping(payload);
+      const res = await ModuleEmployeeBranchMapping(payload);
 
       if (res?.success) {
-        notify("Mapping saved successfully", "success");
+        notify(res?.message, "success");
         // setTableData((prev) => [...prev, payload[0]]);
         setValues(initialData);
       } else {
@@ -97,7 +116,7 @@ const ModuleEmployeeMapping = () => {
       notify("Something went wrong", "error");
     }
   };
- const getModuleBulk = async () => {
+  const getModuleBulk = async () => {
 
 
     const payload =
@@ -105,11 +124,11 @@ const ModuleEmployeeMapping = () => {
       "searchText": "",
       "isAll": 1,
       "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-      "branchId":  "",
+      "branchId": "",
       // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
       "isActive": 0
     }
- 
+
     try {
       const res = await MenuManagmentGeModuleBulk(payload);
       if (res?.success) {
@@ -139,9 +158,30 @@ const ModuleEmployeeMapping = () => {
       notify("Error fetching branches", "error");
     }
   };
+  const getAllUsers = async () => {
+    const payload = {
+      "pageNumber": 1,
+      "pageSize": 30,
+      "search": null,
+      "lockedOnly": false
+    }
+
+    try {
+      const res = await GetAllUsers(payload);
+      if (res?.success) {
+        notify(res?.message, "success");
+        setAllUser(res?.data?.items || []);
+      } else {
+        notify(res?.message || "Failed", "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
 
   useEffect(() => {
     getData();
+    getAllUsers();
     getModuleBulk();
   }, []);
 
@@ -162,15 +202,24 @@ const ModuleEmployeeMapping = () => {
 
         {/* ================= FORM ================= */}
         <div className="row p-2">
-          <ReactSelect
+          {/* <ReactSelect
             name="employeeId"
             placeholderName="Select Employee"
             dynamicOptions={employeeList}
             respclass="col-xl-3 col-md-6 col-sm-12"
             handleChange={handleSelect}
             value={values.employeeId}
+          /> */}
+          <ReactSelect
+            name="employeeId"
+            placeholderName="Select Employee"
+            // dynamicOptions={allUser}
+            dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
+            respclass="col-xl-4 col-md-6 col-sm-12"
+            handleChange={handleSelect}
+            value={values.employeeId}
           />
- <ReactSelect
+          <ReactSelect
             name="branchId"
             placeholderName="Select Branch"
             dynamicOptions={branch?.map((ele) => ({
@@ -193,7 +242,7 @@ const ModuleEmployeeMapping = () => {
             value={values.moduleId}
           />
 
-         
+
 
           <div className="col-xl-3 col-12 text-end mt-4">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
