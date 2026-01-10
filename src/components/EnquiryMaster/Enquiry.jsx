@@ -4,49 +4,53 @@ import Input from "../formComponent/Input";
 import Tables from "../UI/customTable";
 import Heading from "../UI/Heading";
 import { notify } from "../../utils/utils";
-import { EnquiryCreate, GetAllEnquiries, GetEnquiriesByRange } from "../../networkServices/School/RegistrationApi";
+import { DeleteEnquiry, EnquiryCreate, GetAllEnquiries, GetEnquiriesByRange } from "../../networkServices/School/RegistrationApi";
 import { useTranslation } from "react-i18next";
 import DatePicker from "../formComponent/DatePicker";
 import moment from "moment";
 import ReactSelect from "../formComponent/ReactSelect";
 import ColorCodingSearch from "../commonComponents/ColorCodingSearch";
+import { exportToExcel } from "../../utils/exportLibrary";
+import Modal from "../modalComponent/Modal";
 
 const Enquiry = () => {
     const [t] = useTranslation();
     const { VITE_DATE_FORMAT } = import.meta.env;
+    const [handleModelData, setHandleModelData] = useState({});
+    const [modalData, setModalData] = useState({});
     /* ================= STATE ================= */
-      const initialData = {
-           toDate: new Date(),
-        fromDate: new Date(),
-        id: null,
-        studentName: "",
-        fatherName: "",
-        enquirerName: "",
-        mobileNumber: "",
-        alternateMobileNumber: "",
-        previousSchoolName: "",
-        previousClass: "",
-        previousPercentage: "",
-        desiredClass: "",
-        isInterested: { label: "Yes", value: "true" },
-        remarks: ""
-      };
     // const initialData = {
     //     toDate: new Date(),
     //     fromDate: new Date(),
-    //     id: 1,
-    //     studentName: "Rahul Kumar",
-    //     fatherName: "Suresh Kumar",
-    //     enquirerName: "Suresh Kumar",
-    //     mobileNumber: "9876543210",
-    //     alternateMobileNumber: "9123456789",
-    //     previousSchoolName: "Bright Future Public School",
-    //     previousClass: "8th",
-    //     previousPercentage: "78",
-    //     desiredClass: "9th",
+    //     id: null,
+    //     studentName: "",
+    //     fatherName: "",
+    //     enquirerName: "",
+    //     mobileNumber: "",
+    //     alternateMobileNumber: "",
+    //     previousSchoolName: "",
+    //     previousClass: "",
+    //     previousPercentage: "",
+    //     desiredClass: "",
     //     isInterested: { label: "Yes", value: "true" },
-    //     remarks: "Parent is interested in admission from next academic session"
+    //     remarks: ""
     // };
+    const initialData = {
+        toDate: new Date(),
+        fromDate: new Date(),
+        id: 1,
+        studentName: "Rahul Kumar",
+        fatherName: "Suresh Kumar",
+        enquirerName: "Suresh Kumar",
+        mobileNumber: "9876543210",
+        alternateMobileNumber: "9123456789",
+        previousSchoolName: "Bright Future Public School",
+        previousClass: "8th",
+        previousPercentage: "78",
+        desiredClass: "9th",
+        isInterested: { label: "Yes", value: "true" },
+        remarks: "Parent is interested in admission from next academic session"
+    };
 
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
@@ -68,6 +72,23 @@ const Enquiry = () => {
         }
         try {
             const response = await GetEnquiriesByRange(payload);
+            if (response?.success) {
+                setTableData(response?.data);
+                notify(response?.message, "success")
+            }
+            else {
+                setTableData([])
+                notify(response?.message, "error")
+            }
+        } catch (error) {
+            console.log("error", error)
+        }
+    }
+    const DelEnquiry = async (Student) => {
+        
+
+        try {
+            const response = await DeleteEnquiry(Student?.id);
             if (response?.success) {
                 setTableData(response?.data);
                 notify(response?.message, "success")
@@ -120,19 +141,6 @@ const Enquiry = () => {
         }
     };
 
-    /* ================= GET LIST ================= */
-    //   const getAllEnquiry = async () => {
-    //     try {
-    //       const res = await GetAllEnquiries();
-    //       if (res?.success) {
-    //         setTableData(res?.data);
-    //       }
-    //     } catch {
-    //       notify("Failed to load enquiries", "error");
-    //     }
-    //   };
-
-    /* ================= EDIT ================= */
     const handleEdit = (item) => {
         setValues({
             id: item.id,
@@ -154,8 +162,8 @@ const Enquiry = () => {
     useEffect(() => {
         handleSearch();
     }, []);
- const getRowClass = (val) => {
-    debugger
+    const getRowClass = (val) => {
+
         console.log(val);
         // let data = RoomDetail?.find(
         //     (item) => item?.STATUS === val?.STATUS
@@ -169,175 +177,338 @@ const Enquiry = () => {
             return "color-indicator-4-bg";
         }
     };
-    /* ================= UI ================= */
+    //     const todayEnq = tableData?.filter(
+    //   (ele) =>
+    //     ele?.enquiryDate &&
+    //     moment(ele.enquiryDate).isSame(moment(), "day")
+    // );
+    const today = new Date().toISOString().split("T")[0];
+
+    const todayEnq = tableData?.filter(
+        (ele) => ele.enquiryDate?.startsWith(today)
+    );
+    const handleExcel = (data) => {
+        const excelData = data.map((item, index) => {
+            return {
+                "S.No": index + 1,
+                "Enquiry ID": item.id,
+                "Student Name": item.studentName,
+                "Father Name": item.fatherName,
+                "Enquirer Name": item.enquirerName,
+
+                "Mobile Number": item.mobileNumber,
+                "Alternate Mobile": item.alternateMobileNumber,
+
+                "Previous School": item.previousSchoolName,
+                "Previous Class": item.previousClass,
+                "Desired Class": item.desiredClass,
+
+                "Interested": item.isInterested ? "Yes" : "No",
+
+                "Enquiry Date": item.enquiryDate
+                    ? item.enquiryDate.split("T")[0]
+                    : "",
+                "Enquiry Time": item.enquiryDate
+                    ? item.enquiryDate.split("T")[1]?.split(".")[0]
+                    : ""
+            };
+        });
+
+        exportToExcel(excelData, `"Enquiry_List",${moment(values?.fromDate).format("DD-MMM-YYYY")} To ${moment(values?.toDate).format("DD-MMM-YYYY")}`);
+    };
+
+    const handleDelete = (Student) => {
+
+        setHandleModelData({
+            label: t("Delete Confirmation"),
+            buttonName: t("Yes"),
+            width: "40vw",
+            isOpen: true,
+            // modalData: data,
+            Component: (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl shadow-xl w-96 p-6 relative">
+                        <h2 className="text-center text-xl font-bold text-danger mt-4">
+                            Are you sure?
+                        </h2>
+                        <div className="mt-4 border p-3 rounded-lg bg-gray-50">
+                            <p><span className="font-semibold">Name:</span> {Student?.studentName}</p>
+                            <p><span className="font-semibold">Father Name:</span> {Student?.fatherName}</p>
+                            <p><span className="font-semibold">Number:</span> {Student?.mobileNumber}</p>
+                            <p><span className="font-semibold">Desired Class:</span> {Student?.desiredClass}</p>
+                        </div>
+                        <div className="mt-4 text-center text-danger">
+                            Do you really want to delete these records? This action cannot be undone.
+                        </div>
+
+                    </div>
+                </div>
+
+            ),
+            handleInsertAPI: () => DelEnquiry(Student),
+            extrabutton: <></>,
+            //   footer: <></>
+        });
+    }
+
+    const setIsOpen = () => {
+        setHandleModelData((val) => ({ ...val, isOpen: false }));
+    };
     return (
-        <div className="card p-2">
-            <Heading title="Student Enquiry" isBreadcrumb={false} />
 
-            {/* ================= FORM ================= */}
-            <div className="row p-2">
-                <Input name="studentName" lable="Student Name"
-                    value={values.studentName}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+        <>
 
-                <Input name="fatherName" lable="Father Name"
-                    value={values.fatherName}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+            {handleModelData?.isOpen && (
+                <Modal
+                    visible={handleModelData?.isOpen}
+                    setVisible={setIsOpen}
+                    modalWidth={handleModelData?.width}
+                    Header={t(handleModelData?.label)}
+                    buttonType={"button"}
+                    buttons={handleModelData?.extrabutton}
+                    buttonName={handleModelData?.buttonName}
+                    modalData={modalData}
+                    setModalData={setModalData}
+                    footer={handleModelData?.footer}
+                    handleAPI={handleModelData?.handleInsertAPI}
+                >
+                    {handleModelData?.Component}
+                    {/* <RegistrationForm  values={values} setValues={setValues}  /> */}
 
-                <Input name="enquirerName" lable="Enquirer Name"
-                    value={values.enquirerName}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+                </Modal>
+            )}
 
-                <Input name="mobileNumber" lable="Mobile Number"
-                    value={values.mobileNumber}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+            <div className="card p-2">
+                <Heading title="Student Enquiry" isBreadcrumb={false} />
 
-                <Input name="alternateMobileNumber" lable="Alternate Mobile"
-                    value={values.alternateMobileNumber}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+                {/* ================= FORM ================= */}
+                <div className="row p-2">
+                    <Input name="studentName" lable="Student Name"
+                        value={values.studentName}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
 
-                <Input name="previousSchoolName" lable="Previous School"
-                    value={values.previousSchoolName}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+                    <Input name="fatherName" lable="Father Name"
+                        value={values.fatherName}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
 
-                <Input name="previousClass" lable="Previous Class"
-                    value={values.previousClass}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+                    <Input name="enquirerName" lable="Enquirer Name"
+                        value={values.enquirerName}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
 
-                <Input name="previousPercentage" lable="Previous Percentage"
-                    value={values.previousPercentage}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+                    <Input name="mobileNumber" lable="Mobile Number"
+                        value={values.mobileNumber}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
 
-                <Input name="desiredClass" lable="Desired Class"
-                    value={values.desiredClass}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
+                    <Input name="alternateMobileNumber" lable="Alternate Mobile"
+                        value={values.alternateMobileNumber}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
 
-                <Input name="remarks" lable="Remarks"
-                    value={values.remarks}
-                    className="form-control"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    onChange={handleChange}
-                />
-                <ReactSelect
-                    placeholderName="Is Interested"
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    name="isInterested"
-                    dynamicOptions={[
-                        { label: "Yes", value: "true" },
-                        { label: "No", value: "false" }
-                    ]}
-                    handleChange={handleSelect}
-                    value={values.isInterested?.value}
-                />
-                <div className="col-xl-2 col-md-4 col-sm-4 col-12 d-flex align-items-end justify-content-end">
-                    <button className="btn btn-sm btn-primary" onClick={handleSave}>
-                        {isEdit ? "Update" : "Save"}
-                    </button>
+                    <Input name="previousSchoolName" lable="Previous School"
+                        value={values.previousSchoolName}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
+
+                    <Input name="previousClass" lable="Previous Class"
+                        value={values.previousClass}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
+
+                    <Input name="previousPercentage" lable="Previous Percentage"
+                        value={values.previousPercentage}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
+
+                    <Input name="desiredClass" lable="Desired Class"
+                        value={values.desiredClass}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
+
+                    <Input name="remarks" lable="Remarks"
+                        value={values.remarks}
+                        className="form-control"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        onChange={handleChange}
+                    />
+                    <ReactSelect
+                        placeholderName="Is Interested"
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        name="isInterested"
+                        dynamicOptions={[
+                            { label: "Yes", value: "true" },
+                            { label: "No", value: "false" }
+                        ]}
+                        handleChange={handleSelect}
+                        value={values.isInterested?.value}
+                    />
+                    <div className="col-xl-2 col-md-4 col-sm-4 col-12 d-flex align-items-end justify-content-end">
+                        <button className="btn btn-sm btn-primary" onClick={handleSave}>
+                            {isEdit ? "Update" : "Save"}
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <Heading title="Get Student Enquiry" isBreadcrumb={false} />
+                <Heading title="Get Student Enquiry" isBreadcrumb={false} />
 
-            <div className="row  p-2">
-                
-                <DatePicker
-                    id="fromDate"
-                    name="fromDate"
-                    placeholder={VITE_DATE_FORMAT}
-                    lable={t("From cDate")}
-                    className="custom-calendar"
-                    value={values?.fromDate}
-                    handleChange={handleChange}
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    maxDate={values?.toDate}
-                />
-                <DatePicker
-                    id="toDate"
-                    name="toDate"
-                    placeholder={VITE_DATE_FORMAT}
-                    lable={t("To Date")}
-                    className="custom-calendar"
-                    value={values?.toDate}
-                    handleChange={handleChange}
-                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                    maxDate={new Date()}
-                />
-                <div className="col-xl-2 col-md-4 col-sm-4 col-12">
-                    <button
-                        onClick={handleSearch}
-                        // className="btn btn-lg btn-success"
-                        className="btn btn-sm btn-primary"
-                        type="button"
-                    >
-                        {t("Search")}
-                    </button>
-                </div>
+                <div className="row  p-2">
 
-            </div>
-            {/* ================= TABLE ================= */}
-             <Heading title="Student Enquiry" isBreadcrumb={false} secondTitle={
-               <>    <ColorCodingSearch color={"color-indicator-24-bg"} label={t("Interested")} />
-                                <ColorCodingSearch color={"color-indicator-2-bg"} label={t("No Interested")} />
-                 </>        
-             }/>
-            <Tables
-                thead={[
-                    { name: "Student" },
-                    { name: "Parent" },
-                    { name: "Mobile" },
-                    { name: "previous Class" },
-                    { name: "Desired Class" },
-                    { name: "Pre School Name" },
-                    { name: "Is Interested" },
-                    { name: "Action" }
-                ]}
-                tbody={tableData.map((item) => ({
-                    studentName: item.studentName,
-                    fatherName: item.fatherName,
-                    mobileNumber: `${item.mobileNumber},${item?.alternateMobileNumber}`,
-                    previousClass: item.previousClass,
-                    desiredClass: item.desiredClass,
-                    previousSchoolName: item.previousSchoolName,
-                    isInterested: item.isInterested ? "Yes" : "No",
-                    action: (
+                    <DatePicker
+                        id="fromDate"
+                        name="fromDate"
+                        placeholder={VITE_DATE_FORMAT}
+                        lable={t("From cDate")}
+                        className="custom-calendar"
+                        value={values?.fromDate}
+                        handleChange={handleChange}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        maxDate={values?.toDate}
+                    />
+                    <DatePicker
+                        id="toDate"
+                        name="toDate"
+                        placeholder={VITE_DATE_FORMAT}
+                        lable={t("To Date")}
+                        className="custom-calendar"
+                        value={values?.toDate}
+                        handleChange={handleChange}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        maxDate={new Date()}
+                    />
+                    <div className="col-xl-2 col-md-4 col-sm-4 col-12">
                         <button
+                            onClick={handleSearch}
+                            // className="btn btn-lg btn-success"
+                            className="btn btn-sm btn-primary"
+                            type="button"
+                        >
+                            {t("Search")}
+                        </button>
+                    </div>
+
+                </div>
+                <Heading title="Student Enquiry" isBreadcrumb={false} secondTitle={
+                    <>
+                        <span
+                            className="mr-3"
+                            style={{
+                                fontFamily: "serif",
+                                color: "#2ecc71", // green
+                                fontWeight: "bold",
+                                fontSize: "16px",
+                            }}
+                        >
+                            Today No Of Enquiry : {todayEnq?.length}
+                        </span>
+
+                        <span
+                            className="mr-1"
+                            style={{
+                                fontFamily: "serif",
+                                color: "#3498db", // blue
+                                fontWeight: "bold",
+                                fontSize: "16px",
+                            }}
+                        >
+                            Total No Of Enquiry : {tableData?.length}
+                        </span>
+
+                        <button
+                            id="excelBtn"
+                            onClick={() => handleExcel(tableData)}
+                            title="Excel Download"
+                            className="d-flex align-items-center justify-content-center"
+                        >
+
+                            <i
+                                className="fa fa-file-excel  text-lg "
+                            ></i>
+                        </button>
+                        <ColorCodingSearch color={"color-indicator-24-bg"} label={t("Interested")} />
+                        <ColorCodingSearch color={"color-indicator-2-bg"} label={t("No Interested")} />
+                    </>
+                } />
+                <Tables
+                    thead={[
+                        { name: "SN" },
+                        { name: "Student" },
+                        { name: "Guardian" },
+                        { name: "Mobile" },
+                        { name: "Previous Class" },
+                        { name: "Desired Class" },
+                        { name: "Pre School" },
+                        { name: "Is Interested" },
+                        { name: "Date/Time" },
+                        { name: "Action" }
+                    ]}
+                    tbody={tableData.map((item, index) => ({
+                        sn: index + 1,
+                        studentName: item.studentName,
+                        fatherName: item.fatherName,
+                        mobileNumber: `${item.mobileNumber},${item?.alternateMobileNumber}`,
+                        previousClass: item.previousClass,
+                        desiredClass: item.desiredClass,
+                        previousSchoolName: item.previousSchoolName,
+                        isInterested: item.isInterested ? "Yes" : "No",
+                        // enquiryDate: moment(item.enquiryDate).format("DD-MMM-YYYY"),
+                        enquiryDate: moment(item.enquiryDate).format("DD-MMM-YYYY hh:mm A"),
+
+                        action: (
+                            <div
+                                className="d-flex align-items-center justify-content-center gap-2"
+                            // className="row gap-2 text-center"
+                            >
+                                {/* <button
                             className="btn btn-sm btn-warning"
                             onClick={() => handleEdit(item)}
                         >
                             ✏️
-                        </button>
-                    )
+                        </button> */}
+                                <button
+                                    id="editBtn"
+                                    onclick="handleEdit(item.id)"
+                                    title="Edit"
+                                    className="d-flex align-items-center justify-content-center"
+                                >
+                                    <i class=" bi-pencil-square"></i>
+                                </button>
 
-                }))}
-                getRowClass={getRowClass}
-            />
-        </div>
+                                <button
+                                    id="deleteBtn"
+                                    onClick={() => handleDelete(item)}
+                                    title="Delete"
+                                >
+                                    <i class="bi-trash3"></i>
+                                </button>
+                            </div>
+                        )
+
+                    }))}
+                    getRowClass={getRowClass}
+                    scrollView={"scrollView"}
+                />
+            </div>
+        </>
     );
 };
 

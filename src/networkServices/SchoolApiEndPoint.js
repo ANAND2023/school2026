@@ -39,7 +39,8 @@ GetAllAcademicYears:"academicmaster/GetAllAcademicYears",
 // academicmaster End .....
 
 // class start ....
-CreateClass:"academicmaster/CreateClass",
+CreateClass:`${baseUrlMaster}academicmaster/CreateClass`,
+// CreateClass:"academicmaster/CreateClass",
 GetAllClasses:"academicmaster/GetAllClasses",
 CreateSection:"academicmaster/CreateSection",
 GetAllSections:"academicmaster/GetAllSections",
@@ -104,6 +105,7 @@ GetAllTaxes:"feemaster/GetAllTaxes",
 EnquiryCreate:`${studentUrl}Enquiry/createenquiry`,
 getallenquiries:`${studentUrl}Enquiry/getallenquiries`,
 GetEnquiriesByRange:`${studentUrl}Enquiry/GetEnquiriesByDateRange`,
+DeleteEnquiry:`${studentUrl}Enquiry/deleteenquiry`,
 
 // Enquiry end.......
 

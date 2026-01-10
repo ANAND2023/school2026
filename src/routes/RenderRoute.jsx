@@ -25,7 +25,7 @@ function RenderRoute() {
   const dataFetchedRef = useRef(false);
 
   const fetchData = async () => {
-    debugger
+    
     // If no user data, stop waiting and let auth guards handle redirect
     if (!localData?.UserId) {
       setWaitForRoute(false);

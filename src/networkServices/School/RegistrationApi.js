@@ -119,6 +119,24 @@ export const GetEnquiriesByRange = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const DeleteEnquiry = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "DELETE",
+    //   data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.DeleteEnquiry}/${params}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 
 
 export const getadmissionlist = async (params) => {

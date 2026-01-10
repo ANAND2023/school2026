@@ -12,7 +12,7 @@ const { pathname } = location;
 const ip = localStorage.getItem("ip");
 const userData = useLocalStorage("userData", "get");
 export const notify = (message, type = "success") => {
-  debugger
+  
   if (type === "success") {
     // toast.success(message,{duration: 70000});
     toast.success(message, { autoClose: 1000 });
@@ -436,7 +436,7 @@ export const Register_Patient_TypeCasting = (
   let patientMaster = {};
   let policyDetail = [];
   let documentIds = [];
-  debugger
+  
   requestBodyData.RequestId  = values?.requestId ?? 0
   values?.documentIds?.length > 0 &&
     values?.documentIds?.map((val) => {
@@ -672,7 +672,7 @@ export const Register_Patient_TypeCasting = (
 export const payloadSettlerForPaymentGateWay = (paymentMethod, values, paymentControlModeState) => {
   // export const payloadSettlerForPaymentGateWay = (paymentMethod, values, Remark) => {
   // console.log("remaksssssssssssssssssss",Remark)
-  debugger
+  
   const resultData = [];
 
   for (let i = 0; i < paymentMethod.length; i++) {
@@ -1739,7 +1739,7 @@ export const NursingWardSerumBilirubinSavePayload = (data) => {
 
 export const NursingWardSaveIntakePayload = (data, Date) => {
   const filterData = data.filter((ele) => ele?.isChecked === true);
-debugger
+
   const returnData = [];
   for (let i = 0; i < filterData.length; i++) {
     const {
@@ -2227,20 +2227,20 @@ export function getBase64(file) {
 
 
 export const NursingWardSaveViewUploadDocumentPayload = (response) => {
-  debugger
+  
   return response.map((items) => {
     const { ID, Name, Remark, URL, DocumentData } = items;
-debugger
+
     // ✅ decide which data to send
     let fileData = "";
-    debugger
+    
     if (URL) {
       fileData = URL;
     } else if (DocumentData) {
       // remove "data:image/...;base64," part from DocumentData
       fileData = DocumentData.replace(/^data:.*;base64,/, "");
     }
-debugger
+
     return {
       masterID: String(ID ?? ""),
       name: String(Name ?? ""),
@@ -2252,7 +2252,7 @@ debugger
 };
 
 // export const NursingWardSaveViewUploadDocumentPayload = (response) => {
-//   debugger
+//   
 //   console.log(response, "the response form")
 //   return response.map((items, index) => {
 //     const { ID, Name, Remark, URL } = items;

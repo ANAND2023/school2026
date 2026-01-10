@@ -26,7 +26,7 @@ export const signInAction = createAsyncThunk(
       dispatch(setLoading(true));
       const data = await makeApiRequest(apiUrls?.loginAdmin, options);
       dispatch(setLoading(false));
-      debugger
+      
       const user = jwtDecode(data?.data?.accessToken);
       return {
         userData: user, 
@@ -52,7 +52,7 @@ export const authSlice = createSlice({
         state.success = false;
       })
       .addCase(signInAction.fulfilled, (state, { payload }) => {
-        debugger
+        
         state.user = payload;
         state.loading = false;
         state.success = true;
