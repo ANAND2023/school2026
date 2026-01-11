@@ -139,6 +139,44 @@ export const CreateSection = async (params) => {
   }
 };
 
+export const CreateSyllabusMaster = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.CreateSyllabus}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetAllSyllabus = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetAllSyllabus}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
 export const GetAllSections = async (params) => {
   store.dispatch(setLoading(true));
   try {

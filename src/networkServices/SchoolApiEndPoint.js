@@ -53,6 +53,8 @@ CreateAcademicYear:`${baseUrlMaster}AcademicMaster/CreateAcademicYear`,
 GetAllAcademicYears:`${baseUrlMaster}AcademicMaster/GetAllAcademicYears`,
 CreateGradingSystem:`${baseUrlMaster}AcademicMaster/CreateGradingSystem`,
 GetAllGradingSystems:`${baseUrlMaster}AcademicMaster/GetAllGradingSystems`,
+CreateSyllabus:`${baseUrlMaster}AcademicMaster/CreateSyllabus`,
+GetAllSyllabus:`${baseUrlMaster}AcademicMaster/GetAllSyllabus`,
 
 // class end ....
 
