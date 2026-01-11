@@ -455,7 +455,7 @@ const Login = () => {
                 <span className="checkmark"></span>
                 Remember me
               </label>
-              <Link to="/forgot-password" className="forgot-link">Forgot Password?</Link>
+              {/* <Link to="/forgot-password" className="forgot-link">Forgot Password?</Link> */}
             </div>
 
             <button
@@ -466,12 +466,12 @@ const Login = () => {
               {isSubmitting ? "Signing In..." : "Login"}
             </button>
 
-            <div className="privacy-footer">
+            {/* <div className="privacy-footer">
               <p>By signing up, you agree to our</p>
               <div className="links">
                 <Link to="/terms">Terms and Conditions</Link> & <Link to="/privacy">Privacy Policy</Link>
               </div>
-            </div>
+            </div> */}
 
           </form>
         </div>
