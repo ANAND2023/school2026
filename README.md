@@ -1,48 +1,88 @@
-<p align="center" style="margin-bottom: 32px">
-  <a href="https://erdkse.com" >
-    <img src="https://raw.githubusercontent.com/erdkse/adminlte-3-react/main/public/img/logo.png" alt="AdminLTE logo" width="75" height="75">
-  </a>
-</p>
+# 🎓 Digital Vidya Saarthi  
+### A Unified School & College ERP Platform
 
-<h1 align="center">HIS - Hospital Information System</h1>
+**Digital Vidya Saarthi** is a modern, scalable **School & College ERP (Enterprise Resource Planning)** system designed to digitally transform educational institutions.  
+Originally built as a **Hospital Information System (HIS)**, the platform is now being re-architected to meet the administrative, academic, and operational needs of **schools, colleges, and universities**.
 
-<p>
-  This repository is a form of original HIS project. 
-</p>
-<br>
+---
 
-<span align="center">
+## 🌟 Vision
 
-![Stars](https://img.shields.io/github/stars/erdkse/adminlte-3-react?style=flat-square)
-![Forks](https://img.shields.io/github/forks/erdkse/adminlte-3-react?style=flat-square)
-![Issues](https://img.shields.io/github/issues/erdkse/adminlte-3-react?style=flat-square)
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-green.svg?style=flat-square)](#contributors-)
-![GitHub last commit](https://img.shields.io/github/last-commit/erdkse/adminlte-3-react.svg)
-[![License](https://img.shields.io/github/license/erdkse/adminlte-3-react.svg)](LICENSE)
-![Sponsors](https://img.shields.io/github/sponsors/erdkse.svg)
+To act as a **digital guide (Saarthi)** for educational institutions by simplifying administration, improving transparency, and enabling data-driven decision-making through a single integrated platform.
 
-</span>
+---
 
-## Demo
+## 🚀 Key Features
 
-Online demo: https://hms-web-app-nu.vercel.app/
+### 🏫 Academic Management
+- Student Admission & Registration
+- Class, Section & Subject Management
+- Attendance Tracking (Student & Staff)
+- Examination & Result Management
+- Timetable Scheduling
 
-To login website use:
+### 👩‍🏫 Faculty & Staff Management
+- Teacher & Staff Profiles
+- Role-based Access Control
+- Payroll & Leave Management (Planned)
 
-<!-- `username:` admin@example.com<br />
-`password:` admin<br /> -->
+### 💰 Fees & Finance
+- Fee Structure Configuration
+- Fee Collection & Receipts
+- Due Tracking & Reports
 
-## Available Scripts
+### 🧾 Administration
+- User & Role Management
+- Notices & Announcements
+- Document Management
+- Audit Logs & Activity Tracking
 
-In the project directory, you can run:
+### 📊 Reports & Analytics
+- Student Performance Reports
+- Attendance Reports
+- Financial Summaries
+- Export to Excel / PDF (Planned)
 
-### `npm run dev`
+---
 
-Runs the app in the development mode.<br />
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+## 🧱 Tech Stack
 
-## License
+**Frontend**
+- React.js
+- Vite
+- JavaScript (ES6+)
+- PrimeReact / Modern UI Components
 
-[![License](https://img.shields.io/github/license/erdkse/adminlte-3-react.svg)](/LICENSE)
+**Backend (Planned / In Progress)**
+- Node.js / Express
+- REST APIs
+- JWT Authentication
 
-Released 2021 by [Erdi Köse](https://erdkse.com)
+**Database (Planned)**
+- MySQL / PostgreSQL / MongoDB
+
+**Dev & Tooling**
+- ESLint
+- Prettier
+- Git & GitHub
+- Vercel (Deployment)
+
+---
+
+## 📂 Project Structure
+
+```text
+school2026/
+├── public/             # Static assets
+├── src/
+│   ├── assets/         # Images, icons
+│   ├── components/     # Reusable UI components
+│   ├── pages/          # Application pages
+│   ├── routes/         # Routing configuration
+│   ├── services/       # API & business logic
+│   ├── utils/          # Helper utilities
+│   └── main.jsx        # App entry point
+├── .eslintrc.js
+├── vite.config.js
+├── package.json
+└── README.md
