@@ -21,8 +21,8 @@ function CreateSyllabus() {
         academicYear: {},
         class_Name: {},
         subject: {},
-        description:"",
-        
+        description: "",
+
 
     }
     const [values, setValues] = useState(initialData);
@@ -115,14 +115,14 @@ function CreateSyllabus() {
 
     const handleSave = async () => {
 
-        const Payload = 
-        
+        const Payload =
+
         {
-  "academicYearId": values?.academicYear?.value,
-  "classId": values?.class_Name?.value,
-  "subjectId": values?.subject?.value,
-  "description": values?.description,
-}
+            "academicYearId": values?.academicYear?.value,
+            "classId": values?.class_Name?.value,
+            "subjectId": values?.subject?.value,
+            "description": values?.description,
+        }
         try {
             const Response = await CreateSyllabusMaster(Payload);
             if (Response?.success) {
@@ -240,12 +240,12 @@ function CreateSyllabus() {
                 </div>
 
                 <Tables
-                    thead={[{ name: "Academic Year", }, 
-                        
-                        { name: "Class", },
-                        { name: "Subject", },
-                        { name: "Description", },
-                         { name: "Action" }]}
+                    thead={[{ name: "Academic Year", },
+
+                    { name: "Class", },
+                    { name: "Subject", },
+                    { name: "Description", },
+                    { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
                             academicYearId: item.academicYearId,

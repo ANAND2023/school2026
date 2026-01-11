@@ -13,11 +13,13 @@ import ColorCodingSearch from "../commonComponents/ColorCodingSearch";
 import { exportToExcel } from "../../utils/exportLibrary";
 import Modal from "../modalComponent/Modal";
 
-const Enquiry = () => {
+const Enquiry = ({handleChangeModel}) => {
     const [t] = useTranslation();
+     
     const { VITE_DATE_FORMAT } = import.meta.env;
     const [handleModelData, setHandleModelData] = useState({});
     const [modalData, setModalData] = useState({});
+    
     /* ================= STATE ================= */
     // const initialData = {
     //     toDate: new Date(),
@@ -254,6 +256,10 @@ const Enquiry = () => {
     const setIsOpen = () => {
         setHandleModelData((val) => ({ ...val, isOpen: false }));
     };
+    const handleDoubleClick=(data)=>{
+console.log("handleDoubleClick",data)
+handleChangeModel(data)
+    }
     return (
 
         <>
@@ -454,6 +460,7 @@ const Enquiry = () => {
                         { name: "Student" },
                         { name: "Guardian" },
                         { name: "Mobile" },
+                        { name: "Alt Mobile" },
                         { name: "Previous Class" },
                         { name: "Desired Class" },
                         { name: "Pre School" },
@@ -465,7 +472,8 @@ const Enquiry = () => {
                         sn: index + 1,
                         studentName: item.studentName,
                         fatherName: item.fatherName,
-                        mobileNumber: `${item.mobileNumber},${item?.alternateMobileNumber}`,
+                        mobileNumber: `${item.mobileNumber}`,
+                        alternateMobileNumber: `${item?.alternateMobileNumber}`,
                         previousClass: item.previousClass,
                         desiredClass: item.desiredClass,
                         previousSchoolName: item.previousSchoolName,
@@ -478,12 +486,7 @@ const Enquiry = () => {
                                 className="d-flex align-items-center justify-content-center gap-2"
                             // className="row gap-2 text-center"
                             >
-                                {/* <button
-                            className="btn btn-sm btn-warning"
-                            onClick={() => handleEdit(item)}
-                        >
-                            ✏️
-                        </button> */}
+                               
                                 <button
                                     id="editBtn"
                                     onclick="handleEdit(item.id)"
@@ -506,6 +509,7 @@ const Enquiry = () => {
                     }))}
                     getRowClass={getRowClass}
                     scrollView={"scrollView"}
+                    handleDoubleClick={handleDoubleClick}
                 />
             </div>
         </>
