@@ -9,6 +9,7 @@ import { GetAllClasses } from "../../../networkServices/AcademicYear";
 import { useTranslation } from "react-i18next";
 import Modal from "../../modalComponent/Modal";
 import Enquiry from "../../EnquiryMaster/Enquiry";
+import moment from "moment";
 
 /* ================= INITIAL STATE ================= */
 const initialData = {
@@ -108,6 +109,7 @@ const StudentRegistration = () => {
 firstName:data.studentName,
 phone:data.mobileNumber,
 altPhone:data.alternateMobileNumber,
+school:data.previousSchoolName
     }))
      setHandleModelData((val) => ({ ...val, isOpen: false }));
   };
@@ -234,7 +236,7 @@ altPhone:data.alternateMobileNumber,
                 title: values?.title?.value,
                 firstName: values?.firstName,
                 lastName: values?.lastName,
-                dateOfBirth: values?.dateOfBirth,
+                dateOfBirth: moment(values?.dateOfBirth).format("YYYY-MM-DD"),
                 gender: values?.gender?.value === "Male" ? 1 : values?.gender?.value === "Female" ? 2 : 3,
                 phone: values?.phone,
                 altPhone: values?.altPhone,
@@ -260,7 +262,7 @@ altPhone:data.alternateMobileNumber,
                 },
                 aadhaar: values?.aadhaar,
                 photo: values?.photo,
-                isSibling: values?.isSibling,
+                isSibling: false,
                 siblingId: values?.siblingId,
                 previousAcademics: [
                     {
@@ -300,7 +302,7 @@ altPhone:data.alternateMobileNumber,
                 })),
 
                 otherDetail: {
-                    transportRequired: true,
+                    transportRequired: false,
                     route: values?.otherDetail?.route,
                     busNo: values?.otherDetail?.busNo
                 }
@@ -593,19 +595,7 @@ altPhone:data.alternateMobileNumber,
                         isUpperCase={true}
                         onChange={handleChange}
                     />
-                        <Input
-                        type="text"
-                        className="form-control "
-                        id="percentage"
-                        name="percentage"
-                        value={values?.percentage ? values?.percentage : ""}
-                        // onChange={handleChange}
-                        lable={("Percentage")}
-                        placeholder=" "
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        isUpperCase={true}
-                        onChange={handleChange}
-                    />
+                      
                         <Input
                         type="text"
                         className="form-control "

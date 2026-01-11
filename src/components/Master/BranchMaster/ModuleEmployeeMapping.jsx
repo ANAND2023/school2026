@@ -31,11 +31,6 @@ const ModuleEmployeeMapping = () => {
   const [module, setModule] = useState([]);
   const [allUser, setAllUser] = useState([]);
 
-  const employeeList = [
-    { value: "EMP001", label: "Rahul Sharma" },
-    { value: "EMP002", label: "Ankit Verma" }
-  ];
-
 
   const handleSelect = (name, option) => {
          setValues((prev) => ({
@@ -44,36 +39,7 @@ const ModuleEmployeeMapping = () => {
        
       }));
   };
-  // const handleSelect = (name, option) => {
-  //   if (!option) return;
-
-  //   if (name === "employeeId") {
-  //     setValues((prev) => ({
-  //       ...prev,
-  //       employeeId: option.value,
-  //       employeeName: option.label
-  //     }));
-  //   }
-
-  //   if (name === "moduleId") {
-  //     setValues((prev) => ({
-  //       ...prev,
-  //       moduleId: option.value,
-  //       moduleName: option.label
-  //     }));
-  //   }
-
-  //   if (name === "branchId") {
-  //     setValues((prev) => ({
-  //       ...prev,
-  //       branchId: option.value
-  //     }));
-  //   }
-  // };
-
-  /* =======================
-      SAVE
-  ======================== */
+  
   const handleSave = async () => {
     if (!values.moduleId || !values.branchId) {
       notify("Employee, Module & Branch required", "error");

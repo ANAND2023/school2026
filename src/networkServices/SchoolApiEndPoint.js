@@ -150,6 +150,8 @@ MenuManagmentgetmenus:`${baseUrlMaster}MenuManagment/get-menus`,
 MenuManagmentgetsubmenus:`${baseUrlMaster}MenuManagment/get-submenus`,
 MenuManagmentCreateModuleBulk:`${baseUrlMaster}MenuManagment/create-module-bulk`,
 MenuManagmentGeModuleBulk:`${baseUrlMaster}MenuManagment/get-modules`,
+MasterCreatePaymentMode:`${baseUrlMaster}PaymentModeMaster/CreatePaymentMode`,
+MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
   // MenuManagment start ....
 
 

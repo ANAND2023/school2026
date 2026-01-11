@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import logo from "../../../public/img/DIGITALV-removebg-preview.7c847aad42c53321dc7e (1).png"
+import logo from "../../../public/img/logo.png"
 import { toggleSidebarMenu } from "@app/store/reducers/ui";
 import { X, Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Users, Settings, Palette } from 'lucide-react';
 
