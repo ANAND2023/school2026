@@ -501,6 +501,8 @@ const Header = React.memo(() => {
   const signout = useSelector((state) => state.logoutSlice);
 
   const currentTheme = THEMES[theme];
+    const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
+  const activeRole = GetRoleList?.find(r => r.id == localData?.defaultRole) || null;
 
   useEffect(() => {
     // Load saved theme from localStorage
@@ -568,6 +570,7 @@ const Header = React.memo(() => {
 
   // --- CHANGED: Improved Branch Change Logic ---
   const handleChangeCentre = async (e) => {
+    debugger
     const newCentreId = e?.target?.value;
 
 
@@ -593,7 +596,8 @@ const Header = React.memo(() => {
     const updatedData = {
       ...localData,
       defaultCentre: newCentreId,
-      defaultRole: newRoleId
+      defaultRole: newRoleId,
+      defaultCenterName: GetEmployeeWiseCenter?.find(c => c.id == newCentreId)?.name,
     };
     useLocalStorage("userData", "set", updatedData);
 
@@ -624,6 +628,7 @@ const Header = React.memo(() => {
         ...localData,
         defaultRole: newRoleId,
         deptLedgerNo: localData.deptLedgerNo,
+        defaultCenterName: activeCentre?.name,
         roleName: localData.roleName
       });
 
@@ -697,8 +702,7 @@ const Header = React.memo(() => {
   //   );
   // }, []);
 
-  const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
-  const activeRole = GetRoleList?.find(r => r.id == localData?.defaultRole) || null;
+
 
   return (
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>

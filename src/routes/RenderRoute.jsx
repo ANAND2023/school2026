@@ -143,6 +143,8 @@ function RenderRoute() {
   getAllUrls.push("/grading-system");
   getAllUrls.push("/create-syllabus");
   getAllUrls.push("/payment-mode");
+  getAllUrls.push("/exam-type");
+  getAllUrls.push("/exam-term");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -459,7 +461,24 @@ const allRoutes = {
       component: lazy(
         () => import("@app/components/Master/PaymentMode.jsx")
       ),
-    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/exam-type",
+      component: lazy(
+        () => import("@app/components/Master/Exam/ExamType.jsx")
+      ),
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/exam-term",
+      component: lazy(
+        () => import("@app/components/Master/Exam/CreateTerm.jsx")
+      ),
       exact: true,
     },
      ],
