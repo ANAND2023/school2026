@@ -46,7 +46,7 @@
 //   const [isDarkMode, setIsDarkMode] = useState(false);
 //   const [dropdownOpen, setDropdownOpen] = useState(false);
 //   const [theme, setTheme] = useState('dark');
-  
+
 //   const navbarVariant = useSelector((state) => state.ui.navbarVariant);
 //   const headerBorder = useSelector((state) => state.ui.headerBorder);
 //   const screenSize = useSelector((state) => state.ui.screenSize);
@@ -75,7 +75,7 @@
 //     };
 
 //     window.addEventListener('storage', handleStorageChange);
-    
+
 //     // Poll for changes (since storage event doesn't fire in same tab)
 //     const interval = setInterval(() => {
 //       handleStorageChange();
@@ -173,7 +173,7 @@
 
 //   const handleChangeCentre = async (e) => {
 //     const newCentreId = e?.target?.value;
-    
+
 //     // 1. Update Claims (Backend Session)
 //     await handleUpdateClaims(localData?.defaultRole, newCentreId);
 
@@ -195,11 +195,11 @@
 //     // 4. Automatically select the first role of the new centre to prevent mismatch
 //     if(roleResponse?.data && roleResponse.data.length > 0) {
 //         const newRoleId = roleResponse.data[0].id;
-        
+
 //         // Update LocalStorage again with new Role
 //         updatedUserData.defaultRole = newRoleId;
 //         useLocalStorage("userData", "set", updatedUserData);
-        
+
 //         // 5. Fetch Menu for new Centre + new Role
 //         await dispatch(
 //             GetBindMenu({
@@ -209,7 +209,7 @@
 //             organizationId: localData?.OrganizationId
 //             })
 //         );
-        
+
 //         // 6. Navigate to Dashboard to reset view
 //         navigate("/dashboard");
 //         // Optional: window.location.reload() if pure React state isn't clearing old data enough
@@ -218,11 +218,11 @@
 
 //   const handleChangeRole = async (e) => {
 //     const newRoleId = e.target.value;
-    
+
 //     try {
 //       // 1. Update Claims
 //       const apiResp = await handleUpdateClaims(newRoleId, localData?.defaultCentre);
-      
+
 //       // 2. Update Local Storage
 //       const updatedUserData = {
 //         ...localData,
@@ -242,7 +242,7 @@
 //           organizationId: localData?.OrganizationId
 //         })
 //       );
-      
+
 //       navigate("/dashboard");
 //     } catch (error) {
 //       console.error("Error changing role:", error);
@@ -270,7 +270,7 @@
 //   //   );
 //   // }, []);
 
- 
+
 
 //   useEffect(() => {
 //     if (routeFlag && signout.success) {
@@ -520,7 +520,7 @@ const Header = React.memo(() => {
     };
 
     window.addEventListener('storage', handleStorageChange);
-    
+
     // Poll for changes (since storage event doesn't fire in same tab)
     const interval = setInterval(() => {
       handleStorageChange();
@@ -561,15 +561,16 @@ const Header = React.memo(() => {
 
   const handleThemeToggle = () => {
     setIsDarkMode(!isDarkMode);
+    isDarkMode ? useLocalStorage("theme", "set", "default_theme") : useLocalStorage("theme", "set", "dark_theme");
   };
 
- 
+
 
   // --- CHANGED: Improved Branch Change Logic ---
   const handleChangeCentre = async (e) => {
     const newCentreId = e?.target?.value;
-    
-    
+
+
 
     // 2. Fetch Roles for the new centre
     const roleAction = await dispatch(
@@ -581,7 +582,7 @@ const Header = React.memo(() => {
 
     // 3. Determine the correct Role ID (First available role in the new centre)
     let newRoleId = localData?.defaultRole;
-    
+
     // Check if the action was successful and has data
     if (roleAction?.payload?.data && roleAction.payload.data.length > 0) {
       // Automatically select the first role to prevent mismatch
@@ -605,7 +606,7 @@ const Header = React.memo(() => {
         organizationId: localData?.OrganizationId
       })
     );
-    
+
     // 6. Navigate to refresh view
     navigate("/dashboard");
   };
@@ -617,13 +618,13 @@ const Header = React.memo(() => {
     try {
       // 1. Update Claims
       // const apiResp = await handleUpdateClaims(newRoleId, localData?.defaultCentre);
-      
+
       // 2. Update LocalStorage
       useLocalStorage("userData", "set", {
         ...localData,
         defaultRole: newRoleId,
         deptLedgerNo: localData.deptLedgerNo,
-        roleName:  localData.roleName
+        roleName: localData.roleName
       });
 
       // 3. Fetch Menu explicitly for the new role
@@ -635,7 +636,7 @@ const Header = React.memo(() => {
           organizationId: localData?.OrganizationId
         })
       );
-      
+
       // 4. Navigate
       navigate("/dashboard");
     } catch (error) {
@@ -703,9 +704,9 @@ const Header = React.memo(() => {
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>
       {/* LEFT SECTION */}
       <div className="md-header-left">
-        <button 
+        <button
           className="md-icon-btn"
-          onClick={handleToggleSidebar} 
+          onClick={handleToggleSidebar}
           title="Toggle Sidebar"
         >
           <Menu size={20} />
@@ -713,18 +714,18 @@ const Header = React.memo(() => {
 
         {/* Centre Selector */}
         <div className="md-selector-wrapper d-none-mobile" style={{ position: 'relative' }}>
-          <button 
+          <button
             className="md-selector-btn"
             style={{ borderColor: currentTheme.primary + '30' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Building2 size={16} style={{ color: currentTheme.primary }} />
-              <span style={{ 
-                whiteSpace: 'nowrap', 
-                overflow: 'hidden', 
-                textOverflow: 'ellipsis', 
-                maxWidth: '180px', 
-                display: 'block' 
+              <span style={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                maxWidth: '180px',
+                display: 'block'
               }}>
                 {activeCentre?.name || "Select Branch"}
               </span>
@@ -744,17 +745,17 @@ const Header = React.memo(() => {
 
         {/* Role Selector */}
         <div className="md-selector-wrapper d-none-mobile" style={{ position: 'relative' }}>
-          <button 
+          <button
             className="md-selector-btn"
             style={{ borderColor: currentTheme.primary + '30' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ 
-                width: '8px', 
-                height: '8px', 
-                borderRadius: '50%', 
-                backgroundColor: currentTheme.primary, 
-                display: 'inline-block' 
+              <span style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: currentTheme.primary,
+                display: 'inline-block'
               }}></span>
               <span>{activeRole?.name || "Select Module"}</span>
             </div>
@@ -774,12 +775,12 @@ const Header = React.memo(() => {
 
       {/* RIGHT SECTION */}
       <div className="md-header-right">
-        <button 
-          className="md-icon-btn" 
-          onClick={handleThemeToggle} 
+        <button
+          className="md-icon-btn"
+          onClick={handleThemeToggle}
           title="Switch Theme"
-          style={{ 
-            color: isDarkMode ? currentTheme.primary : '#64748b' 
+          style={{
+            color: isDarkMode ? currentTheme.primary : '#64748b'
           }}
         >
           {isDarkMode ? <Moon size={18} /> : <Sun size={18} />}
@@ -791,20 +792,20 @@ const Header = React.memo(() => {
         </button>
 
         <div className="md-user-profile">
-          <div className="d-none-mobile" style={{ 
-            textAlign: 'right', 
-            lineHeight: '1.2', 
-            marginRight: '8px' 
+          <div className="d-none-mobile" style={{
+            textAlign: 'right',
+            lineHeight: '1.2',
+            marginRight: '8px'
           }}>
-            <div style={{ 
-              fontSize: '0.85rem', 
-              fontWeight: '600', 
-              color: '#1e293b' 
+            <div style={{
+              fontSize: '0.85rem',
+              fontWeight: '600',
+              color: '#1e293b'
             }}>
               {localData?.empName}
             </div>
           </div>
-          <div 
+          <div
             className="md-avatar"
             style={{
               background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.primary}dd)`
@@ -814,10 +815,10 @@ const Header = React.memo(() => {
           </div>
         </div>
 
-        <button 
-          className="md-icon-btn" 
-          style={{ color: '#ef4444' }} 
-          onClick={logOut} 
+        <button
+          className="md-icon-btn"
+          style={{ color: '#ef4444' }}
+          onClick={logOut}
           title="Logout"
         >
           <LogOut size={18} />
