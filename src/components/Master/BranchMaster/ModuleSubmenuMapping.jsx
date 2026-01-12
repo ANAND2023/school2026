@@ -11,31 +11,37 @@ import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { CreateModuleSubmenuMappingBulk, MenuManagmentGeModuleBulk, MenuManagmentgetModuleSubmenuMappings, MenuManagmentgetsubmenus } from "../../../networkServices/MenuMaster";
 import { notify } from "../../../utils/utils";
 import Input from "../../formComponent/Input";
+import MultiSelectComp from "../../formComponent/MultiSelectComp";
+import { useTranslation } from "react-i18next";
 
 const ModuleSubmenuMapping = () => {
+    const [t] = useTranslation();
   const localData = useLocalStorage("userData", "get");
   console.log("localData", localData)
   const initialData = {
-    subMenu: {},
+    subMenu: [],
     branch: {},
     module: {},
-order: "",
+    order: "",
     // orgId: localData?.OrganizationId
   };
 
   const [values, setValues] = useState(initialData);
-  console.log("values",values)
+  console.log("values", values)
   const [tableData, setTableData] = useState([]);
   const [subMenu, setSubMenu] = useState([]);
   const [module, setModule] = useState([]);
   const [branch, setBranch] = useState([]);
-    const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
   const handleSelect = (name, option) => {
-        setValues((prev) => ({ ...prev, [name]: option }));
-    };
+    setValues((prev) => ({ ...prev, [name]: option }));
+  };
+    const handleMultiSelectChange = (name, selectedOptions) => {
+    setValues({ ...values, [name]: selectedOptions });
+  };
   // const handleSelect = (name, option) => {
   //   if (!option) return;
 
@@ -112,24 +118,35 @@ order: "",
     }
   };
   const handleSave = async () => {
-  if (!values.module || !values.subMenu) {
+    if (!values.module || !values.subMenu) {
       notify("Module & SubMenu required", "error");
       return;
     }
 
 
-    const payload =
-      [
-        {
-          "moduleId": values.module?.value,
-          "moduleName": values.module?.label,
-          "subMenuId": values.subMenu?.value,
-          "subMenuName": values.subMenu?.label,
-          "displayOrder": values.order,
-          "branchId": values.branch?.value,
-          "orgId": localData?.OrganizationId
-        }
-      ]
+    const payload =values.subMenu.map((subMenuItem) =>(
+      {
+        "moduleId": values.module?.value,
+        "moduleName": values.module?.label,
+        "subMenuId": subMenuItem?.code,    
+        "subMenuName": subMenuItem?.name,
+        "displayOrder": values.order,
+        "branchId": values.branch?.value,
+        "orgId": localData?.OrganizationId
+    })
+  )
+
+      // [
+      //   {
+      //     "moduleId": values.module?.value,
+      //     "moduleName": values.module?.label,
+      //     "subMenuId": values.subMenu?.value,
+      //     "subMenuName": values.subMenu?.label,
+      //     "displayOrder": values.order,
+      //     "branchId": values.branch?.value,
+      //     "orgId": localData?.OrganizationId
+      //   }
+      // ]
     // {
     //   "moduleId": values.moduleId,
     //   "subMenuId": values.subMenuId
@@ -139,7 +156,7 @@ order: "",
       debugger
       if (res?.success) {
         notify(res?.message, "success");
-        setTableData(res?.data)
+        // setTableData(res?.data)
         // setValues(initialData);
       } else {
         notify(res?.message || "Failed", "error");
@@ -233,36 +250,49 @@ order: "",
             handleChange={handleSelect}
           />
           <ReactSelect
-            name="subMenu"
-            placeholderName="Select SubMenu"
-            dynamicOptions={subMenu?.map((ele) => ({
-              label: ele?.name,
-              value: ele?.id
-            }))}
-           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-            handleChange={handleSelect}
-            value={values.subMenu}
-          />
-          <ReactSelect
             name="module"
             placeholderName="Select Module"
             dynamicOptions={module?.map((ele) => ({
               label: ele?.name,
               value: ele?.id
             }))}
-           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.module}
           />
-<Input
-          name="order"
-          placeholder=""
-          value={values.order}
-          lable="Display Order"
-          respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-           className="form-control"
-          onChange={handleChange}
-        />
+          {/* <ReactSelect
+            name="subMenu"
+            placeholderName="Select SubMenu"
+            dynamicOptions={subMenu?.map((ele) => ({
+              label: ele?.name,
+              value: ele?.id
+            }))}
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            handleChange={handleSelect}
+            value={values.subMenu}
+          /> */}
+           <MultiSelectComp
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            name="subMenu"
+            id="subMenu"
+            placeholderName={t("subMenu")}
+            // dynamicOptions={module}
+            dynamicOptions={subMenu?.map((ele) => ({
+              name: ele?.name,
+              code: ele?.id
+            }))}
+            handleChange={handleMultiSelectChange}
+            value={values?.subMenu}
+          />
+          <Input
+            name="order"
+            placeholder=""
+            value={values.order}
+            lable="Display Order"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            className="form-control"
+            onChange={handleChange}
+          />
 
 
           <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end">
@@ -288,7 +318,7 @@ order: "",
           tbody={tableData.map((item, index) => ({
             moduleName: item.moduleName,
             subMenuName: item.subMenuName,
-            displayOrder: item.displayOrder=="0"?"0":item.displayOrder,
+            displayOrder: item.displayOrder == "0" ? "0" : item.displayOrder,
 
             action: (
               <button

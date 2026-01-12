@@ -668,7 +668,7 @@ export const getEmployeeWise = createAsyncThunk(
       data: {
         "employeeId": employeeId,
         "organisationID": OrganizationId,
-        "isAll": 0
+        "isAll": 1
       }
     };
     dispatch(setLoading(true));
@@ -705,7 +705,7 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
       method: "POST",
       data: {
         "searchText": "",
-        "isAll": 0,
+        "isAll": 1,
         "orgId": orgId,
         "branchId": branchId,
         "isActive": 1

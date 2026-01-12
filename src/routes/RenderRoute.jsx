@@ -143,6 +143,9 @@ function RenderRoute() {
   getAllUrls.push("/grading-system");
   getAllUrls.push("/create-syllabus");
   getAllUrls.push("/payment-mode");
+  getAllUrls.push("/menu");
+  getAllUrls.push("/branch");
+  getAllUrls.push("/fee-rate-schedule");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -461,6 +464,38 @@ const allRoutes = {
       ),
     
       exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/branch",
+      component: lazy(
+        () => import("@app/components/Master/Branch.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/menu",
+      component: lazy(
+        () => import("@app/components/Master/MenuMaster/Menu.jsx")
+      ),
+    
+      exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/fee-rate-schedule",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/FeeRateSchedule.jsx")
+      ),
+    // C:\Users\Anand\Desktop\school\school2026\src\components\Master\FeeMaster\FeeRateSchedule.jsx
+      exact: true,
+
     },
      ],
 };

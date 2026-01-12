@@ -42,6 +42,7 @@ const SubMenuBulk = () => {
         setValues(prev => ({ ...prev, [name]: option }));
         if (name === "branchId") {
             handleGetSubMenus()
+            handleGetMenus(option?.value);
         }
     };
 
@@ -65,15 +66,16 @@ const SubMenuBulk = () => {
             }
         ];
 
-        console.log("FINAL PAYLOAD 👉", payload);
-
         try {
             const res = await MenuManagmentcreatesubmenubulk(payload);
+            debugger
             if (res?.success) {
-                handleGetSubMenus()
+                // handleGetSubMenus()
                 // setTableData(prev => [...prev, payload[0]]);
-                setValues(initialData);
-                notify("Saved Successfully", "success");
+                // setValues(initialData);
+               
+                notify(res?.message, "success");
+                 handleGetMenus(values.branchId?.value)
             } else {
                 notify(res?.message, "error");
             }
@@ -88,13 +90,13 @@ const SubMenuBulk = () => {
         data.splice(index, 1);
         setTableData(data);
     };
-    const handleGetMenus = async () => {
+    const handleGetMenus = async (branchId) => {
         const payload =
         {
             "searchText": "",
             "isAll": 0,
-            "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-            "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
+            "orgId": localData?.OrganizationId,
+            "branchId": branchId ?? "",
             "isActive": 0
         }
 
@@ -138,7 +140,7 @@ const SubMenuBulk = () => {
         }
     };
     useEffect(() => {
-        handleGetMenus()
+        // handleGetMenus()
         handleGetSubMenus()
     }, [])
     useEffect(() => {
@@ -168,7 +170,7 @@ const SubMenuBulk = () => {
                         className="form-control"
                     />
                     <ReactSelect
-                        placeholderName="Parent Menu"
+                        placeholderName=" Menu"
                         respclass="col-xl-2 col-md-4 col-sm-6 col-12"
                         name="menuId"
                         dynamicOptions={menuList?.map((ele) => ({
@@ -229,7 +231,7 @@ const SubMenuBulk = () => {
                         className="form-control"
                     />
 
-                    
+
                     <div className="col-12 text-end mt-2">
                         <button
                             className="btn btn-sm btn-primary"

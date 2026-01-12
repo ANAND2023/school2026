@@ -23,7 +23,7 @@ const ModuleBulk = () => {
     icon: "",
     displayOrder: "",
     branchId: null,
-    orgId: "ORG001"
+    orgId: localData?.OrganizationId
   };
 
   const [values, setValues] = useState(initialData);
@@ -38,6 +38,9 @@ const ModuleBulk = () => {
 
   const handleSelect = (name, option) => {
     setValues(prev => ({ ...prev, [name]: option }));
+    if (name === "branchId") {
+      getModuleBulk(option?.value);
+    }
   };
 
   /* ================= SAVE ================= */
@@ -62,14 +65,13 @@ const ModuleBulk = () => {
         }
       ];
 
-    console.log("FINAL PAYLOAD 👉", payload);
-
     try {
       const res = await MenuManagmentCreateModuleBulk(payload);
       if (res?.success) {
         // setTableData(prev => [...prev, payload[0]]);
         setValues(initialData);
         notify(res?.message, "success");
+        getModuleBulk(values.branchId?.value);
       } else {
         notify(res?.message, "error");
       }
@@ -77,19 +79,19 @@ const ModuleBulk = () => {
       notify("Something went wrong", "error");
     }
   };
-  const getModuleBulk = async () => {
+  const getModuleBulk = async ( branchId) => {
 
 
     const payload =
     {
       "searchText": "",
       "isAll": 1,
-      "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-      "branchId": values.branchId?.value ?? "",
+      "orgId": localData?.OrganizationId,
+      "branchId": branchId ?? "",
       // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
       "isActive": 0
     }
- 
+
     try {
       const res = await MenuManagmentGeModuleBulk(payload);
       if (res?.success) {
@@ -162,7 +164,7 @@ const ModuleBulk = () => {
             className="form-control"
           />
 
-          <Input
+          {/* <Input
             type="text"
             name="description"
             value={values.description}
@@ -170,7 +172,7 @@ const ModuleBulk = () => {
             respclass="col-xl-3 col-md-6 col-sm-12 col-12"
             onChange={handleChange}
             className="form-control"
-          />
+          /> */}
 
           <Input
             type="text"
@@ -187,10 +189,11 @@ const ModuleBulk = () => {
             name="displayOrder"
             value={values.displayOrder}
             lable="Display Order"
-            respclass="col-xl-1 col-md-4 col-sm-6 col-12"
+           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             onChange={handleChange}
             className="form-control"
           />
+          
           {/* 
           <ReactSelect
             placeholderName="Branch"
@@ -225,14 +228,41 @@ const ModuleBulk = () => {
             code: item.code,
             description: item.description,
             Order: item.displayOrder,
-            action: (
-              <button
-                className="btn btn-sm btn-danger"
-                onClick={() => handleDelete(index)}
+
+            action: <>
+
+              <div
+                className="d-flex align-items-center justify-content-center gap-2"
+              // className="row gap-2"
               >
-                🗑️
-              </button>
-            )
+                <button
+                  id="editBtn"
+                  onclick="handleEdit(item.id)"
+                  title="Edit"
+                  className="d-flex align-items-center justify-content-center"
+                >
+                  <i class=" bi-pencil-square"></i>
+                </button>
+
+                <button
+                  id="deleteBtn"
+                  onclick="handleDelete(item.id)"
+                  title="Delete"
+                >
+                  <i class="bi-trash3"></i>
+                </button>
+              </div>
+
+            </>,
+
+
+            // <button
+            //   className="btn btn-sm btn-danger"
+            //   onClick={() => handleDelete(index)}
+            // >
+            //   🗑️
+            // </button>
+
           }))}
         />
       </div>

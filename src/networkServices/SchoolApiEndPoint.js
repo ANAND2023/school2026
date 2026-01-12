@@ -84,6 +84,9 @@ UpdateSubCategory:`${feeUrl}SubCategory/UpdateSubCategory`,
 ItemInsertItemMaster:`${feeUrl}Item/InsertItemMaster`,
 GetAllItemMaster:`${feeUrl}Item/GetAllItemMaster`,
 UpdateItemMaster:`${feeUrl}Item/UpdateItemMaster`,
+FeeRateSchedule:`${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
+AllFeeRateSchedule:`${feeUrl}FeeRateSchedule/GetAllFeeRateSchedule`,
+// gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
 
 

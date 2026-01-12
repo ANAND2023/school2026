@@ -188,15 +188,7 @@ const ModuleEmployeeMapping = () => {
             handleChange={handleSelect}
             value={values.employeeId}
           /> */}
-          <ReactSelect
-            name="employeeId"
-            placeholderName="Select Employee"
-            // dynamicOptions={allUser}
-            dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
-            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-            handleChange={handleSelect}
-            value={values.employeeId}
-          />
+         
           <ReactSelect
             name="branchId"
             placeholderName="Select Branch"
@@ -204,9 +196,18 @@ const ModuleEmployeeMapping = () => {
               label: ele?.name,
               value: ele?.id
             }))}
-            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.branchId}
+          />
+           <ReactSelect
+            name="employeeId"
+            placeholderName="Select Employee"
+            // dynamicOptions={allUser}
+            dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
+            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
+            handleChange={handleSelect}
+            value={values.employeeId}
           />
           {/* <ReactSelect
             name="moduleId"
@@ -220,7 +221,7 @@ const ModuleEmployeeMapping = () => {
             value={values.moduleId}
           /> */}
           <MultiSelectComp
-            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
             name="module"
             id="module"
             placeholderName={t("module")}

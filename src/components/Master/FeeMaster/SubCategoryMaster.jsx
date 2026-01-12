@@ -123,7 +123,7 @@ const update={
           placeholder=""
           value={values.subCategoryName}
           lable="Sub Category Name"
-          respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+          respclass="col-xl-3 col-md-4 col-sm-6 col-12"
            className="form-control"
           onChange={handleChange}
         />
@@ -133,7 +133,7 @@ const update={
           value={values.displayName}
            placeholder=""
           lable="Display Name"
-          respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+          respclass="col-xl-3 col-md-4 col-sm-6 col-12"
            className="form-control"
           onChange={handleChange}
         />
@@ -162,14 +162,31 @@ const update={
           subCategoryName: item.name,
           displayName: item.displayName,
          
-          action: (
-            <button
-              className="btn btn-sm btn-warning"
-              onClick={() => handleEdit(item)}
-            >
-              ✏️
-            </button>
-          )
+           action: <>
+
+              <div
+                className="d-flex align-items-center justify-content-center gap-2"
+              // className="row gap-2"
+              >
+                <button
+                  id="editBtn"
+                  onclick="handleEdit(item.id)"
+                  title="Edit"
+                  className="d-flex align-items-center justify-content-center"
+                >
+                  <i class=" bi-pencil-square"></i>
+                </button>
+
+                <button
+                  id="deleteBtn"
+                  onclick="handleDelete(item.id)"
+                  title="Delete"
+                >
+                  <i class="bi-trash3"></i>
+                </button>
+              </div>
+
+            </>,
         }))}
       />
     </div>

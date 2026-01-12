@@ -70,7 +70,7 @@ function Branch() {
     const payload={
   "employeeId": "",
   "organisationID": values?.organisationId,
-  "isAll": 1
+  "isAll": 0
 }
     try {
       const res = await GetAllBranches(payload);
@@ -231,22 +231,31 @@ function Branch() {
                     tbody={tableData.map((item, index) => ({
                         name: item.name,
                        
-                        action: (
-                            <div className="d-flex gap-2">
-                                <button
-                                    className="btn btn-sm btn-warning"
-                                    onClick={() => handleEdit(item)}
-                                >
-                                    ✏️
-                                </button>
-                                <button
-                                    className="btn btn-sm btn-danger"
-                                    onClick={() => handleDelete(index)}
-                                >
-                                    🗑️
-                                </button>
-                            </div>
-                        )
+                        action: <>
+
+              <div
+                className="d-flex align-items-center justify-content-center gap-2"
+              // className="row gap-2"
+              >
+                <button
+                  id="editBtn"
+                  onclick="handleEdit(item.id)"
+                  title="Edit"
+                  className="d-flex align-items-center justify-content-center"
+                >
+                  <i class=" bi-pencil-square"></i>
+                </button>
+
+                <button
+                  id="deleteBtn"
+                  onclick="handleDelete(item.id)"
+                  title="Delete"
+                >
+                  <i class="bi-trash3"></i>
+                </button>
+              </div>
+
+            </>,
                     }))}
                 />
       </div>

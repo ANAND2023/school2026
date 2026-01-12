@@ -88,7 +88,7 @@ const EmployeeBranchMap = () => {
     const payload = {
       "employeeId": "",
       "organisationID": values?.organisationId,
-      "isAll": 1
+      "isAll": 0
     }
     try {
       const res = await GetAllBranches(payload);

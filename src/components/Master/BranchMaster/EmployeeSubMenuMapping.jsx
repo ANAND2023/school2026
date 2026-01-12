@@ -7,69 +7,76 @@ import { createEmployeeSubmenuMappingBulk, MenuCreatebulk, MenuManagmentgetsubme
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { GetAllBranches } from "../../../networkServices/AcademicYear";
 import { GetAllUsers } from "../../../networkServices/Admin";
+import MultiSelectComp from "../../formComponent/MultiSelectComp";
+import { useTranslation } from "react-i18next";
 
 const EmployeeSubMenuMapping = () => {
+   const [t] = useTranslation();
   const localData = useLocalStorage("userData", "get");
   const initialData = {
     employeeId: {},
 
-    subMenuId: {},
-  
+   
+subMenu: [],
     branchId: {},
     orgId: localData?.OrganizationId
   };
   const [branch, setBranch] = useState([]);
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
- const [subMenu, setSubMenu] = useState([]);
- const [allUser, setAllUser] = useState([]);
- 
+  const [subMenu, setSubMenu] = useState([]);
+  const [allUser, setAllUser] = useState([]);
+
 
   const getBranch = async () => {
-     const payload = {
-       employeeId: "",
-       organisationID: values?.orgId,
-       isAll: 1
-     };
- 
-     try {
-       const res = await GetAllBranches(payload);
-       if (res?.success) setBranch(res.data);
-       else notify(res?.message, "error");
-     } catch {
-       notify("Error fetching branches", "error");
-     }
-   };
-   const GetSubMenus = async () => {
-            const payload =
-            {
-                "searchText": "",
-                "isAll": 1,
-                "orgId": values?.orgId,
-                "branchId":  "",
-                // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
-                "isActive": 0
-            }
-    
-            try {
-                const res = await MenuManagmentgetsubmenus(payload);
-                if (res?.success) {
-                    setSubMenu(res?.data);
-    
-    
-                } else {
-                    notify(res?.message, "error");
-                }
-            } catch (error) {
-                notify("Something went wrong", "error");
-            }
-        };
+    const payload = {
+      employeeId: "",
+      organisationID: values?.orgId,
+      isAll: 1
+    };
+
+    try {
+      const res = await GetAllBranches(payload);
+      if (res?.success) setBranch(res.data);
+      else notify(res?.message, "error");
+    } catch {
+      notify("Error fetching branches", "error");
+    }
+  };
+  const GetSubMenus = async () => {
+    const payload =
+    {
+      "searchText": "",
+      "isAll": 1,
+      "orgId": values?.orgId,
+      "branchId": "",
+      // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
+      "isActive": 0
+    }
+
+    try {
+      const res = await MenuManagmentgetsubmenus(payload);
+      if (res?.success) {
+        setSubMenu(res?.data);
+
+
+      } else {
+        notify(res?.message, "error");
+      }
+    } catch (error) {
+      notify("Something went wrong", "error");
+    }
+  };
+   const handleMultiSelectChange = (name, selectedOptions) => {
+    setValues({ ...values, [name]: selectedOptions });
+  };
   const handleSelect = (name, option) => {
-          setValues(prev => ({
-        ...prev,
-        [name]: option,
-       
-      }));
+    setValues(prev => ({
+      ...prev,
+      [name]: option,
+
+    }));
+    
     // if (name === "employeeId") {
     //   setValues(prev => ({
     //     ...prev,
@@ -96,25 +103,33 @@ const EmployeeSubMenuMapping = () => {
 
   /* ================= SAVE ================= */
   const handleSave = async () => {
-    if (!values.employeeId || !values.subMenuId) {
+    if (!values.employeeId || !values.subMenu) {
       notify("Employee & SubMenu required", "error");
       return;
     }
 
-    const payload = [
-      {
+    const payload = values.subMenu.map((subMenuItem) => ({
         employeeId: values.employeeId.value,
         employeeName: values.employeeId?.label,
-        subMenuId: values.subMenuId.value,
-        subMenuName: values.subMenuId?.label,
+        subMenuId: subMenuItem?.code,
+        subMenuName: subMenuItem?.name,
         branchId: values.branchId?.value,
         orgId: values.orgId
-      }
-    ];
+      })
+    );
+    //   {
+    //     employeeId: values.employeeId.value,
+    //     employeeName: values.employeeId?.label,
+    //     subMenuId: values.subMenuId.value,
+    //     subMenuName: values.subMenuId?.label,
+    //     branchId: values.branchId?.value,
+    //     orgId: values.orgId
+    //   }
+    // ];
     try {
       const res = await createEmployeeSubmenuMappingBulk(payload);
       if (res?.success) {
-        
+
         setValues(initialData);
         notify("Saved Successfully", "success");
       } else {
@@ -172,25 +187,7 @@ const EmployeeSubMenuMapping = () => {
             handleChange={handleSelect}
             value={values.employeeId}
           /> */}
-
-<ReactSelect
-            name="employeeId"
-            placeholderName="Select Employee"
-            // dynamicOptions={allUser}
-            dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
-           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-            handleChange={handleSelect}
-            value={values.employeeId?.value}
-          />
           <ReactSelect
-            placeholderName="Sub Menu"
-            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
-            name="subMenuId"
-            dynamicOptions={subMenu?.map(item => ({ label: item.name, value: item.id }))}
-            handleChange={handleSelect}
-            value={values.subMenuId?.value}
-          />
- <ReactSelect
             name="branchId"
             placeholderName="Select Branch"
             dynamicOptions={branch?.map((ele) => ({
@@ -201,6 +198,37 @@ const EmployeeSubMenuMapping = () => {
             handleChange={handleSelect}
             value={values.branchId?.value}
           />
+          <ReactSelect
+            name="employeeId"
+            placeholderName="Select Employee"
+            // dynamicOptions={allUser}
+            dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
+             respclass="col-xl-3 col-md-6 col-sm-12"
+            handleChange={handleSelect}
+            value={values.employeeId?.value}
+          />
+          {/* <ReactSelect
+            placeholderName="Sub Menu"
+            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
+            name="subMenuId"
+            dynamicOptions={subMenu?.map(item => ({ label: item.name, value: item.id }))}
+            handleChange={handleSelect}
+            value={values.subMenuId?.value}
+          /> */}
+          <MultiSelectComp
+             respclass="col-xl-3 col-md-6 col-sm-12"
+            name="subMenu"
+            id="subMenu"
+            placeholderName={t("subMenu")}
+            // dynamicOptions={module}
+            dynamicOptions={subMenu?.map((ele) => ({
+              name: ele?.name,
+              code: ele?.id
+            }))}
+            handleChange={handleMultiSelectChange}
+            value={values?.subMenu}
+          />
+
           {/* <ReactSelect
             placeholderName="Branch"
             respclass="col-xl-3 col-md-4 col-sm-6 col-12"
