@@ -6,16 +6,34 @@ import Heading from '../../UI/Heading';
 import Input from '../../formComponent/Input';
 import Tables from '../../UI/customTable';
 import { useLocalStorage } from '../../../utils/hooks/useLocalStorage';
+import ReactSelect from '../../formComponent/ReactSelect';
+import { useSelector } from 'react-redux';
 
 const CreateTerm = () => {
-
+ const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
+    (state) => state?.CommonSlice
+  );
+   const initialData = {
+      termName: "",
+      
+      branchId: {
+        label: "",
+        value: "",
+      },
+    
+    };
+  
+    const [values, setValues] = useState(initialData);
     const [termName, setTermName] = useState("");
     const [tableData, setTableData] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState("");
 
     const userData  = useLocalStorage("userData", "get");
-
+ const handleSelect = (name, option) => {
+    setValues(prev => ({ ...prev, [name]: option }));
+   
+  };
 
     // --- API Calls ---
 
@@ -37,18 +55,18 @@ const CreateTerm = () => {
     };
 
     const handleSave = async () => {
-        if (!termName.trim()) {
+        if (!values.termName.trim()) {
             notify(t("Please enter Term Name"), "error");
             return;
         }
 
         try {
             const payload = {
-                "termName": termName,
+                "termName": values.termName,
                 "orgId": userData?.OrganizationId, 
                 "orgName": "Digital Vidhaya Sarthi Organization", 
-                "branchId": userData?.defaultCentre, 
-                "branchName": userData?.defaultCenterName
+                "branchId": values.branchId?.value, 
+                "branchName":   values.branchId?.label
             };
 
             const response = await masterAcademicMastercreate_term(payload);
@@ -116,14 +134,28 @@ const CreateTerm = () => {
                 
                 <div className="card-body p-2">
                     <div className="row align-items-end">
+                         <ReactSelect
+                                    placeholderName="Branch"
+                                    respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                                    name="branchId"
+                                    // dynamicOptions={branchList}
+                                    dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+                                      value: ele.id,
+                                      label: ele.name
+                                    }))}
+                                    handleChange={handleSelect}
+                                    value={values.branchId}
+                                    className="form-control"
+                                  />
                         <Input
                             type="text"
                             className="form-control"
                             id="termName"
                             name="termName"
                             lable={t("Term Name")}
-                            value={termName}
-                            onChange={(e) => setTermName(e.target.value)}
+                            value={values.termName}
+                            // onChange={(e) => setTermName(e.target.value)}
+                            onChange={(e) => setValues({ ...values, termName: e.target.value })} // Update state(e.target.value)}
                             respclass="col-xl-4 col-md-6 col-sm-12 col-12"
                             placeholder=" "
                         />

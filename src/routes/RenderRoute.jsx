@@ -148,7 +148,9 @@ function RenderRoute() {
   getAllUrls.push("/fee-rate-schedule");
   getAllUrls.push("/exam-type");
   getAllUrls.push("/exam-term");
-
+  getAllUrls.push("/exam-type");
+  getAllUrls.push("/create-exam");
+  getAllUrls.push("/exam-timetable");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -516,5 +518,37 @@ const allRoutes = {
       exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/exam-type",
+      component: lazy(
+        () => import("@app/components/Master/Exam/ExamType.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/create-exam",
+      component: lazy(
+        () => import("@app/components/Master/Exam/CreateExam.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/exam-timetable",
+      component: lazy(
+        () => import("@app/components/Master/Exam/ExamTimetable.jsx")
+      ),exact: true,
+
+    },
+
+// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\CreateExam.jsx
+
+// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\ExamType.jsx
+
      ],
 };
