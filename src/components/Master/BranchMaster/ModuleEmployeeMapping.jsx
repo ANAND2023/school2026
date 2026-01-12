@@ -12,6 +12,8 @@ import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { MenuManagmentGeModuleBulk } from "../../../networkServices/MenuMaster";
 import { GetAllUsers } from "../../../networkServices/Admin";
 import { handleReactSelectDropDownOptions } from "../../../utils/utils";
+import MultiSelectComp from "../../formComponent/MultiSelectComp";
+import { useTranslation } from "react-i18next";
 
 const ModuleEmployeeMapping = () => {
   const localData = useLocalStorage("userData", "get");
@@ -20,51 +22,61 @@ const ModuleEmployeeMapping = () => {
     employeeId: null,
     employeeName: "",
     moduleId: null,
+    module: [],
     moduleName: "",
     branchId: null,
     orgId: localData?.OrganizationId
   };
-
+  const [t] = useTranslation();
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
   const [branch, setBranch] = useState([]);
   const [module, setModule] = useState([]);
   const [allUser, setAllUser] = useState([]);
-
+  console.log("values", values)
 
   const handleSelect = (name, option) => {
-         setValues((prev) => ({
-        ...prev,
-        [name]: option,
-       
-      }));
+    setValues((prev) => ({
+      ...prev,
+      [name]: option,
+
+    }));
   };
-  
+  const handleMultiSelectChange = (name, selectedOptions) => {
+    setValues({ ...values, [name]: selectedOptions });
+  };
+
   const handleSave = async () => {
-    if (!values.moduleId || !values.branchId) {
+    
+    if (!values.module || !values.branchId) {
       notify("Employee, Module & Branch required", "error");
       return;
     }
 
-    const payload = [
-       {
-    "employeeId": values?.employeeId?.value??"",
-    "employeeName": values?.employeeId?.label??"",
-    "moduleId": values.moduleId?.value??"",
-    "moduleName": values.moduleId?.label??"",
-    "branchId":values.branchId?.value??"",
-    "orgId": values.orgId
-  }
-      // {
-      //   employeeId: values?.employeeId?.value,
-      //   employeeName: values?.employeeId?.label,
-      //   moduleId: values.moduleId?.value,
-      //   moduleName: values.moduleName?.label,
-      //   branchId: values.branchId?.value,
-      //   BranchName: values.branchId?.label,
-      //   OrganisationId: values.orgId
-      // }
-    ];
+    const payload =
+
+      values?.module?.length > 0 ? values?.module.map((mod) => ({
+
+        "employeeId": values?.employeeId?.value ?? "",
+        "employeeName": values?.employeeId?.label ?? "",
+        "moduleId": mod?.code ?? "",
+        "moduleName": mod?.name ?? "",
+        "branchId": values.branchId?.value ?? "",
+        "orgId": values.orgId
+
+      })) : []
+
+    //   [
+    //      {
+    //   "employeeId": values?.employeeId?.value??"",
+    //   "employeeName": values?.employeeId?.label??"",
+    //   "moduleId": values.moduleId?.value??"",
+    //   "moduleName": values.moduleId?.label??"",
+    //   "branchId":values.branchId?.value??"",
+    //   "orgId": values.orgId
+    // }
+
+    //   ];
 
     console.log("FINAL PAYLOAD 👉", payload);
 
@@ -181,7 +193,7 @@ const ModuleEmployeeMapping = () => {
             placeholderName="Select Employee"
             // dynamicOptions={allUser}
             dynamicOptions={handleReactSelectDropDownOptions(allUser, "fullName", "id")}
-           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.employeeId}
           />
@@ -192,22 +204,34 @@ const ModuleEmployeeMapping = () => {
               label: ele?.name,
               value: ele?.id
             }))}
-           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.branchId}
           />
-          <ReactSelect
+          {/* <ReactSelect
             name="moduleId"
             placeholderName="Select Module"
             dynamicOptions={module?.map((ele) => ({
               label: ele?.name,
               value: ele?.id
             }))}
-           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.moduleId}
+          /> */}
+          <MultiSelectComp
+            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            name="module"
+            id="module"
+            placeholderName={t("module")}
+            // dynamicOptions={module}
+            dynamicOptions={module?.map((ele) => ({
+              name: ele?.name,
+              code: ele?.id
+            }))}
+            handleChange={handleMultiSelectChange}
+            value={values?.module}
           />
-
 
 
           <div className=" text-end ">

@@ -71,9 +71,9 @@ function PaymentMode() {
                 "orgId": localData?.OrganizationId,
                 "branchId": values.branchId?.value ?? "",
             },
-            "modeName":values?.modeName??"",
-            "requiresReferenceNo": values?.requiresReferenceNo?.value== "true"?true:false,
-            "isOnline": values?.isOnline?.value== "true"?true:false
+            "modeName": values?.modeName ?? "",
+            "requiresReferenceNo": values?.requiresReferenceNo?.value == "true" ? true : false,
+            "isOnline": values?.isOnline?.value == "true" ? true : false
         }
 
         try {
@@ -108,11 +108,11 @@ function PaymentMode() {
         }
     };
     const getData = async (ID) => {
-const payload = {
-  "orgId": localData?.OrganizationId,
-  "branchId": ID ?? "",
-  "isAll": 0
-}
+        const payload = {
+            "orgId": localData?.OrganizationId,
+            "branchId": ID ?? "",
+            "isAll": 0
+        }
         try {
             const response = await MasterGetAllPaymentModes(payload);
             if (response?.success) {
@@ -211,7 +211,7 @@ const payload = {
                         value={values?.requiresReferenceNo?.value}
                         requiredClassName="required-fields"
                     />
-              
+
                     <button
                         onClick={handleSave}
                         className="btn btn-sm btn-primary"
@@ -220,15 +220,15 @@ const payload = {
                     >
                         {t("Save")}
                     </button>
-                   
+
                 </div>
                 <Tables
                     thead={[{ name: "Mode Name", }, { name: "isOnline" }, { name: "Requires Reference No" }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
                             modeName: item.modeName,
-                            isOnline: item.isOnline===true?"Yes":"No",
-                            requiresReferenceNo: item.requiresReferenceNo===true?"Yes":"No",
+                            isOnline: item.isOnline === true ? "Yes" : "No",
+                            requiresReferenceNo: item.requiresReferenceNo === true ? "Yes" : "No",
 
                             action: <>
 
