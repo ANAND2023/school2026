@@ -47,7 +47,7 @@ function FeeRateSchedule() {
                 setClasses(response?.data)
             } else {
                 notify(response?.message, "error");
-              
+
             }
         } catch (error) {
             notify("Error saving reason", "error");
@@ -112,7 +112,7 @@ function FeeRateSchedule() {
             "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "itemId": values?.item?.value,
             "rate": Number(values?.rate),
-            "isCurrent": values?.isCurrent?.value==="true"?true:false
+            "isCurrent": values?.isCurrent?.value === "true" ? true : false
         }
         try {
             const Response = await FeeRateSchedules(Payload);

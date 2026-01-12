@@ -686,7 +686,7 @@ export const getEmployeeWise = createAsyncThunk(
           const isCurrentValid = data.data.find(b => b.id == prevData?.defaultCentre);
           
           if (!isCurrentValid) {
-             const newData = { ...prevData, defaultCentre: data.data[0].id };
+             const newData = { ...prevData, defaultCentre: data.data[0].id , defaultCenterName: data.data[0].name };
              useLocalStorage("userData", "set", newData);
           }
       }

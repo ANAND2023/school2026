@@ -146,6 +146,8 @@ function RenderRoute() {
   getAllUrls.push("/menu");
   getAllUrls.push("/branch");
   getAllUrls.push("/fee-rate-schedule");
+  getAllUrls.push("/exam-type");
+  getAllUrls.push("/exam-term");
 
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
@@ -462,7 +464,24 @@ const allRoutes = {
       component: lazy(
         () => import("@app/components/Master/PaymentMode.jsx")
       ),
-    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/exam-type",
+      component: lazy(
+        () => import("@app/components/Master/Exam/ExamType.jsx")
+      ),
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/exam-term",
+      component: lazy(
+        () => import("@app/components/Master/Exam/CreateTerm.jsx")
+      ),
       exact: true,
     },
     {

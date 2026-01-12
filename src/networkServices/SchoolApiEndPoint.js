@@ -157,7 +157,11 @@ MasterCreatePaymentMode:`${baseUrlMaster}PaymentModeMaster/CreatePaymentMode`,
 MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
   // MenuManagment start ....
 
+//Exam Start
+  masterAcademicMastercreate_term: `${baseUrlMaster}AcademicMaster/create_term`,
+  AcademicMasterget_all_term: `${baseUrlMaster}AcademicMaster/get_all_term`,
 
+//Exam End
 
   // Users Start ....
 
