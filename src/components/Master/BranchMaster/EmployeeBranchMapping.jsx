@@ -187,14 +187,39 @@ const getAllUsers = async () => {
           tbody={tableData.map((item, index) => ({
             employeeName: item.employeeName,
             branchName: item.branchName,
-            action: (
-              <button
-                className="btn btn-sm btn-danger"
-                onClick={() => handleDelete(index)}
-              >
-                🗑️
-              </button>
-            )
+            // action: (
+            //   <button
+            //     className="btn btn-sm btn-danger"
+            //     onClick={() => handleDelete(index)}
+            //   >
+            //     🗑️
+            //   </button>
+            // )
+            action: <>
+
+                            <div
+                                className="d-flex align-items-center justify-content-center gap-2"
+                            // className="row gap-2"
+                            >
+                                <button
+                                    id="editBtn"
+                                    onclick="handleEdit(item.id)"
+                                    title="Edit"
+                                    className="d-flex align-items-center justify-content-center"
+                                >
+                                    <i class=" bi-pencil-square"></i>
+                                </button>
+
+                                <button
+                                    id="deleteBtn"
+                                    onclick="handleDelete(item.id)"
+                                    title="Delete"
+                                >
+                                    <i class="bi-trash3"></i>
+                                </button>
+                            </div>
+
+                        </>,
           }))}
         />
       </div>

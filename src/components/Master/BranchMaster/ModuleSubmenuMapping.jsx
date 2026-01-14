@@ -295,10 +295,11 @@ const ModuleSubmenuMapping = () => {
           />
 
 
-          <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end">
+          <div className="col-xl-2 col-md-4 col-sm-6 col-12 ">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Mapping
             </button>
+            
           </div>
           <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={getMapping}>
