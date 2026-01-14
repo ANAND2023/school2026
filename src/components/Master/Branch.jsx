@@ -10,6 +10,7 @@ import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
 import { CreateBranch, GetAllBranches, GetAllOrganisation } from "../../networkServices/AcademicYear";
 import Input from "../formComponent/Input";
 import ReactSelect from "../formComponent/ReactSelect";
+import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 
 function Branch() {
   const [t] = useTranslation();
@@ -83,7 +84,7 @@ function Branch() {
     const payload = {
       "employeeId": "",
       "organisationID": values?.organisationId ?? ID,
-      "isAll": 0
+      "isAll": 1
     }
     try {
       const res = await GetAllBranches(payload);

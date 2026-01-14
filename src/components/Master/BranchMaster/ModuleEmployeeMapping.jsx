@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import ReactSelect from "../../formComponent/ReactSelect";
 import Tables from "../../UI/customTable";
 import Heading from "../../UI/Heading";
-import { notify } from "../../../utils/ustil2";
 import {
   EmployeeBranchMapping,
   GetAllBranches,
@@ -14,6 +13,7 @@ import { GetAllUsers } from "../../../networkServices/Admin";
 import { handleReactSelectDropDownOptions } from "../../../utils/utils";
 import MultiSelectComp from "../../formComponent/MultiSelectComp";
 import { useTranslation } from "react-i18next";
+import { notify } from "../../../utils/ustil2";
 
 const ModuleEmployeeMapping = () => {
   const localData = useLocalStorage("userData", "get");
@@ -47,7 +47,7 @@ const ModuleEmployeeMapping = () => {
   };
 
   const handleSave = async () => {
-    
+    debugger
     if (!values.module || !values.branchId) {
       notify("Employee, Module & Branch required", "error");
       return;
@@ -118,7 +118,7 @@ const ModuleEmployeeMapping = () => {
         notify(res?.message, "error");
       }
     } catch (error) {
-      notify("Something went wrong", "error");
+      // notify("Something went wrong", "error");
     }
   };
   const getData = async () => {
@@ -153,7 +153,7 @@ const ModuleEmployeeMapping = () => {
         notify(res?.message || "Failed", "error");
       }
     } catch (error) {
-      notify("Something went wrong", "error");
+      // notify("Something went wrong", "error");
     }
   };
 
