@@ -150,6 +150,7 @@ function RenderRoute() {
   getAllUrls.push("/exam-term");
   getAllUrls.push("/exam-type");
   getAllUrls.push("/create-exam");
+  getAllUrls.push("/exam-timetable");
   getAllUrls.push("/master-class-section");
   getAllUrls.push("/master-organization");
   // Add dynamic routes from Menu
