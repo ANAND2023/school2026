@@ -58,8 +58,8 @@ function RenderRoute() {
       // 3. Fetch Roles
       const roleResult = await dispatch(
         GetRoleListByEmployeeIDAndCentreID({
-          branchId: currentBranchId,
-          orgId: localData?.OrganizationId,
+       
+          empID: localData?.UserId,
         })
       ).unwrap();
 
