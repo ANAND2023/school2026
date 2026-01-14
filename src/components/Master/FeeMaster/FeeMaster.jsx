@@ -6,12 +6,17 @@ import ReactTabs from '../../School/ReactTabs';
 import CategoryMaster from './CategoryMaster';
 import SubCategoryMaster from './SubCategoryMaster';
 import ItemMaster from './ItemMaster';
+import RateScheduleByCalss from './RateScheduleByCalss';
+import ClassWiseItemRateMapping from './ClassWiseItemRateMapping';
+import InsertMonthType from './InsertMonthType';
 
 const FeeMaster = () => {
     const tabs = [
         { id: 'CategoryMaster', label: 'CategoryMaster', icon: User, color: '#0d6efd', component: <CategoryMaster /> },
         { id: 'SubCategoryMaster', label: 'SubCategoryMaster', icon: User, color: '#0d6efd', component: <SubCategoryMaster /> },
         { id: 'ItemMaster', label: 'ItemMaster', icon: User, color: '#0d6efd', component: <ItemMaster /> },
+        { id: 'InsertMonthType', label: 'InsertMonthType', icon: User, color: '#0d6efd', component: <InsertMonthType /> },
+        { id: 'ClassWiseItemRateMapping', label: 'ClassWiseItemRateMapping', icon: User, color: '#0d6efd', component: <ClassWiseItemRateMapping /> },
     ];
     return (
         <div>

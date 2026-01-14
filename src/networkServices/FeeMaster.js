@@ -140,6 +140,44 @@ export const ItemInsertItemMaster = async (params) => {
   }
 };
 
+export const InsertMonthTypes = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.InsertMonthType}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetAllMonthType = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetAllMonthType}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
 export const GetAllItemMaster = async (params) => {
   store.dispatch(setLoading(true));
   try {
@@ -168,6 +206,43 @@ export const UpdateItemMaster = async (params) => {
     };
     const data = await makeApiRequest(
       `${apiUrls.UpdateItemMaster}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const InsertFeeRateSchedule = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.InsertFeeRateSchedule}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const UpdateBulkItemClassMonthWise = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.UpdateBulkItemClassMonthWise}`,
       options
     );
     store.dispatch(setLoading(false));
