@@ -158,6 +158,7 @@ function Subject() {
                         value={values?.isPractical?.value}
                         requiredClassName="required-fields"
                     />
+                    <div className="col-xl-2 col-md-4 col-sm-4 col-12">
  <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
@@ -165,6 +166,8 @@ function Subject() {
                         >
                             {t("Save")}
                         </button>
+                    </div>
+
                     {/* <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
@@ -188,8 +191,8 @@ function Subject() {
                             action: <>
 
                                 <div
-                                    // className="d-flex align-items-center justify-content-center gap-2"
-                                    className="row gap-2"
+                                    className="d-flex align-items-center justify-content-center gap-2"
+                                    // className="row gap-2"
                                 >
                                     <button
                                         id="editBtn"

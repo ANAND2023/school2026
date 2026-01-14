@@ -23,7 +23,7 @@ function SectionMaster() {
     }
     const [values, setValues] = useState(initialData);
     const [classes, setClasses] = useState([]);
-    
+
     const [tableData, setTableData] = useState(
         []
     );
@@ -38,23 +38,23 @@ function SectionMaster() {
     };
 
 
-        const getClass = async () => {
-    
-            try {
-                const response = await GetAllClasses();
-                if (response?.success) {
-                    setClasses(response?.data)
-                } else {
-                    notify(response?.message, "error");
-                    setTableData([])
-                }
-            } catch (error) {
-                notify("Error saving reason", "error");
+    const getClass = async () => {
+
+        try {
+            const response = await GetAllClasses();
+            if (response?.success) {
+                setClasses(response?.data)
+            } else {
+                notify(response?.message, "error");
+                setTableData([])
             }
-        };
-    
-     
- const getData = async () => {
+        } catch (error) {
+            notify("Error saving reason", "error");
+        }
+    };
+
+
+    const getData = async () => {
 
         try {
             const response = await GetAllSections();
@@ -91,7 +91,7 @@ function SectionMaster() {
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-               getData()
+                getData()
             } else {
                 notify(Response?.message, "error");
             }
@@ -135,7 +135,8 @@ function SectionMaster() {
                 <div className="row p-2">
                     <Input
                         type="text"
-                        className="form-control required-fields"
+                        className="form-control"
+                        // className="form-control required-fields"
                         id="section_name"
                         name="section_name"
                         value={values?.section_name ? values?.section_name : ""}
@@ -154,23 +155,25 @@ function SectionMaster() {
                         name="class_Name"
                         removeIsClearable={true}
                         // dynamicOptions={classes}
-                                    dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
+                        dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
                         handleChange={handleSelect}
                         value={values?.class_Name?.value}
-                        requiredClassName="required-fields"
+                        // requiredClassName="required-fields"
                     />
+                    <div className="col-xl-2 col-md-4 col-sm-4 col-12">
 
-                    <button
+                        <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
                             type="button"
                         >
                             {t("Add Section")}
                         </button>
+                    </div>
                 </div>
 
                 <Tables
-                    thead={[{ name: "Section", }, { name: "Class", },{ name: "Action" }]}
+                    thead={[{ name: "Section", }, { name: "Class", }, { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
                             sectionName: item.sectionName,
@@ -178,8 +181,8 @@ function SectionMaster() {
 
                             action: <>
                                 <div
-                                    // className="d-flex align-items-center justify-content-center gap-2"
-                                    className="row gap-2"
+                                    className="d-flex align-items-center justify-content-center gap-2"
+                                // className="row gap-2"
                                 >
                                     <button
                                         id="editBtn"

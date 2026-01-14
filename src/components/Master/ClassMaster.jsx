@@ -1,16 +1,11 @@
 
 
-import React, { act, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Heading from "../../components/UI/Heading";
 import Input from "../../components/formComponent/Input";
 import { useTranslation } from "react-i18next";
 import Tables from "../../components/UI/customTable";
 
-import {
-
-    bloodBankSaveData,
-
-} from "../../networkServices/blooadbankApi";
 import Modal from "../../components/modalComponent/Modal";
 import { notify } from "../../utils/utils";
 import { CreateClass, GetAllClasses } from "../../networkServices/AcademicYear";
@@ -31,7 +26,7 @@ function ClassMaster() {
         // if (type === "number" && ((limit < Number(value)) || isNaN(Number(value)))) {
 
         // } else {
-            setValues((prev) => ({ ...prev, [name]: value }));
+        setValues((prev) => ({ ...prev, [name]: value }));
         // }
     };
     const getData = async () => {
@@ -69,7 +64,7 @@ function ClassMaster() {
             if (Response?.success) {
                 notify(Response?.message, "success");
                 setValues(initialData)
-                 getData()
+                getData()
                 // handleBindQuestions();
             } else {
                 notify(Response?.message, "error");
@@ -87,7 +82,7 @@ function ClassMaster() {
     }
     return (
         <>
-            {handleModelData?.isOpen && (
+            {/* {handleModelData?.isOpen && (
                 <Modal
                     visible={handleModelData?.isOpen}
                     setVisible={setIsOpen}
@@ -103,7 +98,7 @@ function ClassMaster() {
                 >
                     {handleModelData?.Component}
                 </Modal>
-            )}
+            )} */}
 
             <div className="card p-1">
                 <Heading title={t("Class Master")} isBreadcrumb={false} />
@@ -135,13 +130,16 @@ function ClassMaster() {
                         isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />
-<button
+                    <div className="col-xl-2 col-md-4 col-sm-4 col-12">
+                        <button
                             onClick={handleSave}
                             className="btn btn-sm btn-primary"
                             type="button"
                         >
                             {t("Class Add")}
                         </button>
+                    </div>
+
                     {/* <div className="col-12 text-right">
                         <button
                             onClick={handleSave}
@@ -164,8 +162,8 @@ function ClassMaster() {
                             action: <>
 
                                 <div
-                                    // className="d-flex align-items-center justify-content-center gap-2"
-                                    className="row gap-2"
+                                    className="d-flex align-items-center justify-content-center gap-2"
+                                    // className="row gap-2"
                                 >
                                     <button
                                         id="editBtn"

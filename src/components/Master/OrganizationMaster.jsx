@@ -129,7 +129,7 @@ function OrganizationMaster() {
             className="form-control required-fields"
             name="name"
             value={values.name}
-            lable="Organization Name"
+            lable="Organization"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
           />
@@ -242,23 +242,47 @@ function OrganizationMaster() {
           tbody={tableData.map((item, index) => ({
             sn: index + 1,
             Organization: item?.name,
+action: <>
 
-            action: (
-              <div className="d-flex gap-2">
+              <div
+                className="d-flex align-items-center justify-content-center gap-2"
+              // className="row gap-2"
+              >
                 <button
-                  className="btn btn-sm btn-warning"
-                  onClick={() => handleEdit(item)}
+                  id="editBtn"
+                  onclick="handleEdit(item.id)"
+                  title="Edit"
+                  className="d-flex align-items-center justify-content-center"
                 >
-                  ✏️
+                  <i class=" bi-pencil-square"></i>
                 </button>
+
                 <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDelete(index)}
+                  id="deleteBtn"
+                  onclick="handleDelete(item.id)"
+                  title="Delete"
                 >
-                  🗑️
+                  <i class="bi-trash3"></i>
                 </button>
               </div>
-            )
+
+            </>,
+            // action: (
+            //   <div className="d-flex gap-2">
+            //     <button
+            //       className="btn btn-sm btn-warning"
+            //       onClick={() => handleEdit(item)}
+            //     >
+            //       ✏️
+            //     </button>
+            //     <button
+            //       className="btn btn-sm btn-danger"
+            //       onClick={() => handleDelete(index)}
+            //     >
+            //       🗑️
+            //     </button>
+            //   </div>
+            // )
           }))}
         />
       </div>
