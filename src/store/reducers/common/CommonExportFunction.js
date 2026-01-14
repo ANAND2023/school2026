@@ -705,7 +705,7 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
       method: "POST",
       data: {
         "searchText": "",
-        "isAll": 1,
+        "isAll": 0,
         "orgId": orgId,
         "branchId": branchId,
         "isActive": 1
