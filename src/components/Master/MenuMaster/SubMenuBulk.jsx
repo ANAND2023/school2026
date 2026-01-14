@@ -269,15 +269,6 @@ const SubMenuBulk = () => {
                         className="form-control"
                     />
 
-                    {/* <Input
-                        type="text"
-                        name="icon"
-                        value={values.icon}
-                        lable="Icon"
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-                        onChange={handleChange}
-                        className="form-control"
-                    /> */}
 
                     <ReactSelect
                         placeholderName="icon"
@@ -299,7 +290,7 @@ const SubMenuBulk = () => {
                     />
 
 
-                    <div className="col-12 text-end mt-2">
+                    <div className="col-xl-2 col-md-4 col-sm-6 col-12">
                         <button
                             className="btn btn-sm btn-primary"
                             onClick={handleSave}
@@ -317,6 +308,7 @@ const SubMenuBulk = () => {
                         { name: "Code" },
                         { name: "URL" },
                         { name: "Order" },
+                        { name: "Icone" },
                         { name: "Action" }
                     ]}
                     tbody={tableData.map((item, index) => ({
@@ -325,13 +317,30 @@ const SubMenuBulk = () => {
                         code: item.code,
                         url: item.pageUrl,
                         Order: item.displayOrder,
+                        icon: <i class={item.icon}></i>,
                         action: (
-                            <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => handleDelete(index)}
+                            <div
+                                className="d-flex align-items-center justify-content-center gap-2"
+                            // className="row gap-2 text-center"
                             >
-                                🗑️
-                            </button>
+                               
+                                <button
+                                    id="editBtn"
+                                    onclick="handleEdit(item.id)"
+                                    title="Edit"
+                                    className="d-flex align-items-center justify-content-center"
+                                >
+                                    <i class=" bi-pencil-square"></i>
+                                </button>
+
+                                <button
+                                    id="deleteBtn"
+                                    onClick={() => handleDelete(item)}
+                                    title="Delete"
+                                >
+                                    <i class="bi-trash3"></i>
+                                </button>
+                            </div>
                         )
                     }))}
                 />

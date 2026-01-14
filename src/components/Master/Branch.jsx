@@ -6,16 +6,16 @@ import Heading from "../../components/UI/Heading";
 import { useTranslation } from "react-i18next";
 import Tables from "../../components/UI/customTable";
 import Modal from "../../components/modalComponent/Modal";
-import { notify } from "../../utils/utils";
-import { CreateBranch, GetAllBranches } from "../../networkServices/AcademicYear";
+import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
+import { CreateBranch, GetAllBranches, GetAllOrganisation } from "../../networkServices/AcademicYear";
 import Input from "../formComponent/Input";
-import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
+import ReactSelect from "../formComponent/ReactSelect";
 
 function Branch() {
   const [t] = useTranslation();
   const localData = useLocalStorage("userData", "get");
   const initialData = {
-    OrganizationId: "5bbf859d-9907-4117-aead-c260d030d335",
+    organisationId: "",
     name: "",
     address: {
       street: "",
@@ -45,9 +45,10 @@ function Branch() {
 
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
+  const [organisation, setOrganisation] = useState([]);
   const [handleModelData, setHandleModelData] = useState({});
   const [modalData, setModalData] = useState({});
-
+  console.log("values", values);
   /* ================= HANDLE CHANGE ================= */
   const handleChange = (e, parent = null) => {
     const { name, value } = e.target;
@@ -64,13 +65,25 @@ function Branch() {
       setValues((prev) => ({ ...prev, [name]: value }));
     }
   };
+  const AllOrganisation = async () => {
+    try {
+      const res = await GetAllOrganisation();
+      if (res?.success) setOrganisation(res.data);
+      else notify(res?.message, "error");
+    } catch {
+      notify("Error fetching data", "error");
+    }
+  };
 
+  useEffect(() => {
+    AllOrganisation();
+  }, []);
   /* ================= API ================= */
-  const getData = async () => {
+  const getData = async (ID) => {
     const payload = {
       "employeeId": "",
-      "organisationID": localData?.OrganizationId,
-      "isAll": 1
+      "organisationID": values?.organisationId ?? ID,
+      "isAll": 0
     }
     try {
       const res = await GetAllBranches(payload);
@@ -103,6 +116,10 @@ function Branch() {
   const setIsOpen = () => {
     setHandleModelData((v) => ({ ...v, isOpen: false }));
   };
+  const handleSelect = (name, value) => {
+    setValues((prev) => ({ ...prev, [name]: value?.value }));
+    // getData(value?.value)
+  };
 
   /* ================= JSX ================= */
   return (
@@ -124,13 +141,24 @@ function Branch() {
         <Heading title={t("Branch Master")} isBreadcrumb={false} />
 
         <div className="row p-2">
-
-          <Input
+          {/* organisation */}
+          <ReactSelect
+            placeholderName={t("Organisation")}
+            searchable={true}
+            respclass="col-xl-4 col-md-4 col-sm-4 col-12"
+            id="organisationId"
+            name="organisationId"
+            removeIsClearable={true}
+            // dynamicOptions={classes}
+            dynamicOptions={handleReactSelectDropDownOptions(organisation, "name", "id")}
+            handleChange={handleSelect}
+            value={values?.organisationId}
+            requiredClassName="required-fields"
+          />
+          {/* <Input
             className="form-control required-fields"
-            name="organisationId" value={localData.OrganizationId} lable="Organisation Id"
-            respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} 
-            disabled={true}
-            />
+            name="organisationId" value={values.organisationId} lable="Organisation Id"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} /> */}
 
           <Input
             className="form-control required-fields"
@@ -139,19 +167,19 @@ function Branch() {
 
           {/* ===== ADDRESS ===== */}
           <Input
-            className="form-control "
+            className="form-control required-fields"
             name="street" value={values.address.street} lable="Street"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="city" value={values.address.city} lable="City"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="state" value={values.address.state} lable="State"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
@@ -163,52 +191,52 @@ function Branch() {
             onChange={(e) => handleChange(e, "address")} />
 
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="country" value={values.address.country} lable="Country"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           {/* ===== CONTACT ===== */}
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="phoneNumber" value={values.contact.phoneNumber} lable="Phone"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "contact")} />
 
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="email" value={values.contact.email} lable="Email"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "contact")} />
 
           {/* ===== LOCATION ===== */}
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="latitude" value={values.location.latitude} lable="Latitude"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "location")} />
 
           <Input
-            className="form-control "
+            className="form-control required-fields"
             name="longitude" value={values.location.longitude} lable="Longitude"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "location")} />
 
           {/* ===== OWNER ===== */}
           <Input
-            className="form-control "
+            className="form-control required-fields"
             name="ownerName" value={values.ownerName} lable="Owner Name"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="phoneNumber" value={values.ownerContact.phoneNumber} lable="Owner Phone"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "ownerContact")} />
 
           {/* ===== OTHER ===== */}
           <Input
-            className="form-control"
+            className="form-control required-fields"
             name="certification" value={values.certification} lable="Certification"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
