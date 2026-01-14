@@ -500,12 +500,13 @@ school:data.previousSchoolName
 
             {/* ================= ADDRESS CARD ================= */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-success text-white">
+                {/* <div className="card-header bg-success text-white">
                     <h5 className="mb-0  text-lg py-1 ml-2">
-                        {/* <i className="bi bi-geo-alt-fill me-2"></i> */}
+                       
                         Address Details
                     </h5>
-                </div>
+                </div> */}
+                <Heading title={t("Address Details")} isBreadcrumb={false}/>
                 <div className="card-body">
                     <div className="row g-3">
                         {Object.keys(values.address).map((key) => (
@@ -524,12 +525,13 @@ school:data.previousSchoolName
 
             {/* ================= OTHER INFO CARD ================= */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-info text-white">
+                {/* <div className="card-header bg-info text-white">
                     <h5 className="mb-0  text-lg py-1 ml-2">
-                        {/* <i className="bi bi-info-circle-fill me-2"></i> */}
+                       
                         Additional Information
                     </h5>
-                </div>
+                </div> */}
+                <Heading title={t("Additional Information")} isBreadcrumb={false}/>
                 <div className="card-body">
                     <div className="row g-3">
                         {Object.keys(values.otherInfo).map((key) => (
@@ -548,12 +550,13 @@ school:data.previousSchoolName
 
             {/* ================= PREVIOUS ACADEMICS CARD ================= */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-warning text-dark">
+                {/* <div className="card-header bg-warning text-dark">
                     <h5 className="mb-0  text-lg py-1 ml-2">
-                        {/* <i className="bi bi-book-fill me-2"></i> */}
+                        
                         Previous Academic Details
                     </h5>
-                </div>
+                </div> */}
+                <Heading title={t("Previous Academic Details")} isBreadcrumb={false}/>
                 <div className="card-body">
                     <div className="row g-3">
                         <ReactSelect
@@ -716,8 +719,8 @@ school:data.previousSchoolName
 
             {/* ================= PARENT DETAILS CARD (DYNAMIC) ================= */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-secondary">
-                    <div className="  text-white d-flex justify-content-between align-items-center w-100">
+                <div className="card-header ">
+                    {/* <div className="  text-white d-flex justify-content-between align-items-center w-100">
                         <h5 className="mb-0">
                             Parent/Guardian Details
                         </h5>
@@ -725,7 +728,13 @@ school:data.previousSchoolName
                         <button className="btn btn-light btn-sm" onClick={addParent}>
                             Add Parent
                         </button>
-                    </div>
+                    </div> */}
+                    <Heading title={t("Parent/Guardian Details")} isBreadcrumb={false}
+                    
+                    secondTitle={<button className="btn btn-light btn-sm" onClick={addParent}>
+                            Add Parent
+                        </button>}
+                        />
                 </div>
                 <div className="card-body">
                     {values.parents.map((parent, parentIndex) => (
@@ -853,17 +862,23 @@ school:data.previousSchoolName
 
             {/* ================= STUDENT DOCUMENTS CARD (DYNAMIC) ================= */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-dark">
-                    <div className="text-white d-flex justify-content-between align-items-center">
+                <div className="card-header ">
+                    {/* <div className="text-white d-flex justify-content-between align-items-center">
                         <h5 className="mb-0  text-lg py-1 ml-2">
                            
                             Student Documents
                         </h5>
                         <button className="btn btn-light btn-sm" onClick={addStudentDocument}>
-                            {/* <i className="bi bi-plus-circle me-1"></i> */}
+                            
                             Add Document
                         </button>
-                    </div>
+                    </div> */}
+                    <Heading title={t("Student Documents")} isBreadcrumb={false}
+                        secondTitle={<button className="btn btn-light btn-sm" onClick={addStudentDocument}>
+                            
+                            Add Document
+                        </button>}
+                    />
                 </div>
                 <div className="card-body">
                     {values.studentDocuments.map((doc, index) => (
@@ -926,12 +941,13 @@ school:data.previousSchoolName
 
             {/* ================= TRANSPORT CARD ================= */}
             <div className="card shadow-sm mb-4">
-                <div className="card-header bg-danger text-white">
+                {/* <div className="card-header bg-danger text-white">
                     <h5 className="mb-0  text-lg py-1 ml-2">
-                        {/* <i className="bi bi-bus-front-fill me-2"></i> */}
+                       
                         Transport Details
                     </h5>
-                </div>
+                </div> */}
+                <Heading title={t("Transport Details")} isBreadcrumb={false} />
                 <div className="card-body">
                     <div className="row g-3">
                         <Input

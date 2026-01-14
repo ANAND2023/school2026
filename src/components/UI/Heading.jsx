@@ -134,7 +134,8 @@ function Heading({
 
         <div className="card-header" onClick={onClick}
           // style={{ backgroundColor: currentTheme.headerBg }}
-          style={{ background: currentTheme?.primary + '30' }}
+          style={{ background: "rgb(153 168 201 / 19%)"}}
+          // style={{ background: currentTheme?.primary + '30' }}
         >
           <div className="d-flex align-items-center justify-content-between flex-wrap">
             {/* Left Side - Title/Breadcrumb */}

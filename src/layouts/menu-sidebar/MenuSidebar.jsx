@@ -8,20 +8,20 @@ import { X, Search, ChevronRight, ChevronDown, FileText, LayoutDashboard, Users,
 
 // Theme configurations
 const THEMES = {
-  dark: {
-    name: 'Dark',
-    sidebarBg: '#0f172a',
-    sidebarHeaderBg: '#020617',
-    sidebarText: '#94a3b8',
-    sidebarTextHover: '#ffffff',
-    sidebarActiveGradient: 'linear-gradient(90deg, rgba(37,99,235,0.15) 0%, transparent 100%)',
-    sidebarGroupHover: 'rgba(255,255,255,0.05)',
-    sidebarChildrenBg: 'rgba(0,0,0,0.2)',
-    searchBg: '#1e293b',
-    searchBorder: '#334155',
-    primary: '#2563eb',
-    activeBorder: '#2563eb'
-  },
+  // dark: {
+  //   name: 'Dark',
+  //   sidebarBg: '#0f172a',
+  //   sidebarHeaderBg: '#020617',
+  //   sidebarText: '#94a3b8',
+  //   sidebarTextHover: '#ffffff',
+  //   sidebarActiveGradient: 'linear-gradient(90deg, rgba(37,99,235,0.15) 0%, transparent 100%)',
+  //   sidebarGroupHover: 'rgba(255,255,255,0.05)',
+  //   sidebarChildrenBg: 'rgba(0,0,0,0.2)',
+  //   searchBg: '#1e293b',
+  //   searchBorder: '#334155',
+  //   primary: '#2563eb',
+  //   activeBorder: '#2563eb'
+  // },
   light: {
     name: 'Light',
     sidebarBg: '#ffffff',
@@ -36,34 +36,34 @@ const THEMES = {
     primary: '#2563eb',
     activeBorder: '#2563eb'
   },
-  purple: {
-    name: 'Purple',
-    sidebarBg: '#1e1b4b',
-    sidebarHeaderBg: '#0f0a2e',
-    sidebarText: '#a78bfa',
-    sidebarTextHover: '#ffffff',
-    sidebarActiveGradient: 'linear-gradient(90deg, rgba(139,92,246,0.15) 0%, transparent 100%)',
-    sidebarGroupHover: 'rgba(167,139,250,0.1)',
-    sidebarChildrenBg: 'rgba(0,0,0,0.2)',
-    searchBg: '#312e81',
-    searchBorder: '#4c1d95',
-    primary: '#8b5cf6',
-    activeBorder: '#8b5cf6'
-  },
-  green: {
-    name: 'Green',
-    sidebarBg: '#064e3b',
-    sidebarHeaderBg: '#022c22',
-    sidebarText: '#6ee7b7',
-    sidebarTextHover: '#ffffff',
-    sidebarActiveGradient: 'linear-gradient(90deg, rgba(16,185,129,0.15) 0%, transparent 100%)',
-    sidebarGroupHover: 'rgba(110,231,183,0.1)',
-    sidebarChildrenBg: 'rgba(0,0,0,0.2)',
-    searchBg: '#065f46',
-    searchBorder: '#047857',
-    primary: '#10b981',
-    activeBorder: '#10b981'
-  }
+  // purple: {
+  //   name: 'Purple',
+  //   sidebarBg: '#1e1b4b',
+  //   sidebarHeaderBg: '#0f0a2e',
+  //   sidebarText: '#a78bfa',
+  //   sidebarTextHover: '#ffffff',
+  //   sidebarActiveGradient: 'linear-gradient(90deg, rgba(139,92,246,0.15) 0%, transparent 100%)',
+  //   sidebarGroupHover: 'rgba(167,139,250,0.1)',
+  //   sidebarChildrenBg: 'rgba(0,0,0,0.2)',
+  //   searchBg: '#312e81',
+  //   searchBorder: '#4c1d95',
+  //   primary: '#8b5cf6',
+  //   activeBorder: '#8b5cf6'
+  // },
+  // green: {
+  //   name: 'Green',
+  //   sidebarBg: '#064e3b',
+  //   sidebarHeaderBg: '#022c22',
+  //   sidebarText: '#6ee7b7',
+  //   sidebarTextHover: '#ffffff',
+  //   sidebarActiveGradient: 'linear-gradient(90deg, rgba(16,185,129,0.15) 0%, transparent 100%)',
+  //   sidebarGroupHover: 'rgba(110,231,183,0.1)',
+  //   sidebarChildrenBg: 'rgba(0,0,0,0.2)',
+  //   searchBg: '#065f46',
+  //   searchBorder: '#047857',
+  //   primary: '#10b981',
+  //   activeBorder: '#10b981'
+  // }
 };
 
 export const MENU = {
