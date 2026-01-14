@@ -67,11 +67,11 @@ function Branch() {
 
   /* ================= API ================= */
   const getData = async () => {
-    const payload={
-  "employeeId": "",
-  "organisationID": values?.organisationId,
-  "isAll": 0
-}
+    const payload = {
+      "employeeId": "",
+      "organisationID": values?.organisationId,
+      "isAll": 0
+    }
     try {
       const res = await GetAllBranches(payload);
       if (res?.success) setTableData(res.data);
@@ -87,6 +87,8 @@ function Branch() {
 
   const handleSave = async () => {
     try {
+      if (!values.name) return notify("Brnach Name is required", "error");
+      if (!values.establishedYear) return notify("Established Year is required", "error");
       const res = await CreateBranch(values);
       if (res?.success) {
         notify(res.message, "success");
@@ -122,95 +124,97 @@ function Branch() {
         <Heading title={t("Branch Master")} isBreadcrumb={false} />
 
         <div className="row p-2">
-          
-          <Input 
-          className="form-control required-fields"
-          name="organisationId" value={values.organisationId} lable="Organisation Id"
-            respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
-          <Input 
-          className="form-control required-fields"
-          name="name" value={values.name} lable="Branch Name"
+          <Input
+            className="form-control required-fields"
+            name="organisationId" value={values.organisationId} lable="Organisation Id"
+            respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} 
+            disabled={true}
+            />
+
+          <Input
+            className="form-control required-fields"
+            name="name" value={values.name} lable="Branch Name"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
           {/* ===== ADDRESS ===== */}
-          <Input 
-          className="form-control required-fields"
-          name="street" value={values.address.street} lable="Street"
+          <Input
+            className="form-control "
+            name="street" value={values.address.street} lable="Street"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
-          <Input 
-          className="form-control required-fields"
-          name="city" value={values.address.city} lable="City"
+          <Input
+            className="form-control"
+            name="city" value={values.address.city} lable="City"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
-          <Input 
-          className="form-control required-fields"
-          name="state" value={values.address.state} lable="State"
+          <Input
+            className="form-control"
+            name="state" value={values.address.state} lable="State"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
-          <Input 
-          className="form-control"
-          name="zipCode" value={values.address.zipCode} lable="Zip Code"
+          <Input
+            className="form-control"
+            name="zipCode" value={values.address.zipCode} lable="Zip Code"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
-          <Input 
-          className="form-control required-fields"
-          name="country" value={values.address.country} lable="Country"
+          <Input
+            className="form-control"
+            name="country" value={values.address.country} lable="Country"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           {/* ===== CONTACT ===== */}
-          <Input 
-          className="form-control required-fields"
-          name="phoneNumber" value={values.contact.phoneNumber} lable="Phone"
+          <Input
+            className="form-control"
+            name="phoneNumber" value={values.contact.phoneNumber} lable="Phone"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "contact")} />
 
-          <Input 
-          className="form-control required-fields"
-          name="email" value={values.contact.email} lable="Email"
+          <Input
+            className="form-control"
+            name="email" value={values.contact.email} lable="Email"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "contact")} />
 
           {/* ===== LOCATION ===== */}
-          <Input 
-          className="form-control required-fields"
-          name="latitude" value={values.location.latitude} lable="Latitude"
+          <Input
+            className="form-control"
+            name="latitude" value={values.location.latitude} lable="Latitude"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "location")} />
 
-          <Input 
-          className="form-control required-fields"
-          name="longitude" value={values.location.longitude} lable="Longitude"
+          <Input
+            className="form-control "
+            name="longitude" value={values.location.longitude} lable="Longitude"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "location")} />
 
           {/* ===== OWNER ===== */}
-          <Input 
-          className="form-control required-fields"
-          name="ownerName" value={values.ownerName} lable="Owner Name"
+          <Input
+            className="form-control "
+            name="ownerName" value={values.ownerName} lable="Owner Name"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
-          <Input 
-          className="form-control required-fields"
-          name="phoneNumber" value={values.ownerContact.phoneNumber} lable="Owner Phone"
+          <Input
+            className="form-control"
+            name="phoneNumber" value={values.ownerContact.phoneNumber} lable="Owner Phone"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "ownerContact")} />
 
           {/* ===== OTHER ===== */}
-          <Input 
-          className="form-control required-fields"
-          name="certification" value={values.certification} lable="Certification"
+          <Input
+            className="form-control"
+            name="certification" value={values.certification} lable="Certification"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
-          <Input 
-          className="form-control required-fields"
-          type="number" name="establishedYear" value={values.establishedYear}
+          <Input
+            className="form-control required-fields"
+            type="number" name="establishedYear" value={values.establishedYear}
             lable="Established Year"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
@@ -223,15 +227,15 @@ function Branch() {
         </div>
 
         <Tables
-                    thead={[
-                        { name: "Name" },
-                       
-                        { name: "Action" }
-                    ]}
-                    tbody={tableData.map((item, index) => ({
-                        name: item.name,
-                       
-                        action: <>
+          thead={[
+            { name: "Name" },
+
+            { name: "Action" }
+          ]}
+          tbody={tableData.map((item, index) => ({
+            name: item.name,
+
+            action: <>
 
               <div
                 className="d-flex align-items-center justify-content-center gap-2"
@@ -256,8 +260,8 @@ function Branch() {
               </div>
 
             </>,
-                    }))}
-                />
+          }))}
+        />
       </div>
     </>
   );
