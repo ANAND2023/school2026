@@ -10,11 +10,11 @@ import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
 import { CreateBranch, GetAllBranches, GetAllOrganisation } from "../../networkServices/AcademicYear";
 import Input from "../formComponent/Input";
 import ReactSelect from "../formComponent/ReactSelect";
+import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 
 function Branch() {
   const [t] = useTranslation();
-
-  /* ================= INITIAL DATA ================= */
+  const localData = useLocalStorage("userData", "get");
   const initialData = {
     organisationId: "",
     name: "",
@@ -84,7 +84,7 @@ function Branch() {
     const payload = {
       "employeeId": "",
       "organisationID": values?.organisationId ?? ID,
-      "isAll": 0
+      "isAll": 1
     }
     try {
       const res = await GetAllBranches(payload);
@@ -101,6 +101,8 @@ function Branch() {
 
   const handleSave = async () => {
     try {
+      if (!values.name) return notify("Brnach Name is required", "error");
+      if (!values.establishedYear) return notify("Established Year is required", "error");
       const res = await CreateBranch(values);
       if (res?.success) {
         notify(res.message, "success");

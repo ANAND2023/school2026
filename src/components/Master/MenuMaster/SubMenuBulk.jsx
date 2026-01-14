@@ -9,13 +9,12 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { getEmployeeWise } from "../../../store/reducers/common/CommonExportFunction";
+import { GetAllBranches } from "../../../networkServices/AcademicYear";
 
 const SubMenuBulk = () => {
     const localData = useLocalStorage("userData", "get");
-    const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
-        (state) => state?.CommonSlice
-    );
-    const dispatch = useDispatch();
+   
+     const [branchList, setBranchList] = useState([])
     const initialData = {
         menuId: null,
         name: "",
@@ -32,6 +31,20 @@ const SubMenuBulk = () => {
     const [menuList, setMenuList] = useState([]);
 
 
+    const getBranchData = async () => {
+            const payload = {
+              "employeeId": "",
+              "organisationID": localData?.OrganizationId,
+              "isAll": 1
+            }
+            try {
+              const res = await GetAllBranches(payload);
+              if (res?.success) setBranchList(res.data);
+              else notify(res?.message, "error");
+            } catch {
+              notify("Error fetching data", "error");
+            }
+          };
     /* ================= HANDLERS ================= */
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -142,6 +155,7 @@ const SubMenuBulk = () => {
     useEffect(() => {
         // handleGetMenus()
         handleGetSubMenus()
+        getBranchData()
     }, [])
 
 
@@ -201,14 +215,6 @@ const SubMenuBulk = () => {
   { value: "fa fa-dashboard", label: <i className="fa fa-dashboard" /> },
 ];
 
-    useEffect(() => {
-        if (localData?.UserId) {
-            dispatch(getEmployeeWise({
-                employeeId: localData?.UserId,
-                OrganizationId: localData?.OrganizationId
-            }));
-        }
-    }, [dispatch]);
     return (
         <>
             <div className="card p-2">
@@ -219,7 +225,7 @@ const SubMenuBulk = () => {
                         respclass="col-xl-2 col-md-4 col-sm-6 col-12"
                         name="branchId"
                         // dynamicOptions={branchList}
-                        dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+                        dynamicOptions={branchList?.map((ele) => ({
                             value: ele.id,
                             label: ele.name
                         }))}

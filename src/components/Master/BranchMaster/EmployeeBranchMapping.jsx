@@ -55,6 +55,7 @@ const EmployeeBranchMap = () => {
       notify("Employee & Branch required", "error");
       return;
     }
+    debugger
 
     const payload = [
       {

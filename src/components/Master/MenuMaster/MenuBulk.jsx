@@ -10,6 +10,7 @@ import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getEmployeeWise } from "../../../store/reducers/common/CommonExportFunction";
+import { GetAllBranches } from "../../../networkServices/AcademicYear";
 // import { CreateMenu, GetMenus } from "../../../networkServices/menuApi";
 
 const MenuBulk = () => {
@@ -20,18 +21,29 @@ const MenuBulk = () => {
         icon: "",
         displayOrder: "",
         branchId: null,
-        orgId:localData?.OrganizationId// normally login se aata hai
+        orgId: localData?.OrganizationId// normally login se aata hai
     };
-     const dispatch = useDispatch();
-//   const localData = useLocalStorage("userData", "get");
+    const dispatch = useDispatch();
+    //   const localData = useLocalStorage("userData", "get");
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
-  const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
-    (state) => state?.CommonSlice
-  );
+    const [branchList, setBranchList] = useState([])
 
 
-  
+const getBranchData = async () => {
+        const payload = {
+          "employeeId": "",
+          "organisationID": localData?.OrganizationId,
+          "isAll": 1
+        }
+        try {
+          const res = await GetAllBranches(payload);
+          if (res?.success) setBranchList(res.data);
+          else notify(res?.message, "error");
+        } catch {
+          notify("Error fetching data", "error");
+        }
+      };
 
     /* =======================
         INPUT HANDLER
@@ -42,11 +54,11 @@ const MenuBulk = () => {
     };
 
     const handleSelect = (name, value) => {
-        
+
         setValues((prev) => ({ ...prev, [name]: value }));
         if (name === "branchId") {
             getModuleBulk(value?.value);
-            
+
         }
     };
 
@@ -72,15 +84,15 @@ const MenuBulk = () => {
             }
         ];
 
-       
+
         try {
             const res = await MenuCreatebulk(payload);
             if (res?.success) {
-getModuleBulk(values.branchId?.value)
+                getModuleBulk(values.branchId?.value)
                 //   setTableData((prev) => [...prev, payload[0]]);
                 setValues(initialData);
                 notify("Saved Successfully", "success");
-                
+
             } else {
                 notify(res?.message, "error");
             }
@@ -103,7 +115,7 @@ getModuleBulk(values.branchId?.value)
             if (res?.success) {
                 console.log("first", res);
                 setTableData(res?.data);
-               
+
                 //   notify("Saved Successfully", "success");
 
             } else {
@@ -130,20 +142,13 @@ getModuleBulk(values.branchId?.value)
         setTableData(data);
     };
 
-      useEffect(() => {
-    if (localData?.UserId) {
-      dispatch(getEmployeeWise({ 
-        employeeId: localData?.UserId,
-        OrganizationId: localData?.OrganizationId
-      }));
-    }
-  }, [dispatch]);
-    // useEffect(() => {
-    //     getModuleBulk()
-    // }, [])
-//  {GetEmployeeWiseCenter?.map((ele) => (
-//               <option key={ele.id} value={ele.id}>{ele.name}</option>
-//             ))}
+   
+    useEffect(() => {
+        getBranchData()
+    }, [])
+    //  {GetEmployeeWiseCenter?.map((ele) => (
+    //               <option key={ele.id} value={ele.id}>{ele.name}</option>
+    //             ))}
     return (
         <>
             <div className="card p-2">
@@ -151,12 +156,12 @@ getModuleBulk(values.branchId?.value)
 
                 {/* ================= FORM ================= */}
                 <div className="row p-2">
-                     <ReactSelect
+                    <ReactSelect
                         placeholderName="Branch"
                         respclass="col-xl-2 col-md-4 col-sm-6 col-12"
                         name="branchId"
                         // dynamicOptions={branchList}
-                        dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+                        dynamicOptions={branchList?.map((ele) => ({
                             value: ele.id,
                             label: ele.name
                         }))}
@@ -205,7 +210,7 @@ getModuleBulk(values.branchId?.value)
                         className="form-control"
                     />
 
-                   
+
 
 
                     <div className="col-12 text-end ">
@@ -232,36 +237,36 @@ getModuleBulk(values.branchId?.value)
                         name: item.name,
                         code: item.code,
                         Order: item.displayOrder,
-                      
+
                         // Icon:<span><i className="fa fa-solid fa-user"></i></span> ,
                         Icon: <i className={`${item.icon} me-2`}></i>,
                         // Icon: item.icon,
-                          Branch: item.Branch,
-                          action: <>
+                        Branch: item.Branch,
+                        action: <>
 
-              <div
-                className="d-flex align-items-center justify-content-center gap-2"
-              // className="row gap-2"
-              >
-                <button
-                  id="editBtn"
-                  onclick="handleEdit(item.id)"
-                  title="Edit"
-                  className="d-flex align-items-center justify-content-center"
-                >
-                  <i class=" bi-pencil-square"></i>
-                </button>
+                            <div
+                                className="d-flex align-items-center justify-content-center gap-2"
+                            // className="row gap-2"
+                            >
+                                <button
+                                    id="editBtn"
+                                    onclick="handleEdit(item.id)"
+                                    title="Edit"
+                                    className="d-flex align-items-center justify-content-center"
+                                >
+                                    <i class=" bi-pencil-square"></i>
+                                </button>
 
-                <button
-                  id="deleteBtn"
-                  onclick="handleDelete(item.id)"
-                  title="Delete"
-                >
-                  <i class="bi-trash3"></i>
-                </button>
-              </div>
+                                <button
+                                    id="deleteBtn"
+                                    onclick="handleDelete(item.id)"
+                                    title="Delete"
+                                >
+                                    <i class="bi-trash3"></i>
+                                </button>
+                            </div>
 
-            </>,
+                        </>,
                     }))}
                 />
             </div>
