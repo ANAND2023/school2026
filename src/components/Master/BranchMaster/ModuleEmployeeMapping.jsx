@@ -235,7 +235,7 @@ const ModuleEmployeeMapping = () => {
           />
 
 
-          <div className=" text-end ">
+          <div className="col-xl-3 col-md-4 col-sm-6 col-12">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Save Mapping
             </button>

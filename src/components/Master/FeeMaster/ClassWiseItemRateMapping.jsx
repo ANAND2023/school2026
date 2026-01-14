@@ -180,7 +180,7 @@ function ClassWiseItemRateMapping() {
           value={values?.item}
         />
 
-        <div className="col-xl-2 col-md-4 col-sm-6 col-12 mt-4">
+        <div className="col-xl-2 col-md-4 col-sm-6 col-12">
           <button
             onClick={handleSave}
             className="btn btn-sm btn-primary"

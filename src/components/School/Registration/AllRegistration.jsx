@@ -1224,18 +1224,17 @@ function AllRegistration() {
       setValues((prev) => ({ ...prev, [name]: value }));
     }
   };
-
+  const selectedRows = tableData.filter(item => item.isChecked);
+      console.log("tableData", tableData);
+    useEffect(() => {
+      
+      const selectedRows = tableData.filter(item => item.isChecked);
+      // console.log("tableData", tableData);
+      console.log("selectedRows", selectedRows);
+    }, [tableData]);
   const handleSearch = async () => {
     const payload =
-    // {
-    //   "studentMasterId": null,
-    //   "studentId": null,
-    //   "firstName": null,
-    //   "mobile": null,
-    //   "email": null,
-    //   "fromDate":null,
-    //   "toDate": null
-    // }
+    
     {
       "studentMasterId": null,
       "studentId": values.StudentID ?? null,
@@ -1430,7 +1429,12 @@ function AllRegistration() {
       // footer: <></>
     });
     // }
-    //   const selectedRows = tableData.filter(item => item.isChecked);
+    useEffect(() => {
+      
+      const selectedRows = tableData.filter(item => item.isChecked);
+      clgear.log("Selected Rows =>", selectedRows);
+    }, []);
+      
     // debugger
     //   if (!selectedRows.length) {
     //     notify("Please select at least one student", "warning");
@@ -1574,6 +1578,7 @@ function AllRegistration() {
               // className="btn btn-lg btn-success"
               className="btn btn-sm btn-primary ml-1"
               type="button"
+              disabled={selectedRows.length === 0}
             >
               {t("Admission")}
             </button>
