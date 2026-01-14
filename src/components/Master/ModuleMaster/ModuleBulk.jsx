@@ -9,13 +9,11 @@ import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getEmployeeWise } from "../../../store/reducers/common/CommonExportFunction";
+import { GetAllBranches } from "../../../networkServices/AcademicYear";
 
 const ModuleBulk = () => {
   const localData = useLocalStorage("userData", "get");
-  const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
-    (state) => state?.CommonSlice
-  );
-  const dispatch = useDispatch();
+
   const initialData = {
     name: "",
     code: "",
@@ -28,6 +26,7 @@ const ModuleBulk = () => {
 
   const [values, setValues] = useState(initialData);
   const [tableData, setTableData] = useState([]);
+  const [branchList, setBranchList] = useState([])
 
 
   /* ================= HANDLERS ================= */
@@ -42,7 +41,20 @@ const ModuleBulk = () => {
       getModuleBulk(option?.value);
     }
   };
-
+    const getBranchData = async () => {
+        const payload = {
+          "employeeId": "",
+          "organisationID": localData?.OrganizationId,
+          "isAll": 1
+        }
+        try {
+          const res = await GetAllBranches(payload);
+          if (res?.success) setBranchList(res.data);
+          else notify(res?.message, "error");
+        } catch {
+          notify("Error fetching data", "error");
+        }
+      };
   /* ================= SAVE ================= */
   const handleSave = async () => {
     if (!values.name || !values.code) {
@@ -79,6 +91,7 @@ const ModuleBulk = () => {
       notify("Something went wrong", "error");
     }
   };
+
   const getModuleBulk = async ( branchId) => {
 
 
@@ -113,16 +126,12 @@ const ModuleBulk = () => {
     setTableData(data);
   };
 
-  useEffect(() => {
-    if (localData?.UserId) {
-      dispatch(getEmployeeWise({
-        employeeId: localData?.UserId,
-        OrganizationId: localData?.OrganizationId
-      }));
-    }
-  }, [dispatch]);
+
+
+
   useEffect(() => {
     getModuleBulk();
+    getBranchData()
   }, []);
   return (
     <>
@@ -136,7 +145,7 @@ const ModuleBulk = () => {
             respclass="col-xl-2 col-md-4 col-sm-6 col-12"
             name="branchId"
             // dynamicOptions={branchList}
-            dynamicOptions={GetEmployeeWiseCenter?.map((ele) => ({
+            dynamicOptions={branchList?.map((ele) => ({
               value: ele.id,
               label: ele.name
             }))}

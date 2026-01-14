@@ -9,13 +9,13 @@ import Modal from "../../components/modalComponent/Modal";
 import { notify } from "../../utils/utils";
 import { CreateBranch, GetAllBranches } from "../../networkServices/AcademicYear";
 import Input from "../formComponent/Input";
+import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 
 function Branch() {
   const [t] = useTranslation();
-
-  /* ================= INITIAL DATA ================= */
+  const localData = useLocalStorage("userData", "get");
   const initialData = {
-    organisationId: "5bbf859d-9907-4117-aead-c260d030d335",
+    OrganizationId: "5bbf859d-9907-4117-aead-c260d030d335",
     name: "",
     address: {
       street: "",
@@ -69,8 +69,8 @@ function Branch() {
   const getData = async () => {
     const payload = {
       "employeeId": "",
-      "organisationID": values?.organisationId,
-      "isAll": 0
+      "organisationID": localData?.OrganizationId,
+      "isAll": 1
     }
     try {
       const res = await GetAllBranches(payload);
@@ -127,7 +127,7 @@ function Branch() {
 
           <Input
             className="form-control required-fields"
-            name="organisationId" value={values.organisationId} lable="Organisation Id"
+            name="organisationId" value={localData.OrganizationId} lable="Organisation Id"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} 
             disabled={true}
             />

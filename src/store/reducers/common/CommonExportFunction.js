@@ -668,7 +668,7 @@ export const getEmployeeWise = createAsyncThunk(
       data: {
         "employeeId": employeeId,
         "organisationID": OrganizationId,
-        "isAll": 1
+        "isAll": 0
       }
     };
     dispatch(setLoading(true));
