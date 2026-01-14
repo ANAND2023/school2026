@@ -8,7 +8,7 @@ export const apiUrls = {
 
  loginAdmin: "identity/api/v1/auth/login",
  BranchMastersGetBranch: "master/api/v1/BranchMasters/GetBranch",
- getModules: "master/api/v1/MenuManagment/get-modules",
+ getModules: "master/api/v1/MenuManagment/get-module-employee-mappings",
  getMenuWithSubmenus: "master/api/v1/MenuManagment/get-menu-with-submenus",
 //  loginAdmin: "Auth/login",
 

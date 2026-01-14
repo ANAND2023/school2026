@@ -1497,7 +1497,7 @@ function AllRegistration() {
             <button
               onClick={handleReg}
               // className="btn btn-lg btn-success"
-              className="btn btn-sm btn-primary"
+              className="btn btn-sm btn-primary mx-2"
               type="button"
             >
               {t("Bulk Registration")}
@@ -1505,7 +1505,7 @@ function AllRegistration() {
             <button
               onClick={handleOpen}
               // className="btn btn-lg btn-success"
-              className="btn btn-sm btn-primary"
+              className="btn btn-sm btn-primary "
               type="button"
             >
               {t("Registration")}
@@ -1568,6 +1568,7 @@ function AllRegistration() {
             >
               {t("Search")}
             </button>
+          </div>
             <button
               onClick={handleAdmission}
               // className="btn btn-lg btn-success"
@@ -1576,7 +1577,6 @@ function AllRegistration() {
             >
               {t("Admission")}
             </button>
-          </div>
 
         </div>
         {/* <Heading title={t(" Details")} isBreadcrumb={false} /> */}

@@ -502,7 +502,7 @@ const Header = React.memo(() => {
 
   const currentTheme = THEMES[theme];
     const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
-  const activeRole = GetRoleList?.find(r => r.id == localData?.defaultRole) || null;
+  const activeRole = GetRoleList?.find(r => r.moduleId == localData?.defaultRole) || null;
 
   useEffect(() => {
     // Load saved theme from localStorage
@@ -578,8 +578,7 @@ const Header = React.memo(() => {
     // 2. Fetch Roles for the new centre
     const roleAction = await dispatch(
       GetRoleListByEmployeeIDAndCentreID({
-        branchId: newCentreId,
-        orgId: localData?.OrganizationId,
+        empID: localData?.UserId,
       })
     );
 
@@ -761,7 +760,7 @@ const Header = React.memo(() => {
                 backgroundColor: currentTheme.primary,
                 display: 'inline-block'
               }}></span>
-              <span>{activeRole?.name || "Select Module"}</span>
+              <span>{activeRole?.moduleName || "Select Module"}</span>
             </div>
             <ChevronDown size={14} style={{ color: '#94a3b8' }} />
           </button>
@@ -771,7 +770,7 @@ const Header = React.memo(() => {
             onChange={(e) => handleChangeRole(e)}
           >
             {GetRoleList?.map((ele) => (
-              <option key={ele.id} value={ele.id}>{ele.name}</option>
+              <option key={ele.moduleId} value={ele.moduleId}>{ele.moduleName}</option>
             ))}
           </select>
         </div>

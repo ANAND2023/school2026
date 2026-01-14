@@ -636,10 +636,10 @@ export const GetAuthorization = createAsyncThunk(
 //         `${apiUrls?.BranchMastersGetBranch}`,
 //         options
 //       );
-      
+
 //       // FIX: Handle LocalStorage update safely
 //       const prevData = useLocalStorage("userData", "get");
-      
+
 //       // Check if we have branches
 //       if(data?.data && data.data.length > 0) {
 //           // If defaultCentre exists in storage and is valid in this list, keep it. 
@@ -681,16 +681,16 @@ export const getEmployeeWise = createAsyncThunk(
 
       // Safe update of LocalStorage
       const prevData = useLocalStorage("userData", "get");
-      if(data?.data && data.data.length > 0) {
-          // If current defaultCentre is invalid, set to 1st one
-          const isCurrentValid = data.data.find(b => b.id == prevData?.defaultCentre);
-          
-          if (!isCurrentValid) {
-             const newData = { ...prevData, defaultCentre: data.data[0].id , defaultCenterName: data.data[0].name };
-             useLocalStorage("userData", "set", newData);
-          }
+      if (data?.data && data.data.length > 0) {
+        // If current defaultCentre is invalid, set to 1st one
+        const isCurrentValid = data.data.find(b => b.id == prevData?.defaultCentre);
+
+        if (!isCurrentValid) {
+          const newData = { ...prevData, defaultCentre: data.data[0].id, defaultCenterName: data.data[0].name };
+          useLocalStorage("userData", "set", newData);
+        }
       }
-      
+
       return data;
     } catch {
       dispatch(setLoading(false));
@@ -700,14 +700,12 @@ export const getEmployeeWise = createAsyncThunk(
 
 export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
   "GetRoleList",
-  async ({ orgId, branchId }, { dispatch }) => {
+  async ({ empID }, { dispatch }) => {
     const options = {
       method: "POST",
       data: {
-        "searchText": "",
-        "isAll": 0,
-        "orgId": orgId,
-        "branchId": branchId,
+        "employeeId": empID,
+        "moduleId": "",
         "isActive": 1
       }
     };
@@ -717,17 +715,17 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
         `${apiUrls.getModules}`,
         options
       );
-      
+
       // FIX: Handle Role Default Logic
       const prevData = useLocalStorage("userData", "get");
-      
-      if(data?.data && data.data.length > 0) {
-           // If defaultRole exists and is valid, keep it, else take first [0]
-           const currentRoleValid = data.data.find(r => r.id == prevData?.defaultRole);
-           const newDefaultRole = currentRoleValid ? prevData.defaultRole : data.data[0].id;
 
-           const newData = { ...prevData, defaultRole: newDefaultRole };
-           useLocalStorage("userData", "set", newData);
+      if (data?.data && data.data.length > 0) {
+        // If defaultRole exists and is valid, keep it, else take first [0]
+        const currentRoleValid = data.data.find(r => r.moduleId == prevData?.defaultRole);
+        const newDefaultRole = currentRoleValid ? prevData.defaultRole : data.data[0].moduleId;
+
+        const newData = { ...prevData, defaultRole: newDefaultRole };
+        useLocalStorage("userData", "set", newData);
       }
 
       dispatch(setLoading(false));
