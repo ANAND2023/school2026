@@ -1,0 +1,495 @@
+
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { t } from "i18next";
+import Heading from "../../UI/Heading";
+import ReactSelect from "../../formComponent/ReactSelect";
+import MultiSelectComp from "../../formComponent/MultiSelectComp";
+import DatePicker from "../../formComponent/DatePicker";
+import { notify } from "../../../utils/ustil2";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+import { GetAllClasses } from "../../../networkServices/AcademicYear";
+import { AcademicMasterget_all_term, create_exam, get_created_exam } from "../../../networkServices/School/exam";
+import { handleReactSelectDropDownOptions } from "../../../utils/utils";
+import moment from "moment";
+import TimePicker from "../../formComponent/TimePicker";
+import Tables from "../../UI/customTable";
+
+const MarksUpload = () => {
+    const { GetEmployeeWiseCenter } = useSelector(
+        (state) => state?.CommonSlice
+    );
+
+    const userData = useLocalStorage("userData", "get");
+    const { VITE_DATE_FORMAT } = import.meta.env;
+
+    const [classes, setClasses] = useState([]);
+
+    const [values, setValues] = useState({
+        class_Name: { label: "", value: "" },
+        branch: { label: "", value: "" },
+        allExam: { label: "", value: "" },
+        term: { label: "", value: "" },
+        Subject: []
+    });
+
+    /* ================= EXAM ROW STATE ================= */
+    const [examRows, setExamRows] = useState([]);
+    const [allExam, setAllExam] = useState([]);
+    const [allTerm, setAllTerm] = useState([]);
+
+    /* ================= APPLY TO ALL ================= */
+    const [applyAll, setApplyAll] = useState({
+        examDate: "",
+        startTime: "",
+        endTime: "",
+        passingMarks: "",
+        maxMarks: ""
+    });
+
+    /* ================= API ================= */
+    const getClass = async () => {
+        try {
+            const res = await GetAllClasses();
+            if (res?.success) setClasses(res?.data);
+            else notify(res?.message, "error");
+        } catch {
+            notify("Error fetching classes", "error");
+        }
+    };
+
+    useEffect(() => {
+        getClass();
+    }, []);
+
+    /* ================= HANDLERS ================= */
+    const handleSelect = (name, option) => {
+        setValues((prev) => ({ ...prev, [name]: option }));
+    };
+
+    const handleMultiSelectChange = (name, selectedOptions) => {
+        setValues((prev) => ({ ...prev, [name]: selectedOptions }));
+
+        const rows = selectedOptions.map((sub) => ({
+            subjectId: sub.code,
+            subjectName: sub.name,
+            examDate: "",
+            startTime: "",
+            endTime: "",
+            passingMarks: "",
+            maxMarks: ""
+        }));
+
+        setExamRows(rows);
+    };
+
+    const handleApplyAllChange = (e) => {
+        const { name, value } = e.target;
+
+        setApplyAll((prev) => ({ ...prev, [name]: value }));
+
+        setExamRows((prev) =>
+            prev.map((row) => ({
+                ...row,
+                [name]: value
+            }))
+        );
+    };
+
+    const handleRowChange = (index, name, value) => {
+        const updated = [...examRows];
+        updated[index][name] = value;
+        setExamRows(updated);
+    };
+
+    /* ================= SAVE ================= */
+    const handleSave = async () => {
+        if (!values.class_Name?.value || !values.branch?.value || examRows.length === 0) {
+            notify(t("Please fill all mandatory fields"), "error");
+            return;
+        }
+
+        const payload = examRows.map((row) => ({
+            examId: values?.allExam?.value || "",
+            classId: values.class_Name.value,
+            subjectId: row.subjectId,
+            examDate: moment(row.examDate).format("YYYY-MM-DD"),
+            startTime: moment(row.startTime).format("hh:mm A"),
+            endTime: moment(row.endTime).format("hh:mm A"),
+            passingMarks: Number(row.passingMarks),
+            maxMarks: Number(row.maxMarks),
+            orgId: userData?.OrganizationId,
+            orgName: userData?.OrganizationName,
+            branchId: values.branch.value,
+            branchName: values.branch.label
+        }));
+
+        console.log("FINAL PAYLOAD 👉", payload);
+
+        try {
+            const res = await create_exam(payload);
+            if (res?.success) notify("Exam timetable saved", "success");
+            else notify("Error saving exam timetable", "error");
+        } catch (err) {
+            console.error(err);
+            notify("Something went wrong", "error");
+        }
+    };
+
+    /* ================= STATIC SUBJECT LIST ================= */
+    const ListSubject = [
+        { id: 1, name: "Mathematics" },
+        { id: 2, name: "Science" },
+        { id: 3, name: "History" },
+        { id: 4, name: "Geography" },
+        { id: 5, name: "English" }
+    ];
+     const fetchTerms = async () => {
+            try {
+                const response = await AcademicMasterget_all_term();
+                // Checking response structure based on your provided JSON
+                if (response && Array.isArray(response)) {
+                    setAllTerm(response);
+                } else if (response?.success && response?.data) {
+                    setAllTerm(response.data);
+                } else {
+                    setAllTerm([]);
+                }
+            } catch (error) {
+                console.error("Error fetching terms:", error);
+                setAllTerm([]);
+            }
+        };
+    // const getAllExam = async (branch,term) => {
+        
+    //     // if ( !branch || !term) {
+    //     //     notify(t("Please fill all mandatory fields"), "error");
+    //     //     return;
+    //     // }
+
+    //     const payload =
+    //     {
+    //         "orgId": userData?.OrganizationId,
+    //         "branchId": branch,
+    //         "examId": "",
+    //         "termId":term,
+    //     }
+
+    //     try {
+    //         const res = await get_created_exam(payload);
+    //         if (res?.success) {
+    //             setAllExam(res?.data);
+    //             notify(t("Exam created successfully"), "success");
+
+    //         }
+    //         else notify(t("Error creating exam"), "error");
+    //     } catch (error) {
+    //         console.log("error", error)
+    //     }
+    // };
+
+ const getAllExam = async (branch, term) => {
+       
+
+        const payload =
+        {
+            "orgId": userData?.OrganizationId,
+            "branchId": values.branch.value,
+            "examId": "",
+            "termId": values.term.value,
+        }
+
+        try {
+            const res = await get_created_exam(payload);
+            if (res?.success) {
+                setTableData(res?.data);
+                notify(t("Exam created successfully"), "success");
+
+            }
+            else notify(t("Error creating exam"), "error");
+        } catch (error) {
+            console.log("error", error)
+        }
+    };
+    //    useEffect(() => {
+           
+    //         getAllExam(values.branch?.value, values.term?.value, );
+    //     }, [values.branch, values.term, ]);
+    useEffect(() => {
+        getAllExam(values?.branch?.value,values?.term?.value);
+    }, [values.branch,values.term]);
+    useEffect(() => {
+        fetchTerms();
+    }, []);
+    return (
+        <>
+            <div className="card border">
+                <Heading title={t("Exam Timetable")} />
+
+                <div className="card-body">
+                    <div className="row">
+                        <ReactSelect
+                            placeholderName={t("Branch")}
+                            name="branch"
+                            respclass="col-md-3"
+                            dynamicOptions={GetEmployeeWiseCenter?.map((b) => ({
+                                value: b.id,
+                                label: b.name
+                            }))}
+                            handleChange={handleSelect}
+                            value={values.branch}
+                        />
+                        <ReactSelect
+                            placeholderName={t("Class")}
+                            name="class_Name"
+                            respclass="col-md-3"
+                            dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")}
+                            handleChange={handleSelect}
+                            value={values.class_Name}
+                        />
+                         <ReactSelect
+                            placeholderName={t("Exam")}
+                            searchable={true}
+                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                            id="allExam"
+                            name="allExam"
+                            removeIsClearable={true}
+                            // dynamicOptions={classes}
+                            dynamicOptions={handleReactSelectDropDownOptions(allExam, "examName", "id")}
+                            handleChange={handleSelect}
+                            value={values?.allExam?.value}
+                            // requiredClassName="required-fields"
+                        />
+<MultiSelectComp
+                            respclass="col-md-4"
+                            name="Subject"
+                            placeholderName={t("Subject")}
+                            dynamicOptions={ListSubject.map((s) => ({
+                                name: s.name,
+                                code: s.id
+                            }))}
+                            handleChange={handleMultiSelectChange}
+                            value={values.Subject}
+                        />  
+
+                        
+                        {/* <ReactSelect
+                            placeholderName={t("Term")}
+                            searchable={true}
+                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                            id="term"
+                            name="term"
+                            removeIsClearable={true}
+                            // dynamicOptions={classes}
+                            dynamicOptions={handleReactSelectDropDownOptions(allTerm, "termName", "id")}
+                            handleChange={handleSelect}
+                            value={values?.term?.value}
+                            // requiredClassName="required-fields"
+                        /> */}
+                       
+                        
+
+                                             
+                    </div>
+                    {examRows.length > 0 && (
+                        <div className="table-responsive mt-4">
+                            <table className="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Exam Date</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Passing</th>
+                                        <th>Max</th>
+                                    </tr>
+
+                                    {/* APPLY TO ALL */}
+                                    <tr className="bg-light">
+                                        <th>All</th>
+                                        <th>
+                                            {/* <input
+                        type="date"
+                        name="examDate"
+                        className="form-control"
+                        onChange={handleApplyAllChange}
+                      /> */}
+                                            <DatePicker
+                                                id="examDate"
+                                                name="examDate"
+                                                placeholder={VITE_DATE_FORMAT}
+                                                lable={t("")}
+                                                className="custom-calendar"
+                                                // value={row.examDate}
+                                                // handleChange={handleChange}
+                                                handleChange={handleApplyAllChange}
+                                            // respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                                            // maxDate={values?.toDate}
+                                            />
+                                        </th>
+                                        <th>
+                                            <TimePicker
+                                                placeholderName=""
+                                                lable={t("")}
+                                                id="startTime"
+                                                name="startTime"
+                                                // value={payload?.time}
+                                                // respclass="col-xl-2 col-md-3 col-sm-4 col-12"
+                                                handleChange={handleApplyAllChange}
+                                            />
+                                            {/* <input
+                        type="time"
+                        name="startTime"
+                        className="form-control"
+                        onChange={handleApplyAllChange}
+                      /> */}
+                                        </th>
+                                        <th>
+                                            <TimePicker
+                                                placeholderName=""
+                                                lable={t("")}
+                                                id="endTime"
+                                                name="endTime"
+                                                // value={payload?.time}
+                                                // respclass="col-xl-2 col-md-3 col-sm-4 col-12"
+                                                handleChange={handleApplyAllChange}
+                                            />
+                                            {/* <input
+                        type="time"
+                        name="endTime"
+                        className="form-control"
+                        onChange={handleApplyAllChange}
+                      /> */}
+                                        </th>
+                                        <th>
+                                            <input
+                                                type="number"
+                                                name="passingMarks"
+                                                className="form-control"
+                                                onChange={handleApplyAllChange}
+                                            />
+                                        </th>
+                                        <th>
+                                            <input
+                                                type="number"
+                                                name="maxMarks"
+                                                className="form-control"
+                                                onChange={handleApplyAllChange}
+                                            />
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {examRows.map((row, index) => (
+                                        <tr key={index}>
+                                            <td>{row.subjectName}</td>
+                                            <td>
+                                                <DatePicker
+                                                    id="examDate"
+                                                    name="examDate"
+                                                    placeholder={VITE_DATE_FORMAT}
+                                                    lable={t("Start Date ")}
+                                                    className="custom-calendar"
+                                                    value={row.examDate}
+                                                    // handleChange={handleChange}
+                                                    handleChange={(e) =>
+                                                        handleRowChange(index, "examDate", e.target.value)
+                                                    }
+                                                // respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                                                // maxDate={values?.toDate}
+                                                />
+                                                {/* <input
+                          type="date"
+                          className="form-control"
+                          value={row.examDate}
+                          onChange={(e) =>
+                            handleRowChange(index, "examDate", e.target.value)
+                          }
+                        /> */}
+                                            </td>
+                                            <td>
+                                                <TimePicker
+                                                    placeholderName=""
+                                                    lable={t("")}
+                                                    id="startTime"
+                                                    name="startTime"
+                                                    value={row.startTime}
+                                                    // respclass="col-xl-2 col-md-3 col-sm-4 col-12"
+
+                                                    handleChange={(e) =>
+                                                        handleRowChange(index, "startTime", e.target.value)
+                                                    }
+                                                />
+                                                {/* <input
+                          type="time"
+                          className="form-control"
+                          value={row.startTime}
+                          onChange={(e) =>
+                            handleRowChange(index, "startTime", e.target.value)
+                          }
+                        /> */}
+                                            </td>
+                                            <td>
+                                                <TimePicker
+                                                    placeholderName=""
+                                                    lable={t("")}
+                                                    id="endTime"
+                                                    name="endTime"
+                                                    value={row.endTime}
+                                                    // respclass="col-xl-2 col-md-3 col-sm-4 col-12"
+
+                                                    handleChange={(e) =>
+                                                        handleRowChange(index, "endTime", e.target.value)
+                                                    }
+                                                />
+                                                {/* <input
+                          type="time"
+                          className="form-control"
+                          value={row.endTime}
+                          onChange={(e) =>
+                            handleRowChange(index, "endTime", e.target.value)
+                          }
+                        /> */}
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
+                                                    value={row.passingMarks}
+                                                    onChange={(e) =>
+                                                        handleRowChange(index, "passingMarks", e.target.value)
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
+                                                    value={row.maxMarks}
+                                                    onChange={(e) =>
+                                                        handleRowChange(index, "maxMarks", e.target.value)
+                                                    }
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+                    <div className="mt-3">
+                        <button className="btn btn-primary btn-sm" onClick={handleSave}>
+                            {t("Upload Marks")}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default MarksUpload;
+

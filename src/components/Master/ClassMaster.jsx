@@ -5,8 +5,6 @@ import Heading from "../../components/UI/Heading";
 import Input from "../../components/formComponent/Input";
 import { useTranslation } from "react-i18next";
 import Tables from "../../components/UI/customTable";
-
-import Modal from "../../components/modalComponent/Modal";
 import { notify } from "../../utils/utils";
 import { CreateClass, GetAllClasses } from "../../networkServices/AcademicYear";
 
@@ -14,20 +12,14 @@ function ClassMaster() {
     const [t] = useTranslation(); const initialData = {
         class_name: "",
         Order: "",
-
     }
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
-    const [handleModelData, setHandleModelData] = useState({});
-
-    const [modalData, setModalData] = useState({});
     const handleChange = (e) => {
         const { name, value } = e.target
-        // if (type === "number" && ((limit < Number(value)) || isNaN(Number(value)))) {
-
-        // } else {
+   
         setValues((prev) => ({ ...prev, [name]: value }));
-        // }
+
     };
     const getData = async () => {
 
@@ -47,10 +39,6 @@ function ClassMaster() {
     useEffect(() => {
         getData()
     }, [])
-
-    const setIsOpen = () => {
-        setHandleModelData((val) => ({ ...val, isOpen: false }));
-    };
 
     const handleSave = async () => {
 
@@ -73,33 +61,9 @@ function ClassMaster() {
             notify("Error saving reason", "error");
         }
     };
-    const handleCapitalLatter = (e) => {
-
-        let event = { ...e }
-        event.target.value = event.target.value.toUpperCase()
-        handleChange(e)
-
-    }
     return (
         <>
-            {/* {handleModelData?.isOpen && (
-                <Modal
-                    visible={handleModelData?.isOpen}
-                    setVisible={setIsOpen}
-                    modalWidth={handleModelData?.width}
-                    Header={t(handleModelData?.label)}
-                    buttonType={"button"}
-                    buttons={handleModelData?.extrabutton}
-                    buttonName={handleModelData?.buttonName}
-                    modalData={modalData}
-                    setModalData={setModalData}
-                    footer={handleModelData?.footer}
-                    handleAPI={handleModelData?.handleInsertAPI}
-                >
-                    {handleModelData?.Component}
-                </Modal>
-            )} */}
-
+            
             <div className="card p-1">
                 <Heading title={t("Class Master")} isBreadcrumb={false} />
 
@@ -140,15 +104,7 @@ function ClassMaster() {
                         </button>
                     </div>
 
-                    {/* <div className="col-12 text-right">
-                        <button
-                            onClick={handleSave}
-                            className="btn btn-sm btn-primary"
-                            type="button"
-                        >
-                            {t("Class Add")}
-                        </button>
-                    </div> */}
+                   
                 </div>
 
 

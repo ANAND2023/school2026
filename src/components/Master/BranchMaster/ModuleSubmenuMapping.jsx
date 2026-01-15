@@ -4,7 +4,7 @@ import Tables from "../../UI/customTable";
 import Heading from "../../UI/Heading";
 
 import {
-  EmployeeBranchMapping,
+
   GetAllBranches
 } from "../../../networkServices/AcademicYear";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
@@ -27,7 +27,7 @@ const ModuleSubmenuMapping = () => {
   };
 
   const [values, setValues] = useState(initialData);
-  console.log("values", values)
+
   const [tableData, setTableData] = useState([]);
   const [subMenu, setSubMenu] = useState([]);
   const [module, setModule] = useState([]);
@@ -42,34 +42,7 @@ const ModuleSubmenuMapping = () => {
     const handleMultiSelectChange = (name, selectedOptions) => {
     setValues({ ...values, [name]: selectedOptions });
   };
-  // const handleSelect = (name, option) => {
-  //   if (!option) return;
-
-  //   if (name === "subMenuId") {
-  //     setValues((prev) => ({
-  //       ...prev,
-  //       subMenuId: option.value,
-  //       subMenuName: option.label
-  //     }));
-  //   }
-
-  //   if (name === "moduleId") {
-  //     setValues((prev) => ({
-  //       ...prev,
-  //       moduleId: option.value,
-  //       moduleName: option.label
-  //     }));
-  //   }
-  //   if (name === "moduleId") {
-  //     setValues((prev) => ({
-  //       ...prev,
-  //       moduleId: option.value,
-  //       moduleName: option.label
-  //     }));
-  //   }
-
-
-  // };
+  
   const getData = async () => {
     const payload = {
       "employeeId": "",
@@ -89,9 +62,7 @@ const ModuleSubmenuMapping = () => {
   useEffect(() => {
     getData();
   }, []);
-  /* =======================
-      SAVE
-  ======================== */
+
   const getMapping = async () => {
     if (!values.module || !values.subMenu) {
       notify("Module & SubMenu required", "error");
@@ -105,7 +76,7 @@ const ModuleSubmenuMapping = () => {
     }
     try {
       const res = await MenuManagmentgetModuleSubmenuMappings(payload);
-      debugger
+      
       if (res?.success) {
         notify(res?.message, "success");
         setTableData(res?.data)
@@ -136,24 +107,9 @@ const ModuleSubmenuMapping = () => {
     })
   )
 
-      // [
-      //   {
-      //     "moduleId": values.module?.value,
-      //     "moduleName": values.module?.label,
-      //     "subMenuId": values.subMenu?.value,
-      //     "subMenuName": values.subMenu?.label,
-      //     "displayOrder": values.order,
-      //     "branchId": values.branch?.value,
-      //     "orgId": localData?.OrganizationId
-      //   }
-      // ]
-    // {
-    //   "moduleId": values.moduleId,
-    //   "subMenuId": values.subMenuId
-    // }
     try {
       const res = await CreateModuleSubmenuMappingBulk(payload);
-      debugger
+      
       if (res?.success) {
         notify(res?.message, "success");
         // setTableData(res?.data)
@@ -260,19 +216,9 @@ const ModuleSubmenuMapping = () => {
             handleChange={handleSelect}
             value={values.module}
           />
-          {/* <ReactSelect
-            name="subMenu"
-            placeholderName="Select SubMenu"
-            dynamicOptions={subMenu?.map((ele) => ({
-              label: ele?.name,
-              value: ele?.id
-            }))}
-            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-            handleChange={handleSelect}
-            value={values.subMenu}
-          /> */}
+         
            <MultiSelectComp
-            respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
             name="subMenu"
             id="subMenu"
             placeholderName={t("subMenu")}
@@ -295,16 +241,17 @@ const ModuleSubmenuMapping = () => {
           />
 
 
-          <div className="col-xl-2 col-md-4 col-sm-6 col-12 ">
+          <div className="col-xl-3 col-md-4 col-sm-6 col-12 ">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Mapping
             </button>
             
-          </div>
-          <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end">
-            <button className="btn btn-sm btn-primary" onClick={getMapping}>
+      
+          {/* <div className="col-xl-2 col-md-4 col-sm-6 col-12 text-end"> */}
+            <button className="btn btn-sm btn-primary ml-2" onClick={getMapping}>
               Get Mapping
             </button>
+          {/* </div> */}
           </div>
         </div>
 

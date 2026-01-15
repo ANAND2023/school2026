@@ -130,7 +130,7 @@
 
 //   // const handleChangeCentre = async (e) => {
 //   //   const { value } = e?.target;
-//   //   debugger
+//   //   
 //   //   await handleUpdateClaims(localData?.defaultRole, value);
 
 //   //   // window.location.reload();
@@ -570,7 +570,7 @@ const Header = React.memo(() => {
 
   // --- CHANGED: Improved Branch Change Logic ---
   const handleChangeCentre = async (e) => {
-    debugger
+    
     const newCentreId = e?.target?.value;
 
 
@@ -616,7 +616,7 @@ const Header = React.memo(() => {
 
   // --- CHANGED: Improved Role Change Logic ---
   const handleChangeRole = async (e) => {
-    debugger
+    
     const newRoleId = e.target.value;
     try {
       // 1. Update Claims

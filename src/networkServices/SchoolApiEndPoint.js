@@ -134,6 +134,7 @@ DeleteEnquiry:`${studentUrl}Enquiry/deleteenquiry`,
 // registrtion start.......
 
 StudentRegister:`${studentUrl}Registration/Create`,
+
 // StudentGetstudent:`${studentUrl}Student/getstudentlist`,
 getRegistrationlist:`${studentUrl}Registration/getregistrationlist`,
 Registrationbulkcreate:`${studentUrl}Registration/bulkcreate`,
@@ -144,6 +145,7 @@ Registrationbulkcreate:`${studentUrl}Registration/bulkcreate`,
 // admission start.......
 
 getadmissionlist:`${studentUrl}Admission/getadmissionlist`,
+AdmissionBulkcreate:`${studentUrl}Admission/bulkcreate`,
 
 // admission end.......
 
@@ -169,6 +171,7 @@ MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
   GetAllExamTypes: `${baseUrlMaster}AcademicMaster/GetAllExamTypes`,
   create_exam: `${baseUrlMaster}AcademicMaster/create_exam`,
   get_created_exam: `${baseUrlMaster}AcademicMaster/get_created_exam`,
+  create_exam_timetable: `${baseUrlMaster}AcademicMaster/create_exam_timetable`,
 
 //Exam End
 

@@ -154,6 +154,10 @@ function RenderRoute() {
   getAllUrls.push("/master-class-section");
   getAllUrls.push("/master-organization");
   getAllUrls.push("/master-exam");
+  getAllUrls.push("/master-exam");
+  getAllUrls.push("/marks-upload");
+  getAllUrls.push("/module-employee-mapping");
+  getAllUrls.push("/submenu-employee-mapping");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -575,6 +579,25 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/module-employee-mapping",
+      component: lazy(
+        () => import("@app/components/Master/BranchMaster/ModuleEmployeeMapping.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/submenu-employee-mapping",
+      component: lazy(
+        () => import("@app/components/Master/BranchMaster/EmployeeSubMenuMapping.jsx")
+      ),exact: true,
+
+    },
+    // C:\Users\Anand\Desktop\school\school2026\src\components\Master\BranchMaster\ModuleEmployeeMapping.jsx
 // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\ExamMaster.jsx
 // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\CreateExam.jsx
 

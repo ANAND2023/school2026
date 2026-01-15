@@ -122,7 +122,29 @@ function Branch() {
     // getData(value?.value)
   };
 
-  /* ================= JSX ================= */
+useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setValues((prev) => ({
+          ...prev,
+          location: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          },
+        }));
+      },
+      (error) => {
+        console.log("Location error:", error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  }, []);
   return (
     <>
       {handleModelData?.isOpen && (
@@ -157,7 +179,7 @@ function Branch() {
             requiredClassName="required-fields"
           />
           {/* <Input
-            className="form-control required-fields"
+            className="form-control "
             name="organisationId" value={values.organisationId} lable="Organisation Id"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} /> */}
 
@@ -168,19 +190,19 @@ function Branch() {
 
           {/* ===== ADDRESS ===== */}
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="street" value={values.address.street} lable="Street"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="city" value={values.address.city} lable="City"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="state" value={values.address.state} lable="State"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
@@ -192,52 +214,52 @@ function Branch() {
             onChange={(e) => handleChange(e, "address")} />
 
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="country" value={values.address.country} lable="Country"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "address")} />
 
           {/* ===== CONTACT ===== */}
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="phoneNumber" value={values.contact.phoneNumber} lable="Phone"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "contact")} />
 
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="email" value={values.contact.email} lable="Email"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "contact")} />
 
           {/* ===== LOCATION ===== */}
-          <Input
-            className="form-control required-fields"
+          {/* <Input
+            className="form-control "
             name="latitude" value={values.location.latitude} lable="Latitude"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "location")} />
 
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="longitude" value={values.location.longitude} lable="Longitude"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-            onChange={(e) => handleChange(e, "location")} />
+            onChange={(e) => handleChange(e, "location")} /> */}
 
           {/* ===== OWNER ===== */}
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="ownerName" value={values.ownerName} lable="Owner Name"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="phoneNumber" value={values.ownerContact.phoneNumber} lable="Owner Phone"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={(e) => handleChange(e, "ownerContact")} />
 
           {/* ===== OTHER ===== */}
           <Input
-            className="form-control required-fields"
+            className="form-control "
             name="certification" value={values.certification} lable="Certification"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
@@ -248,7 +270,7 @@ function Branch() {
             respclass="col-xl-2 col-md-4 col-sm-4 col-12" onChange={handleChange} />
 
           {/* ===== BUTTON ===== */}
-          <div className="col-12 text-right">
+          <div className="col-xl-2 col-md-4 col-sm-4 col-12">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               {t("Save Branch")}
             </button>

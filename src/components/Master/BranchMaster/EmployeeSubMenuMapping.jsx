@@ -216,7 +216,7 @@ subMenu: [],
             value={values.subMenuId?.value}
           /> */}
           <MultiSelectComp
-             respclass="col-xl-3 col-md-6 col-sm-12"
+             respclass="col-xl-4 col-md-6 col-sm-12"
             name="subMenu"
             id="subMenu"
             placeholderName={t("subMenu")}
@@ -229,16 +229,7 @@ subMenu: [],
             value={values?.subMenu}
           />
 
-          {/* <ReactSelect
-            placeholderName="Branch"
-            respclass="col-xl-3 col-md-4 col-sm-6 col-12"
-            name="branchId"
-            dynamicOptions={branchList}
-            handleChange={handleSelect}
-            value={values.branchId}
-          /> */}
-
-          <div className="col-12 text-end mt-2">
+          <div className="col-xl-1 col-md-6 col-sm-12">
             <button
               className="btn btn-sm btn-primary"
               onClick={handleSave}

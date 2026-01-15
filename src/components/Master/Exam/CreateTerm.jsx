@@ -159,7 +159,7 @@ const CreateTerm = () => {
                             respclass="col-xl-4 col-md-6 col-sm-12 col-12"
                             placeholder=" "
                         />
-                        
+                        <div className="col-xl-4 col-md-6 col-sm-12 col-12">
                       
                             <button 
                                 className="btn btn-sm btn-primary" 
@@ -175,7 +175,7 @@ const CreateTerm = () => {
                                     {t("Cancel")}
                                 </button>
                             )}
-                        
+                        </div>
                     </div>
                 </div>
             </div>

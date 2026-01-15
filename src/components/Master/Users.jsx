@@ -37,10 +37,6 @@ const Users = () => {
       [name]: value
     }));
   };
-
-  /* =======================
-      SAVE USER
-  ======================== */
   const handleSave = async () => {
     if (
       !values.userName ||

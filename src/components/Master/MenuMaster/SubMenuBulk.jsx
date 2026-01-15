@@ -71,7 +71,7 @@ const SubMenuBulk = () => {
                 menuId: values.menuId.value,
                 name: values.name,
                 code: values.code,
-                pageUrl: values.pageUrl,
+                pageUrl: `/${values.pageUrl}`,
                 icon: values.icon?.value,
                 displayOrder: Number(values.displayOrder),
                 branchId: values.branchId?.value,
@@ -81,7 +81,7 @@ const SubMenuBulk = () => {
 
         try {
             const res = await MenuManagmentcreatesubmenubulk(payload);
-            debugger
+            
             if (res?.success) {
                 // handleGetSubMenus()
                 // setTableData(prev => [...prev, payload[0]]);
@@ -250,7 +250,7 @@ const SubMenuBulk = () => {
                         name="name"
                         value={values.name}
                         lable="Sub Menu Name"
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                        respclass="col-xl-3 col-md-4 col-sm-6 col-12"
                         onChange={handleChange}
                         className="form-control"
                     />
@@ -270,7 +270,7 @@ const SubMenuBulk = () => {
                         name="pageUrl"
                         value={values.pageUrl}
                         lable="Page URL"
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                        respclass="col-xl-3 col-md-4 col-sm-6 col-12"
                         onChange={handleChange}
                         className="form-control"
                     />

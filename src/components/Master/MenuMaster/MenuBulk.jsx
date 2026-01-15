@@ -232,7 +232,7 @@ const getBranchData = async () => {
                         value={values.name}
                         lable="Name"
                         placeholder={""}
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                        respclass="col-xl-3 col-md-4 col-sm-6 col-12"
                         onChange={handleChange}
                         className="form-control"
                     />
@@ -278,7 +278,7 @@ const getBranchData = async () => {
 
 
 
-                    <div className="col-12 text-end ">
+                    <div className="col-xl-1 col-md-4 col-sm-6 col-12 ">
                         <button
                             className="btn btn-sm btn-primary"
                             onClick={handleSave}

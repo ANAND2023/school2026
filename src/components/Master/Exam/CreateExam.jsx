@@ -102,11 +102,8 @@ const CreateExam = () => {
             console.log("error", error)
         }
     };
-    const getAllExam = async () => {
-        if (!values.examTypeId || !values.term.value || !values.branch.value) {
-            notify(t("Please fill all mandatory fields"), "error");
-            return;
-        }
+    const getAllExam = async (branch, term) => {
+       
 
         const payload =
         {
@@ -134,6 +131,10 @@ const CreateExam = () => {
         ExamTypesGet();
         getAllExam();
     }, []);
+    useEffect(() => {
+       
+        getAllExam(values.branch?.value, values.term?.value, );
+    }, [values.branch, values.term, ]);
     return (
         <>
             <div className="card border">

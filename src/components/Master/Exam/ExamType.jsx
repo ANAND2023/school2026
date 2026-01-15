@@ -53,10 +53,7 @@ const ExamType = () => {
   };
 
   const handleSave = async () => {
-    if (!values.termName.trim()) {
-      notify(t("Please enter Term Name"), "error");
-      return;
-    }
+  
 
     try {
       const payload =
@@ -157,9 +154,8 @@ const ExamType = () => {
               respclass="col-xl-4 col-md-6 col-sm-12 col-12"
               placeholder=" "
             />
-
-
-            <button
+<div className="col-xl-4 col-md-6 col-sm-12 col-12">
+ <button
               className="btn btn-sm btn-primary"
               onClick={handleSave}
             >
@@ -173,6 +169,9 @@ const ExamType = () => {
                 {t("Cancel")}
               </button>
             )}
+</div>
+
+           
 
           </div>
         </div>

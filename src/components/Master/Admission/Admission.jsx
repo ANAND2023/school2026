@@ -17,6 +17,7 @@ import { exportToExcel } from "../../../utils/exportLibrary";
 
 function Admission() {
     const localData = useLocalStorage("userData", "get");
+    console.log("localData",localData)
     const [t] = useTranslation();
     const [tableData, setTableData] = useState([]);
     const { VITE_DATE_FORMAT } = import.meta.env;
@@ -46,7 +47,7 @@ function Admission() {
         setValues((prev) => ({ ...prev, [name]: value }));
     };
     const handleChange = (e, type, limit = 9999999999999) => {
-        debugger
+        
         const { name, value } = e.target
         console.log("first", limit, Number(value), isNaN(Number(value)))
 
@@ -71,11 +72,11 @@ function Admission() {
 
         {
   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "branchId": localData?.defaultCentre,
 //   "classId": "",
 //   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 //   "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "classId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "classId": "cb0115fb-6dfa-4590-8c77-bffcd28e153f",
   "fromDate": moment(values.fromDate).format("YYYY-MM-DD"),
   "toDate":  moment(values.toDate).format("YYYY-MM-DD"),
   "studentId": values.StudentID,
@@ -85,6 +86,7 @@ function Admission() {
   "page": 100,
   "pageSize": 100
 }
+
 
         try {
             const response = await getadmissionlist(payload);

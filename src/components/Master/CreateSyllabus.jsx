@@ -176,11 +176,10 @@ function CreateSyllabus() {
                 <Heading title={t("Syllabus Master")} isBreadcrumb={false} />
 
                 <div className="row p-2">
-
                     <ReactSelect
                         placeholderName={t("Academic Year")}
                         searchable={true}
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        respclass="col-xl-3 col-md-4 col-sm-4 col-12"
                         id="academicYear"
                         name="academicYear"
                         removeIsClearable={true}
@@ -189,7 +188,7 @@ function CreateSyllabus() {
                         // dynamicOptions={academicYears(classes, "className", "id")}
                         handleChange={handleSelect}
                         value={values?.academicYear?.value}
-                        requiredClassName="required-fields"
+                        requiredClassName=""
                     />
                     <ReactSelect
                         placeholderName={t("Class")}
@@ -202,7 +201,7 @@ function CreateSyllabus() {
                         dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
                         handleChange={handleSelect}
                         value={values?.class_Name?.value}
-                        requiredClassName="required-fields"
+                        requiredClassName=""
                     />
                     <ReactSelect
                         placeholderName={t("Subject")}
@@ -215,21 +214,22 @@ function CreateSyllabus() {
                         dynamicOptions={[...handleReactSelectDropDownOptions(subject, "subjectName", "id")]}
                         handleChange={handleSelect}
                         value={values?.subject?.value}
-                        requiredClassName="required-fields"
+                        requiredClassName=""
                     />
                     <Input
                         type="text"
-                        className="form-control required-fields"
+                        className="form-control "
                         id="description"
                         name="description"
                         value={values?.description ? values?.description : ""}
                         // onChange={handleChange}
                         lable={t("Description")}
                         placeholder=" "
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        respclass="col-xl-4 col-md-4 col-sm-4 col-12"
                         isUpperCase={true}
                         onChange={handleChange}
                     />
+                    <div className="col-xl-1 col-md-4 col-sm-4 col-12">
                     <button
                         onClick={handleSave}
                         className="btn btn-sm btn-primary"
@@ -237,6 +237,7 @@ function CreateSyllabus() {
                     >
                         {t("Save")}
                     </button>
+                    </div>
                 </div>
 
                 <Tables
@@ -248,9 +249,9 @@ function CreateSyllabus() {
                     { name: "Action" }]}
                     tbody={tableData?.map((item, index) => (
                         {
-                            academicYearId: item.academicYearId,
-                            classId: item.classId,
-                            subjectId: item.subjectId,
+                            academicYearId: item.academicYearName,
+                            classId: item.className,
+                            subjectId: item.subjectName,
                             description: item.description,
 
                             action: <>

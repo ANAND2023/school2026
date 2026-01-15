@@ -164,10 +164,11 @@ const GradingSystem = () => {
             className="form-control"
           />
 
-          
+          <div className="col-xl-2 col-md-4 col-sm-4 col-12">
           <button className="btn btn-sm btn-primary" onClick={handleSave}>
             Save 
           </button>
+          </div>
           {/* <div className="col-12 text-end">
             <button className="btn btn-sm btn-primary" onClick={handleSave}>
               Save User
