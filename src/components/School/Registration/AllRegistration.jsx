@@ -1415,7 +1415,7 @@ function AllRegistration() {
         "Percentage": academic?.percentage || ""
       };
     });
-    exportToExcel(excelData, "Exel");
+    exportToExcel(excelData, `Registration_${moment(values?.fromDate).format("MM-DD-YYYY")}_${moment(values?.toDate).format("MM-DD-YYYY")}`);
   }
   const handleAdmission = async () => {
     // const handleOpenStudentProfile = (data) => {

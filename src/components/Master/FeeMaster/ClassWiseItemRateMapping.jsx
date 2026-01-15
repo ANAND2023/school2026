@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Heading from "../../UI/Heading";
 import Input from "../../formComponent/Input";
 import ReactSelect from "../../formComponent/ReactSelect";
-import Tables from "../../UI/customTable";
+
 import MultiSelectComp from "../../formComponent/MultiSelectComp";
 
 import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
@@ -15,8 +15,10 @@ import {
 import {
   GetAllItemMaster,
   GetAllMonthType,
+  GetClassMonthFeeDetails,
   UpdateBulkItemClassMonthWise,
 } from "../../../networkServices/FeeMaster";
+import Tables from "../../UI/customTable";
 
 function ClassWiseItemRateMapping() {
   const [t] = useTranslation();
@@ -31,6 +33,7 @@ function ClassWiseItemRateMapping() {
   const [classes, setClasses] = useState([]);
   const [allItem, setAllItem] = useState([]);
   const [allMonth, setAllMonth] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   // 👇 table + rate data
   const [itemRates, setItemRates] = useState([]);
@@ -64,11 +67,24 @@ function ClassWiseItemRateMapping() {
       notify("Failed to load months", "error");
     }
   };
+  const getData = async (classId,monthTypeId) => {
+    debugger
+    try {
+      const res = await GetClassMonthFeeDetails(classId,monthTypeId);
+      if(res?.success){
+        setTableData(res?.data);
+      }
+    //   if (res?.success) setAllMonth(res?.data);
+    } catch {
+      notify("Failed to load months", "error");
+    }
+  };
 
   useEffect(() => {
     getClass();
     getItems();
     getMonths();
+
   }, []);
 
   /* ---------------- HANDLERS ---------------- */
@@ -133,6 +149,9 @@ function ClassWiseItemRateMapping() {
     }
   };
 
+  useEffect(() => {
+    getData(values?.class_Name?.value,values?.Month?.value)
+  },[values?.class_Name?.value,values?.Month?.value])
   /* ---------------- UI ---------------- */
 
   return (
@@ -191,7 +210,7 @@ function ClassWiseItemRateMapping() {
         </div>
       </div>
 
-      {/* 🔥 TABLE */}
+
       <Tables
         thead={[
           { name: "Item Name" },
@@ -209,6 +228,24 @@ function ClassWiseItemRateMapping() {
               }
             />
           ),
+        }))}
+      />
+        <Tables
+        thead={[
+          { name: "Item Name" },
+          { name: "unit" },
+          
+          { name: "rate" },
+          { name: "subCategory" },
+          { name: "isMapped" },
+        ]}
+        tbody={tableData.map((item, index) => ({
+          itemName: item.itemName,
+          unit: item.unit,
+          rate: item.rate,
+          subCategoryId: item.subCategoryId,
+          isMapped: item.isMapped===false ? "No" : "Yes",
+         
         }))}
       />
     </div>

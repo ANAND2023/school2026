@@ -153,6 +153,7 @@ function RenderRoute() {
   getAllUrls.push("/exam-timetable");
   getAllUrls.push("/master-class-section");
   getAllUrls.push("/master-organization");
+  getAllUrls.push("/master-exam");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -565,7 +566,16 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/master-exam",
+      component: lazy(
+        () => import("@app/components/Master/Exam/ExamMaster.jsx")
+      ),exact: true,
 
+    },
+// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\ExamMaster.jsx
 // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\CreateExam.jsx
 
 // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\ExamType.jsx

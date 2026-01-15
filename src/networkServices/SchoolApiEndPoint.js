@@ -90,6 +90,7 @@ InsertFeeRateSchedule:`${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
 InsertMonthType:`${feeUrl}MonthType/InsertMonthType`,
 GetAllMonthType:`${feeUrl}MonthType/GetAllMonthType`,
 UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
+GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
 // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
 

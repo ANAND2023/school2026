@@ -252,6 +252,24 @@ export const UpdateBulkItemClassMonthWise = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const GetClassMonthFeeDetails = async (classId,monthTypeId) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetClassMonthFeeDetails}?classId=${classId}&monthTypeId=${monthTypeId}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 
 export const AddBankAccount = async (params) => {
   store.dispatch(setLoading(true));
