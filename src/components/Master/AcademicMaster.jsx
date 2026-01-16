@@ -7,7 +7,7 @@ import Branch from './Branch'
 import OrganizationMaster from './OrganizationMaster'
 import CreateBankAccount from './FeeMaster/CreateBankAccount'
 import CreateFeeConcession from './FeeMaster/CreateFeeConcession'
-import CreateFeeHead from './FeeMaster/CreateFeeHead'
+
 import CreateFeeStructure from './FeeMaster/CreateFeeStructure'
 import CreateLateFeePenalty from './FeeMaster/CreateLateFeePenalty'
 import CreatePaymentMode from './FeeMaster/CreatePaymentMode'
@@ -44,7 +44,7 @@ const AcademicMaster = () => {
       <OrganizationMaster/>
       <CreateBankAccount/>
       <CreateFeeConcession/>
-      <CreateFeeHead/>
+ 
       <CreateFeeStructure/>
       <CreateLateFeePenalty/>
       <CreatePaymentMode/>

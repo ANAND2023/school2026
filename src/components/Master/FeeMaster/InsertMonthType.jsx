@@ -108,7 +108,7 @@ const InsertMonthType = () => {
 
     return (
         <div className="card p-2">
-            <Heading title="Insert Month Type" isBreadcrumb={false} />
+            <Heading title="Month/Semester Master" isBreadcrumb={false} />
 
             {/* ================= FORM ================= */}
             <div className="row p-2">

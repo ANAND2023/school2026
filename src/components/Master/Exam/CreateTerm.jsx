@@ -133,7 +133,7 @@ const CreateTerm = () => {
                  />
                 
                 <div className="card-body p-2">
-                    <div className="row align-items-end">
+                    <div className="row ">
                          <ReactSelect
                                     placeholderName="Branch"
                                     respclass="col-xl-2 col-md-4 col-sm-6 col-12"
@@ -169,7 +169,7 @@ const CreateTerm = () => {
                             </button>
                             {isEditing && (
                                 <button 
-                                    className="btn btn-sm btn-danger mx-2" 
+                                    className="btn btn-sm btn-danger" 
                                     onClick={handleReset}
                                 >
                                     {t("Cancel")}

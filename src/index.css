@@ -1579,7 +1579,7 @@ table td {
   line-height: 1;
   font-size: 13px;
   vertical-align: middle !important;
-  border: 1px solid rgba(6, 3, 3, 0.747) !important;
+  /* border: 1px solid rgba(6, 3, 3, 0.747) !important; */
   color: #000 !important;
 }
 
@@ -1590,9 +1590,9 @@ table td {
   width: 200px;
 }
 
-.mainTable tbody tr {
+/* .mainTable tbody tr {
   border: none;
-}
+} */
 
 .mainTable tbody tr:hover {
   background-color: #d8ebfa9f;

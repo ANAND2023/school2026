@@ -71,10 +71,10 @@ function RenderRoute() {
 
       // 4. Determine Active Role
       let currentRoleId = localData?.defaultRole;
-      const isRoleValid = roleList.find(r => r.id == currentRoleId);
+      const isRoleValid = roleList.find(r => r.moduleId == currentRoleId);
       
       if (!currentRoleId || !isRoleValid) {
-        currentRoleId = roleList[0]?.id;
+        currentRoleId = roleList[0]?.moduleId;
       }
 
       // 5. Fetch Menu
@@ -158,6 +158,7 @@ function RenderRoute() {
   getAllUrls.push("/marks-upload");
   getAllUrls.push("/module-employee-mapping");
   getAllUrls.push("/submenu-employee-mapping");
+  getAllUrls.push("/category-master");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -352,6 +353,116 @@ const allRoutes = {
       path: "/fee-master",
       component: lazy(
         () => import("@app/components/Master/FeeMaster/FeeMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/category-master",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CategoryMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/sub-category-master",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/SubCategoryMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/item-master",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/ItemMaster.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/month-semester-master",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/InsertMonthType.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/class-wise-item-rate-mapping",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/ClassWiseItemRateMapping.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/create-tax",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CreateTax.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/create-payment-mode",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CreatePaymentMode.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/scholarship",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CreateScholarship.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/bank-account",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CreateBankAccount.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/fee-concession",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CreateFeeConcession.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/late-fee-penalty",
+      component: lazy(
+        () => import("@app/components/Master/FeeMaster/CreateLateFeePenalty.jsx")
       ),
     
       exact: true,
@@ -582,6 +693,15 @@ const allRoutes = {
     {
       Guard: Authenticated,
       layout: Layout,
+      path: "/marks-upload",
+      component: lazy(
+        () => import("@app/components/Master/Exam/MarksUpload.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
       path: "/module-employee-mapping",
       component: lazy(
         () => import("@app/components/Master/BranchMaster/ModuleEmployeeMapping.jsx")
@@ -597,11 +717,23 @@ const allRoutes = {
       ),exact: true,
 
     },
-    // C:\Users\Anand\Desktop\school\school2026\src\components\Master\BranchMaster\ModuleEmployeeMapping.jsx
-// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\ExamMaster.jsx
-// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\CreateExam.jsx
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/module-submenu-mapping",
+      component: lazy(
+        () => import("@app/components/Master/BranchMaster/ModuleSubmenuMapping.jsx")
+      ),exact: true,
 
-// C:\Users\Anand\Desktop\school\school2026\src\components\Master\Exam\ExamType.jsx
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/user-submenu-mapping",
+      component: lazy(
+        () => import("@app/components/Master/BranchMaster/EmployeeSubMenuMapping.jsx")
+      ),exact: true,
 
+    },
      ],
 };
