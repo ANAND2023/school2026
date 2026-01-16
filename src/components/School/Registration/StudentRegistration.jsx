@@ -384,6 +384,14 @@ school:data.previousSchoolName
                             >
                               {t("Enquiry List")}
                             </button>
+                            <button
+                              onClick={handleEnq}
+                              // className="btn btn-lg btn-success"
+                              className="btn btn-sm btn-primary"
+                              type="button"
+                            >
+                              {t("IS SIBLING")}
+                            </button>
                            
                           </div>}
                         />

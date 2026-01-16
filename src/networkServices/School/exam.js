@@ -132,3 +132,21 @@ export const get_created_exam = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const UploadStudentExamMarks = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.UploadStudentExamMarks}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};

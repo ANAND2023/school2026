@@ -172,6 +172,7 @@ MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
   create_exam: `${baseUrlMaster}AcademicMaster/create_exam`,
   get_created_exam: `${baseUrlMaster}AcademicMaster/get_created_exam`,
   create_exam_timetable: `${baseUrlMaster}AcademicMaster/create_exam_timetable`,
+  UploadStudentExamMarks: `${baseUrlMaster}StudenExamMarking/UploadStudentExamMarks`,
 
 //Exam End
 

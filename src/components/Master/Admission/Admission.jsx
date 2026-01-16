@@ -17,7 +17,7 @@ import { exportToExcel } from "../../../utils/exportLibrary";
 
 function Admission() {
     const localData = useLocalStorage("userData", "get");
-    console.log("localData",localData)
+    console.log("localData", localData)
     const [t] = useTranslation();
     const [tableData, setTableData] = useState([]);
     const { VITE_DATE_FORMAT } = import.meta.env;
@@ -47,7 +47,7 @@ function Admission() {
         setValues((prev) => ({ ...prev, [name]: value }));
     };
     const handleChange = (e, type, limit = 9999999999999) => {
-        
+
         const { name, value } = e.target
         console.log("first", limit, Number(value), isNaN(Number(value)))
 
@@ -71,21 +71,37 @@ function Admission() {
         // }
 
         {
-  "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "branchId": localData?.defaultCentre,
-//   "classId": "",
-//   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//   "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "classId": "cb0115fb-6dfa-4590-8c77-bffcd28e153f",
-  "fromDate": moment(values.fromDate).format("YYYY-MM-DD"),
-  "toDate":  moment(values.toDate).format("YYYY-MM-DD"),
-  "studentId": values.StudentID,
-  "admissionNo": "",
-  "rollNumber": "",
-  "firstName": values.firstName,
-  "page": 100,
-  "pageSize": 100
-}
+            "sessionId": null,
+            "branchId": null,
+            //   "classId": "",
+            //   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //   "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "classId": null,
+            "fromDate": null,
+            "toDate": null,
+            "studentId": null,
+            "admissionNo": null,
+            "rollNumber": null,
+            "firstName": null,
+            "page": 1,
+            "pageSize": 100
+        }
+        //         {
+        //   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        //   "branchId": localData?.defaultCentre,
+        // //   "classId": "",
+        // //   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        // //   "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        //   "classId": "cb0115fb-6dfa-4590-8c77-bffcd28e153f",
+        //   "fromDate": moment(values.fromDate).format("YYYY-MM-DD"),
+        //   "toDate":  moment(values.toDate).format("YYYY-MM-DD"),
+        //   "studentId": values.StudentID,
+        //   "admissionNo": "",
+        //   "rollNumber": "",
+        //   "firstName": values.firstName,
+        //   "page": 100,
+        //   "pageSize": 100
+        // }
 
 
         try {
@@ -142,14 +158,14 @@ function Admission() {
     }
     const thead = [
         { name: t("SNo"), width: "1%" },
-        { name: t("#"), width: "1%" },
+        // { name: t("#"), width: "1%" },
         { name: t("Student ID") },
         { name: t("name") },
         { name: t("gender") },
         { name: t("dob") },
         { name: t("class") },
         { name: t("mobile") },
-        { name: t("parents") },
+        // { name: t("parents") },
         { name: t("Action") },
 
     ];
@@ -185,55 +201,61 @@ function Admission() {
     // const handleExcel=(val)=>{
     //   exportToExcel(val, "Exel");
     // }
-    const handleExcel = (data) => {
+    // const handleExcel = (data) => {
 
-        const excelData = data.map((item, index) => {
-            const father = item.parents?.find(p => p.parentType === 1);
-            const mother = item.parents?.find(p => p.parentType === 2);
-            const academic = item.academics?.[0];
+    //     const excelData = data?.map((item, index) => {
+    //         const father = item.parents?.find(p => p.parentType === 1);
+    //         const mother = item.parents?.find(p => p.parentType === 2);
+    //         const academic = item.academics?.[0];
 
-            return {
-                "S.No": index + 1,
-                "Student ID": item.studentId,
-                "Full Name": item.fullName,
-                "Gender": item.gender === "1" ? "Male" : "Female",
-                "DOB": item.dateOfBirth?.split("T")[0],
-                "Phone": item.phone,
-                "Email": item.email,
+    //         return {
+    //             "S.No": index + 1,
+    //             "Student ID": item.studentId,
+    //             "Full Name": item.fullName,
+    //             "Gender": item.gender === "1" ? "Male" : "Female",
+    //             "DOB": item.dateOfBirth?.split("T")[0],
+    //             "Phone": item.phone,
+    //             "Email": item.email,
 
-                "Village": item.village,
-                "City": item.city,
-                "District": item.district,
-                "State": item.state,
-                "Pincode": item.pincode,
+    //             "Village": item.village,
+    //             "City": item.city,
+    //             "District": item.district,
+    //             "State": item.state,
+    //             "Pincode": item.pincode,
 
-                "Blood Group": item.bloodGroup,
-                "Category": item.category,
-                "Religion": item.religion,
-                "Nationality": item.nationality,
+    //             "Blood Group": item.bloodGroup,
+    //             "Category": item.category,
+    //             "Religion": item.religion,
+    //             "Nationality": item.nationality,
 
-                // 👨 Father
-                "Father Name": father?.name || "",
-                "Father Mobile": father?.mobile || "",
-                "Father Occupation": father?.occupation || "",
+    //             // 👨 Father
+    //             "Father Name": father?.name || "",
+    //             "Father Mobile": father?.mobile || "",
+    //             "Father Occupation": father?.occupation || "",
 
-                // 👩 Mother
-                "Mother Name": mother?.name || "",
-                "Mother Mobile": mother?.mobile || "",
-                "Mother Occupation": mother?.occupation || "",
+    //             // 👩 Mother
+    //             "Mother Name": mother?.name || "",
+    //             "Mother Mobile": mother?.mobile || "",
+    //             "Mother Occupation": mother?.occupation || "",
 
-                // 🎓 Academic
-                "Class": academic?.class || "",
-                "Roll No": academic?.rollNumber || "",
-                "Board": academic?.boardName || "",
-                "Medium": academic?.medium || "",
-                "School Name": academic?.schoolName || "",
-                "Passing Year": academic?.yearOfPassing || "",
-                "Percentage": academic?.percentage || ""
-            };
-        });
-        exportToExcel(excelData, "Exel");
-    }
+    //             // 🎓 Academic
+    //             "Class": academic?.class || "",
+    //             "Roll No": academic?.rollNumber || "",
+    //             "Board": academic?.boardName || "",
+    //             "Medium": academic?.medium || "",
+    //             "School Name": academic?.schoolName || "",
+    //             "Passing Year": academic?.yearOfPassing || "",
+    //             "Percentage": academic?.percentage || ""
+    //         };
+    //     });
+    //     exportToExcel(excelData, "Exel");
+    // }
+
+    const sortedTableData = [...tableData].sort((a, b) => {
+  const aNo = Number(a?.admission?.admissionNo?.split("-").pop());
+  const bNo = Number(b?.admission?.admissionNo?.split("-").pop());
+  return aNo - bNo; // ascending order
+});
     return (
         <>
             {handleModelData?.isOpen && (
@@ -330,15 +352,55 @@ function Admission() {
 
                 </div>
                 {/* <Heading title={t(" Details")} isBreadcrumb={false} /> */}
+       
+       
+       
                 <Heading title="Admission Detail" isBreadcrumb={false} secondTitle={
                     <>
-                        <i
+                  
+                        {/* <span
+                            className="mr-3"
+                            style={{
+                                fontFamily: "serif",
+                                color: "#2ecc71", // green
+                                fontWeight: "bold",
+                                fontSize: "16px",
+                            }}
+                        >
+                            Today No Of Enquiry : {todayEnq?.length}
+                        </span> */}
+
+                        <span
+                            className="mr-1"
+                            style={{
+                                fontFamily: "serif",
+                                color: "#3498db", // blue
+                                fontWeight: "bold",
+                                fontSize: "16px",
+                            }}
+                        >
+                            Total No Of Student : {sortedTableData?.length}
+                        </span>
+
+                        <button
+                            id="excelBtn"
+                            // onClick={() => handleExcel(tableData)}
+                            title="Excel Download"
+                            className="d-flex align-items-center justify-content-center"
+                        >
+
+                            <i
+                                className="fa fa-file-excel  text-lg "
+                            ></i>
+                        </button>
+                     
+                        {/* <i
                             className="fa fa-file-excel text-success text-lg mr-2"
-                            onClick={() => handleExcel(tableData)}
+                            // onClick={() => handleExcel(tableData)}
                             style={{ cursor: "pointer" }}
-                        ></i>
-                        <ColorCodingSearch color={"color-indicator-24-bg"} label={t("Admission Done")} />
-                        <ColorCodingSearch color={"color-indicator-2-bg"} label={t("Registration")} />
+                        ></i> */}
+                        {/* <ColorCodingSearch color={"color-indicator-24-bg"} label={t("Admission Done")} />
+                        <ColorCodingSearch color={"color-indicator-2-bg"} label={t("Registration")} /> */}
 
 
                     </>
@@ -346,17 +408,15 @@ function Admission() {
                 {tableData?.length > 0 && <>
                     <Tables
                         thead={thead}
-                        tbody={tableData?.map((ele, index) => ({
+                        tbody={sortedTableData?.map((ele, index) => ({
                             SrNo: index + 1,
-                            checked: <input type="checkbox" name="isChecked" checked={ele?.isChecked} onChange={handleChange} />,
-                            studentId: `${ele?.studentId} `,
-                            name: `${ele?.fullName} `,
-
-                            gender: ele?.gender,
-                            dateOfBirth: moment(ele?.dateOfBirth).format("DD-MM-YYYY"),
-                            class: ele?.academics[0]?.class,
-                            mobile: `${ele?.phone},${ele?.alternatePhone} `,
-                            parents: ele?.parents?.map(p => (`${p?.name},`)),
+                            // checked: <input type="checkbox" name="isChecked" checked={ele?.isChecked} onChange={handleChange} />,
+                            admissionNo: `${ele?.admission?.admissionNo} `,
+                            name: `${ele?.student?.title} ${ele?.student?.firstName} ${ele?.student?.lastName} `,
+                            gender: `${ele?.student?.gender}  `,
+                            dateOfBirth: `${moment(ele?.student?.dateOfBirth).format("DD-MM-YYYY")}  `,
+                            class: `${ele?.academic?.classId}  `,
+                            phone: `${ele?.student?.phone}  `,
                             action: <i className="fa fa-eye" onClick={() => handleOpenStudentProfile(ele)}></i>
                         }))}
                         getRowClass={getRowClass}
