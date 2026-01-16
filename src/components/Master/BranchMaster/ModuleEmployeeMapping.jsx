@@ -82,7 +82,7 @@ const ModuleEmployeeMapping = () => {
 
     try {
       const res = await ModuleEmployeeBranchMapping(payload);
-
+console.log("first",res)
       if (res?.success) {
         notify(res?.message, "success");
         // setTableData((prev) => [...prev, payload[0]]);

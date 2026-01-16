@@ -11,7 +11,6 @@ import Modal from "../../modalComponent/Modal";
 import Enquiry from "../../EnquiryMaster/Enquiry";
 import moment from "moment";
 
-/* ================= INITIAL STATE ================= */
 const initialData = {
     title: { label: "Mr", value: "MR" },
     firstName: "",

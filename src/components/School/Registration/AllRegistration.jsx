@@ -493,6 +493,7 @@ function AllRegistration() {
                 </button>
               </div>
             }))}
+           style={{maxHeight:"60vh"}}
             getRowClass={getRowClass}
           />
 

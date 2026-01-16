@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../formComponent/Input";
 import Tables from "../UI/customTable";
 import Heading from "../UI/Heading";
-import { notify } from "../../utils/utils";
+import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
 import { DeleteEnquiry, EnquiryCreate, GetAllEnquiries, GetEnquiriesByRange } from "../../networkServices/School/RegistrationApi";
 import { useTranslation } from "react-i18next";
 import DatePicker from "../formComponent/DatePicker";
@@ -12,14 +12,15 @@ import ReactSelect from "../formComponent/ReactSelect";
 import ColorCodingSearch from "../commonComponents/ColorCodingSearch";
 import { exportToExcel } from "../../utils/exportLibrary";
 import Modal from "../modalComponent/Modal";
+import { GetAllClasses } from "../../networkServices/AcademicYear";
 
-const Enquiry = ({handleChangeModel}) => {
+const Enquiry = ({ handleChangeModel }) => {
     const [t] = useTranslation();
-     
+
     const { VITE_DATE_FORMAT } = import.meta.env;
     const [handleModelData, setHandleModelData] = useState({});
     const [modalData, setModalData] = useState({});
-    
+
     /* ================= STATE ================= */
     // const initialData = {
     //     toDate: new Date(),
@@ -51,13 +52,15 @@ const Enquiry = ({handleChangeModel}) => {
         previousPercentage: "78",
         desiredClass: "9th",
         isInterested: { label: "Yes", value: "true" },
-        remarks: "Parent is interested in admission from next academic session"
+        remarks: "Parent is interested in admission from next academic session",
+        desiredClass:{label:"",value:""},
+        previousClass:{label:"",value:""}
     };
 
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
-
+const [classes, setClasses] = useState([]);
     /* ================= HANDLER ================= */
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -87,7 +90,7 @@ const Enquiry = ({handleChangeModel}) => {
         }
     }
     const DelEnquiry = async (Student) => {
-        
+
 
         try {
             const response = await DeleteEnquiry(Student?.id);
@@ -117,9 +120,9 @@ const Enquiry = ({handleChangeModel}) => {
             mobileNumber: values.mobileNumber,
             alternateMobileNumber: values.alternateMobileNumber,
             previousSchoolName: values.previousSchoolName,
-            previousClass: values.previousClass,
+            previousClass: values.previousClass?.value,
             previousPercentage: Number(values.previousPercentage),
-            desiredClass: values.desiredClass,
+            desiredClass: values.desiredClass?.value,
             isInterested: values.isInterested?.value === "true" ? true : false,
             remarks: values.remarks
         };
@@ -161,8 +164,23 @@ const Enquiry = ({handleChangeModel}) => {
         setIsEdit(true);
     };
 
+    const getClass = async () => {
+
+        try {
+            const response = await GetAllClasses();
+            if (response?.success) {
+                setClasses(response?.data)
+            } else {
+                notify(response?.message, "error");
+                setTableData([])
+            }
+        } catch (error) {
+            notify("Error saving reason", "error");
+        }
+    };
     useEffect(() => {
         handleSearch();
+        getClass();
     }, []);
     const getRowClass = (val) => {
 
@@ -256,9 +274,9 @@ const Enquiry = ({handleChangeModel}) => {
     const setIsOpen = () => {
         setHandleModelData((val) => ({ ...val, isOpen: false }));
     };
-    const handleDoubleClick=(data)=>{
-console.log("handleDoubleClick",data)
-handleChangeModel(data)
+    const handleDoubleClick = (data) => {
+        console.log("handleDoubleClick", data)
+        handleChangeModel(data)
     }
     return (
 
@@ -331,31 +349,56 @@ handleChangeModel(data)
                         onChange={handleChange}
                     />
 
-                    <Input name="previousClass" lable="Previous Class"
+                    {/* <Input name="previousClass" lable="Previous Class"
                         value={values.previousClass}
                         className="form-control"
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         onChange={handleChange}
-                    />
-
-                    <Input name="previousPercentage" lable="Previous Percentage"
+                    /> */}
+                     <Input name="previousPercentage" lable="Previous Percentage"
                         value={values.previousPercentage}
                         className="form-control"
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         onChange={handleChange}
                     />
+ <ReactSelect
+                        placeholderName={t("Previous Class")}
+                        searchable={true}
+                        respclass="col-xl-3 col-md-4 col-sm-4 col-12"
+                        id="previousClass"
+                        name="previousClass"
+                        removeIsClearable={true}
+                        // dynamicOptions={classes}
+                        dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
+                        handleChange={handleSelect}
+                        value={values?.previousClass?.value}
+                        // requiredClassName="required-fields"
+                    />
+                   
 
-                    <Input name="desiredClass" lable="Desired Class"
+                    {/* <Input name="desiredClass" lable="Desired Class"
                         value={values.desiredClass}
                         className="form-control"
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         onChange={handleChange}
+                    /> */}
+ <ReactSelect
+                        placeholderName={t("Desired Class")}
+                        searchable={true}
+                        respclass="col-xl-3 col-md-4 col-sm-4 col-12"
+                        id="desiredClass"
+                        name="desiredClass"
+                        removeIsClearable={true}
+                        // dynamicOptions={classes}
+                        dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
+                        handleChange={handleSelect}
+                        value={values?.desiredClass?.value}
+                        // requiredClassName="required-fields"
                     />
-
                     <Input name="remarks" lable="Remarks"
                         value={values.remarks}
                         className="form-control"
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        respclass="col-xl-4 col-md-4 col-sm-4 col-12"
                         onChange={handleChange}
                     />
                     <ReactSelect
@@ -369,7 +412,7 @@ handleChangeModel(data)
                         handleChange={handleSelect}
                         value={values.isInterested?.value}
                     />
-                    <div className="col-xl-2 col-md-4 col-sm-4 col-12 d-flex align-items-end justify-content-end">
+                    <div className="col-xl-1 col-md-4 col-sm-4 col-12 ">
                         <button className="btn btn-sm btn-primary" onClick={handleSave}>
                             {isEdit ? "Update" : "Save"}
                         </button>
@@ -486,7 +529,7 @@ handleChangeModel(data)
                                 className="d-flex align-items-center justify-content-center gap-2"
                             // className="row gap-2 text-center"
                             >
-                               
+
                                 <button
                                     id="editBtn"
                                     onclick="handleEdit(item.id)"

@@ -90,10 +90,10 @@ const SubMenuBulk = () => {
                 notify(res?.message, "success");
                 handleGetMenus(values.branchId?.value)
             } else {
-                notify(res?.message, "error");
+                notify(res?.message || res?.data?.message,"error");
             }
         } catch (error) {
-            notify("Something went wrong", "error");
+            console.log("Something went wrong");
         }
     };
 

@@ -109,16 +109,16 @@ const ModuleSubmenuMapping = () => {
 
     try {
       const res = await CreateModuleSubmenuMappingBulk(payload);
-      
+      console.log("res",res)
       if (res?.success) {
         notify(res?.message, "success");
         // setTableData(res?.data)
         // setValues(initialData);
       } else {
-        notify(res?.message || "Failed", "error");
+        notify(res?.message || res?.data?.message, "error");
       }
     } catch (error) {
-      notify("Something went wrong", "error");
+      console.log("Something went wrong");
     }
   };
   const GetSubMenus = async () => {

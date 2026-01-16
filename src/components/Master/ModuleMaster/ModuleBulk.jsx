@@ -85,10 +85,10 @@ const ModuleBulk = () => {
         notify(res?.message, "success");
         getModuleBulk(values.branchId?.value);
       } else {
-        notify(res?.message, "error");
+        notify(res?.message || res?.data?.message , "error");
       }
     } catch (error) {
-      notify("Something went wrong", "error");
+      console.log("Something went wrong", "error");
     }
   };
 

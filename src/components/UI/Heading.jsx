@@ -143,8 +143,10 @@ function Heading({
               {isBreadcrumb ? (
                 <Breadcrumb path={isSlideScreen ? title : ""} />
               ) : (
-                <div>
-                  <label className="text-nowrap m-0 fw-bold">{title}</label>
+                <div style={{ marginLeft:"2px"}}>
+                  <label className="text-nowrap m-0 fw-bold"
+                  style={{color:"#8f8f8f",}}
+                  >{title}</label>
                 </div>
               )}
             </div>
