@@ -38,11 +38,7 @@ const InsertMonthType = () => {
   "name": values?.Month,
   "schoolTypeId": values?.Type?.value,
 }
-        // {
-        //     "categoryId": values.categoryName?.value,
-        //     "name": values?.subCategoryName,
-        //     "displayName": values.displayName,
-        // }
+        
 
         const update = {
             "id": values.id,
@@ -57,11 +53,15 @@ const InsertMonthType = () => {
 
             if (res?.success) {
                 notify(res?.message, "success");
-                getAllSubCategory();
-                setValues(initialData);
+              
+                setValues((preV)=>({
+                    ...preV,
+                    Month: "",
+                   
+                }));
                 setIsEdit(false);
             } else {
-                notify(res?.message, "error");
+                notify(res?.message || res?.data?.message, "error");
             }
         } catch {
             notify("Something went wrong", "error");

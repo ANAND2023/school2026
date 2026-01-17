@@ -196,6 +196,24 @@ export const GetAllItemMaster = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const GetClassMonthItemFees = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetClassMonthItemFees}?schoolTypeId=${params?.schoolTypeId??null}&classId=${params?.classId??null}&sectionId=${params?.sectionId??null}&sessionId=${params?.sessionId??null}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 
 export const UpdateItemMaster = async (params) => {
   store.dispatch(setLoading(true));

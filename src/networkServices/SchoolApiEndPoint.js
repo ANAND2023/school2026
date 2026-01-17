@@ -83,6 +83,7 @@ GetAllSubCategory:`${feeUrl}SubCategory/GetAllSubCategory`,
 UpdateSubCategory:`${feeUrl}SubCategory/UpdateSubCategory`,
 ItemInsertItemMaster:`${feeUrl}Item/InsertItemMaster`,
 GetAllItemMaster:`${feeUrl}Item/GetAllItemMaster`,
+GetClassMonthItemFees:`${feeUrl}FeeRateSchedule/GetClassMonthItemFees`,
 UpdateItemMaster:`${feeUrl}Item/UpdateItemMaster`,
 FeeRateSchedule:`${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
 AllFeeRateSchedule:`${feeUrl}FeeRateSchedule/GetAllFeeRateSchedule`,
@@ -91,6 +92,7 @@ InsertMonthType:`${feeUrl}MonthType/InsertMonthType`,
 GetAllMonthType:`${feeUrl}MonthType/GetAllMonthType`,
 UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
 GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
+// UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
 // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
 
