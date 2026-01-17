@@ -169,6 +169,7 @@ MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
 //Exam Start
   masterAcademicMastercreate_term: `${baseUrlMaster}AcademicMaster/create_term`,
   AcademicMasterget_all_term: `${baseUrlMaster}AcademicMaster/get_all_term`,
+  get_termBranchWise: `${baseUrlMaster}AcademicMaster/get_term`,
   CreateExamType: `${baseUrlMaster}AcademicMaster/CreateExamType`,
   GetAllExamTypes: `${baseUrlMaster}AcademicMaster/GetAllExamTypes`,
   create_exam: `${baseUrlMaster}AcademicMaster/create_exam`,

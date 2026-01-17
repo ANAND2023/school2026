@@ -43,6 +43,23 @@ export const AcademicMasterget_all_term = async () => {
     console.error("Error Found", error);
   }
 };
+export const get_termBranchWise = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "get",
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.get_termBranchWise}?orgId=${params.orgId}&branchId=${params.branchId}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 export const GetAllExamTypes = async () => {
   store.dispatch(setLoading(true));
   try {

@@ -24,7 +24,7 @@ const ModuleEmployeeMapping = () => {
     moduleId: null,
     module: [],
     moduleName: "",
-    branchId: null,
+   
     orgId: localData?.OrganizationId
   };
   const [t] = useTranslation();
@@ -33,7 +33,7 @@ const ModuleEmployeeMapping = () => {
   const [branch, setBranch] = useState([]);
   const [module, setModule] = useState([]);
   const [allUser, setAllUser] = useState([]);
-  console.log("values", values)
+
 
   const handleSelect = (name, option) => {
     setValues((prev) => ({
@@ -47,48 +47,32 @@ const ModuleEmployeeMapping = () => {
   };
 
   const handleSave = async () => {
-    debugger
-    if (!values.module || !values.branchId) {
-      notify("Employee, Module & Branch required", "error");
+    
+    if (!values.module ) {
+      notify("Employee, Module ", "error");
       return;
     }
 
     const payload =
 
       values?.module?.length > 0 ? values?.module.map((mod) => ({
-
         "employeeId": values?.employeeId?.value ?? "",
         "employeeName": values?.employeeId?.label ?? "",
         "moduleId": mod?.code ?? "",
         "moduleName": mod?.name ?? "",
-        "branchId": values.branchId?.value ?? "",
-        "orgId": values.orgId
+        "branchId": userData?.defaultCentre ?? "",
+        "orgId": localData?.OrganizationId
 
       })) : []
 
-    //   [
-    //      {
-    //   "employeeId": values?.employeeId?.value??"",
-    //   "employeeName": values?.employeeId?.label??"",
-    //   "moduleId": values.moduleId?.value??"",
-    //   "moduleName": values.moduleId?.label??"",
-    //   "branchId":values.branchId?.value??"",
-    //   "orgId": values.orgId
-    // }
-
-    //   ];
-
-    console.log("FINAL PAYLOAD 👉", payload);
-
     try {
       const res = await ModuleEmployeeBranchMapping(payload);
-console.log("first",res)
+
       if (res?.success) {
         notify(res?.message, "success");
-        // setTableData((prev) => [...prev, payload[0]]);
         setValues(initialData);
       } else {
-        notify(res?.message || "Failed", "error");
+        notify(res?.message || res?.data?.message, "error");
       }
     } catch (error) {
       notify("Something went wrong", "error");
@@ -101,8 +85,10 @@ console.log("first",res)
     {
       "searchText": "",
       "isAll": 1,
-      "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
-      "branchId": "",
+        "branchId": userData?.defaultCentre ?? "",
+        "orgId": localData?.OrganizationId??"",
+      // "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
+      // "branchId": "",
       // "branchId": "3436b5be-7dd9-43b0-9de8-82d80d8c4683",
       "isActive": 0
     }
@@ -121,21 +107,21 @@ console.log("first",res)
       // notify("Something went wrong", "error");
     }
   };
-  const getData = async () => {
-    const payload = {
-      employeeId: "",
-      organisationID: values?.orgId,
-      isAll: 1
-    };
+  // const getData = async () => {
+  //   const payload = {
+  //     employeeId: "",
+  //     organisationID: values?.orgId,
+  //     isAll: 1
+  //   };
 
-    try {
-      const res = await GetAllBranches(payload);
-      if (res?.success) setBranch(res.data);
-      else notify(res?.message, "error");
-    } catch {
-      notify("Error fetching branches", "error");
-    }
-  };
+  //   try {
+  //     const res = await GetAllBranches(payload);
+  //     if (res?.success) setBranch(res.data);
+  //     else notify(res?.message, "error");
+  //   } catch {
+  //     notify("Error fetching branches", "error");
+  //   }
+  // };
   const getAllUsers = async () => {
     const payload = {
       "pageNumber": 1,
@@ -158,7 +144,7 @@ console.log("first",res)
   };
 
   useEffect(() => {
-    getData();
+    // getData();
     getAllUsers();
     getModuleBulk();
   }, []);
@@ -189,7 +175,7 @@ console.log("first",res)
             value={values.employeeId}
           /> */}
          
-          <ReactSelect
+          {/* <ReactSelect
             name="branchId"
             placeholderName="Select Branch"
             dynamicOptions={branch?.map((ele) => ({
@@ -199,7 +185,7 @@ console.log("first",res)
             respclass="col-xl-3 col-md-4 col-sm-6 col-12"
             handleChange={handleSelect}
             value={values.branchId}
-          />
+          /> */}
            <ReactSelect
             name="employeeId"
             placeholderName="Select Employee"
@@ -247,13 +233,13 @@ console.log("first",res)
           thead={[
             { name: "Employee" },
             { name: "Module" },
-            { name: "Branch" },
+            // { name: "Branch" },
             { name: "Action" }
           ]}
           tbody={tableData.map((item, index) => ({
             employeeName: item.employeeName,
             moduleName: item.moduleName,
-            branchId: item.branchId,
+            // branchId: item.branchId,
             action: (
               <button
                 className="btn btn-sm btn-danger"

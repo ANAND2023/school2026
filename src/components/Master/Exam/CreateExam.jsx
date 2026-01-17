@@ -76,7 +76,7 @@ const CreateExam = () => {
         }
     };
     const handleSave = async () => {
-        if (!values.examName || !values.term.value || !values.branch.value) {
+        if (!values.examName || !values.term.value ) {
             notify(t("Please fill all mandatory fields"), "error");
             return;
         }
@@ -91,8 +91,10 @@ const CreateExam = () => {
             resultPublishDate: moment(values.resultPublishDate).format("YYYY-MM-DD"),
             orgId: userData?.OrganizationId,
             orgName: userData?.OrganizationName ?? "Digital Vidhaya Sarthi Organization",
-            branchId: values.branch.value,
-            branchName: values.branch.label
+            branchId: userData?.defaultCentre,
+            // branchId: values.branch.value,
+            branchName: userData?.defaultCenterName
+            // branchName: values.branch.label
         };
         try {
             const res = await create_exam(payload);
@@ -108,9 +110,10 @@ const CreateExam = () => {
         const payload =
         {
             "orgId": userData?.OrganizationId,
-            "branchId": values.branch.value,
+            "branchId": userData?.defaultCentre,
+            // "branchId": values.branch.value,
             "examId": "",
-            "termId": values.term.value,
+            "termId": values.term.value ??"",
         }
 
         try {
@@ -151,9 +154,6 @@ const CreateExam = () => {
                             onChange={handleChange}
                             respclass="col-md-4"
                         />
-
-
-
                         <ReactSelect
                             placeholderName="Term"
                             name="term"
@@ -179,7 +179,7 @@ const CreateExam = () => {
                             }))}
                         />
 
-                        <ReactSelect
+                        {/* <ReactSelect
                             placeholderName="Branch"
                             className="form-control"
                             name="branch"
@@ -190,7 +190,7 @@ const CreateExam = () => {
                                 value: b.id,
                                 label: b.name
                             }))}
-                        />
+                        /> */}
                         <DatePicker
                             id="startDate"
                             name="startDate"
@@ -227,7 +227,7 @@ const CreateExam = () => {
 
 
 
-                        <div className="col-md-12 mt-3">
+                        <div className="col-xl-2 col-md-4 col-sm-4 col-12 d-flex gap-4">
                             <button className="btn btn-primary btn-sm" onClick={handleSave}>
                                 {t("Save Exam")}
                             </button>

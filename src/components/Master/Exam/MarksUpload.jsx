@@ -177,7 +177,7 @@ console.log("userData",userData)
   };
 
   const handleSave = async() => {
-    debugger
+    
     const payload = buildMarksPayload();
     console.log("SAVE MARKS PAYLOAD 👉", payload);
 try {
@@ -325,6 +325,7 @@ try {
                   name: `${s.student?.firstName || ""} ${
                     s.student?.lastName || ""
                   }`,
+                //   code: s.student?.studentMasterId,
                   code: s.student?.studentId,
                   admissionId: s.admission?.admissionId,
                   rollNo: s.academic?.rollNumber

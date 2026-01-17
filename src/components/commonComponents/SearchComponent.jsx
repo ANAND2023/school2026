@@ -2,75 +2,91 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import EasyUI from "../EasyUI/EasyUI";
 import { useTranslation } from "react-i18next";
 import Input from "../formComponent/Input";
-import { Oldpatientsearch } from "../../networkServices/opdserviceAPI";
-import { BIND_TABLE_OLDPATIENTSEARCH } from "../../utils/constant";
+import { BIND_TABLE_STUDENT_SEARCH } from "../../utils/constant";
 import { debounce, focusInput } from "../../utils/utils";
+import { getadmissionlist } from "../../networkServices/School/RegistrationApi";
+import { notify } from "../../utils/ustil2";
 
-const SearchComponentByUHIDMobileName = ({ onClick,data }) => {
+const SearchComponent = ({ onClick }) => {
   const [t] = useTranslation();
-  const [getOldPatientData, setGetOldPatientData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [studentsList, setStudentsList] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [value, setValue] = useState("");
   const inputRef = useRef(null);
 
-  const handleOldPatientSearch = async (value) => {
+  const handleSearch = async (value) => {
+    const payload = {
+      "sessionId": null,
+      "branchId": null,
+      "classId": null,
+      "fromDate": null,
+      "toDate": null,
+      "studentId": value || null,
+      "admissionNo": null,
+      "rollNumber": null,
+      "firstName": null,
+      "page": 1,
+      "pageSize": 100
+    };
+
     try {
-      const data = await Oldpatientsearch(value);
-      // if(data?.data?.length===1){
-      //   onClick(data?.data[0])
-      // }
-      setGetOldPatientData(data?.data);
-      setSelectedIndex(null); 
+      const response = await getadmissionlist(payload);
+      if (response?.success) {
+        setTableData(response?.data);
+        const students = response?.data?.map((item) => item?.student);
+        setStudentsList(students);
+        notify(response?.message, "success");
+      } else {
+        notify(response?.message, "error");
+      }
+      setSelectedIndex(null);
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
 
-  const debouncedHandleOldPatientSearch = useCallback(
-    debounce(handleOldPatientSearch, 300),
+  const debouncedHandleSearch = useCallback(
+    debounce(handleSearch, 300),
     []
   );
 
   const handleChange = (e) => {
     const { value } = e.target;
     if (value.length > 2) {
-      debouncedHandleOldPatientSearch(value);
+      debouncedHandleSearch(value);
     } else {
-      setGetOldPatientData([]);
+      setTableData([]);
+      setStudentsList([]);
     }
     setValue(value);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      if (selectedIndex !== null && getOldPatientData[selectedIndex]) {
-        onClick(getOldPatientData[selectedIndex]);
+      if (selectedIndex !== null && tableData[selectedIndex]) {
+        onClick(tableData[selectedIndex]);
       }
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       setSelectedIndex((prevIndex) => {
         const newIndex =
-          prevIndex === null
-            ? 0
-            : Math.min(prevIndex + 1, getOldPatientData.length - 1);
+          prevIndex === null ? 0 : Math.min(prevIndex + 1, tableData.length - 1);
         return newIndex;
       });
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setSelectedIndex((prevIndex) => {
         const newIndex =
-          prevIndex === null
-            ? getOldPatientData.length - 1
-            : Math.max(prevIndex - 1, 0);
+          prevIndex === null ? tableData.length - 1 : Math.max(prevIndex - 1, 0);
         return newIndex;
       });
     }
   };
 
   useEffect(() => {
-    // Optionally focus on input when component mounts
-    focusInput("UHIDPatientNameMobileno");
-  }, []); // Empty dependency array to run only on mount
+    focusInput("studentSearch");
+  }, []);
 
   return (
     <div className="row pt-2 pl-2 pr-2">
@@ -80,15 +96,13 @@ const SearchComponentByUHIDMobileName = ({ onClick,data }) => {
             <Input
               type="text"
               className="form-control"
-              id="UHIDPatientNameMobileno"
+              id="studentSearch"
               removeFormGroupClass={false}
-              name="barcode"
-              lable={t(
-                "UHID/Patient Name/Mobile no."
-              )}
+              name="studentSearch"
+              lable={t("Search Student by Admission No / Mobile No / Parent Name")}
               required={true}
               onChange={handleChange}
-              onKeyDown={handleKeyDown} // Add keydown event handler
+              onKeyDown={handleKeyDown}
               inputRef={inputRef}
               value={value}
               respclass={"w-100"}
@@ -97,7 +111,7 @@ const SearchComponentByUHIDMobileName = ({ onClick,data }) => {
               <label
                 style={{
                   border: "1px solid #ced4da",
-                  padding: "2px 5px",
+                  padding: "5px 5px",
                   borderRadius: "3px",
                 }}
                 onClick={() => inputRef.current.focus()}
@@ -107,7 +121,7 @@ const SearchComponentByUHIDMobileName = ({ onClick,data }) => {
             </div>
           </div>
 
-          {getOldPatientData?.length > 0 && (
+          {studentsList?.length > 0 && (
             <div
               style={{
                 position: "absolute",
@@ -117,10 +131,10 @@ const SearchComponentByUHIDMobileName = ({ onClick,data }) => {
               }}
             >
               <EasyUI
-                dataBind={getOldPatientData}
-                dataColoum={BIND_TABLE_OLDPATIENTSEARCH}
-                onClick={onClick}
-                selectedIndex={selectedIndex} // Pass selected index
+                dataBind={studentsList}
+                dataColoum={BIND_TABLE_STUDENT_SEARCH}
+                onClick={(rowData, index) => onClick(tableData[index])}
+                selectedIndex={selectedIndex}
               />
             </div>
           )}
@@ -130,4 +144,4 @@ const SearchComponentByUHIDMobileName = ({ onClick,data }) => {
   );
 };
 
-export default SearchComponentByUHIDMobileName;
+export default SearchComponent;

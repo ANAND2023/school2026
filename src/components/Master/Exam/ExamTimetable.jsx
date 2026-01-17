@@ -637,13 +637,8 @@ import { AcademicMasterget_all_term, create_exam, create_exam_timetable, get_cre
 import { handleReactSelectDropDownOptions } from "../../../utils/utils";
 import moment from "moment";
 import TimePicker from "../../formComponent/TimePicker";
-import Tables from "../../UI/customTable";
 
 const ExamTimetable = () => {
-    const { GetEmployeeWiseCenter } = useSelector(
-        (state) => state?.CommonSlice
-    );
-
     const userData = useLocalStorage("userData", "get");
     const { VITE_DATE_FORMAT } = import.meta.env;
 
@@ -663,16 +658,6 @@ const ExamTimetable = () => {
     const [allExam, setAllExam] = useState([]);
     const [allTerm, setAllTerm] = useState([]);
 
-    /* ================= APPLY TO ALL ================= */
-    const [applyAll, setApplyAll] = useState({
-        examDate: "",
-        startTime: "",
-        endTime: "",
-        passingMarks: "",
-        maxMarks: ""
-    });
-
-    /* ================= API ================= */
     const getClass = async () => {
         try {
             const res = await GetAllClasses();
@@ -683,13 +668,13 @@ const ExamTimetable = () => {
         }
     };
 
-    useEffect(() => {
-        getClass();
-    }, []);
+  
 
-    /* ================= HANDLERS ================= */
     const handleSelect = (name, option) => {
         setValues((prev) => ({ ...prev, [name]: option }));
+        if(name==="term"){
+            getAllExam(option.value)
+        }
     };
 
     const handleMultiSelectChange = (name, selectedOptions) => {
@@ -710,9 +695,6 @@ const ExamTimetable = () => {
 
     const handleApplyAllChange = (e) => {
         const { name, value } = e.target;
-
-        setApplyAll((prev) => ({ ...prev, [name]: value }));
-
         setExamRows((prev) =>
             prev.map((row) => ({
                 ...row,
@@ -729,7 +711,7 @@ const ExamTimetable = () => {
 
     /* ================= SAVE ================= */
     const handleSave = async () => {
-        if (!values.class_Name?.value || !values.branch?.value || examRows.length === 0) {
+        if (!values.class_Name?.value  || examRows.length === 0) {
             notify(t("Please fill all mandatory fields"), "error");
             return;
         }
@@ -739,20 +721,15 @@ const ExamTimetable = () => {
             classId: values.class_Name.value,
             subjectId: String(row.subjectId),
             examDate: moment(row.examDate).format("YYYY-MM-DD"),
-            // startTime: moment(row.startTime).format("hh:mm A"),
-            // endTime: moment(row.endTime).format("hh:mm A"),
             startTime: moment(row.startTime, "HH:mm:ss").format("HH:mm:ss"),
             endTime: moment(row.endTime, "HH:mm:ss").format("HH:mm:ss"),
-
             passingMarks: Number(row.passingMarks),
             maxMarks: Number(row.maxMarks),
             orgId: userData?.OrganizationId,
             orgName: "DVS",
-            branchId: values.branch.value,
-            branchName: values.branch.label
+            branchId: userData?.defaultCentre,
+            branchName: userData?.defaultCenterName
         }));
-
-        console.log("FINAL PAYLOAD 👉", payload);
 
         try {
             const res = await create_exam_timetable(payload);
@@ -778,17 +755,8 @@ const ExamTimetable = () => {
         }
     };
 
-    useEffect(() => {
-        GetSubject()
-    }, [])
-    /* ================= STATIC SUBJECT LIST ================= */
-    const ListSubject = [
-        { id: 1, name: "Mathematics" },
-        { id: 2, name: "Science" },
-        { id: 3, name: "History" },
-        { id: 4, name: "Geography" },
-        { id: 5, name: "English" }
-    ];
+ 
+
     const fetchTerms = async () => {
         try {
             const response = await AcademicMasterget_all_term();
@@ -805,50 +773,19 @@ const ExamTimetable = () => {
             setAllTerm([]);
         }
     };
-    // const getAllExam = async (branch,term) => {
 
-    //     // if ( !branch || !term) {
-    //     //     notify(t("Please fill all mandatory fields"), "error");
-    //     //     return;
-    //     // }
 
-    //     const payload =
-    //     {
-    //         "orgId": userData?.OrganizationId,
-    //         "branchId": branch,
-    //         "examId": "",
-    //         "termId":term,
-    //     }
-
-    //     try {
-    //         const res = await get_created_exam(payload);
-    //         if (res?.success) {
-    //             setAllExam(res?.data);
-    //             notify(t("Exam created successfully"), "success");
-
-    //         }
-    //         else notify(t("Error creating exam"), "error");
-    //     } catch (error) {
-    //         console.log("error", error)
-    //     }
-    // };
-
-    const getAllExam = async (branch, term) => {
+    const getAllExam = async ( term) => {
 
 
         const payload =
         {
             "orgId": userData?.OrganizationId,
-            "branchId": branch,
+            "branchId": userData?.defaultCentre,
             "examId": "",
             "termId": term,
         }
-        // {
-        //     "orgId": userData?.OrganizationId,
-        //     "branchId": values.branch.value,
-        //     "examId": "",
-        //     "termId": values.term.value,
-        // }
+
 
         try {
             const res = await get_created_exam(payload);
@@ -862,16 +799,16 @@ const ExamTimetable = () => {
             console.log("error", error)
         }
     };
-    //    useEffect(() => {
 
-    //         getAllExam(values.branch?.value, values.term?.value, );
-    //     }, [values.branch, values.term, ]);
-    useEffect(() => {
-        getAllExam(values?.branch?.value, values?.term?.value);
-    }, [values.branch, values.term]);
-    useEffect(() => {
-        fetchTerms();
-    }, []);
+    // useEffect(() => {
+    //     // getAllExam(values?.term?.value);
+    // }, [values.term]);
+ 
+       useEffect(() => {
+        GetSubject()
+        getClass();
+         fetchTerms();
+    }, [])
     return (
         <>
             <div className="card border">
@@ -879,7 +816,7 @@ const ExamTimetable = () => {
 
                 <div className="card-body">
                     <div className="row">
-                        <ReactSelect
+                        {/* <ReactSelect
                             placeholderName={t("Branch")}
                             name="branch"
                             respclass="col-md-3"
@@ -889,7 +826,7 @@ const ExamTimetable = () => {
                             }))}
                             handleChange={handleSelect}
                             value={values.branch}
-                        />
+                        /> */}
                         <ReactSelect
                             placeholderName={t("Term")}
                             searchable={true}
@@ -919,7 +856,7 @@ const ExamTimetable = () => {
                         <ReactSelect
                             placeholderName={t("Class")}
                             name="class_Name"
-                            respclass="col-md-3"
+                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                             dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")}
                             handleChange={handleSelect}
                             value={values.class_Name}
@@ -936,6 +873,11 @@ const ExamTimetable = () => {
                             handleChange={handleMultiSelectChange}
                             value={values.Subject}
                         />
+                        <div className="col-xl-2 col-md-4 col-sm-4 col-12">
+                        <button className="btn btn-primary btn-sm" onClick={handleSave}>
+                            {t("Save Timetable")}
+                        </button>
+                    </div>
                     </div>
                     {examRows.length > 0 && (
                         <div className="table-responsive mt-4">
@@ -954,12 +896,7 @@ const ExamTimetable = () => {
                                     <tr className="bg-light">
                                         <th>All</th>
                                         <th>
-                                            {/* <input
-                        type="date"
-                        name="examDate"
-                        className="form-control"
-                        onChange={handleApplyAllChange}
-                      /> */}
+
                                             <DatePicker
                                                 id="examDate"
                                                 name="examDate"
@@ -983,12 +920,7 @@ const ExamTimetable = () => {
                                                 // respclass="col-xl-2 col-md-3 col-sm-4 col-12"
                                                 handleChange={handleApplyAllChange}
                                             />
-                                            {/* <input
-                        type="time"
-                        name="startTime"
-                        className="form-control"
-                        onChange={handleApplyAllChange}
-                      /> */}
+
                                         </th>
                                         <th>
                                             <TimePicker
@@ -1000,12 +932,7 @@ const ExamTimetable = () => {
                                                 // respclass="col-xl-2 col-md-3 col-sm-4 col-12"
                                                 handleChange={handleApplyAllChange}
                                             />
-                                            {/* <input
-                        type="time"
-                        name="endTime"
-                        className="form-control"
-                        onChange={handleApplyAllChange}
-                      /> */}
+
                                         </th>
                                         <th>
                                             <input
@@ -1042,17 +969,9 @@ const ExamTimetable = () => {
                                                     handleChange={(e) =>
                                                         handleRowChange(index, "examDate", e.target.value)
                                                     }
-                                                // respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                                // maxDate={values?.toDate}
+
                                                 />
-                                                {/* <input
-                          type="date"
-                          className="form-control"
-                          value={row.examDate}
-                          onChange={(e) =>
-                            handleRowChange(index, "examDate", e.target.value)
-                          }
-                        /> */}
+
                                             </td>
                                             <td>
                                                 <TimePicker
@@ -1067,14 +986,7 @@ const ExamTimetable = () => {
                                                         handleRowChange(index, "startTime", e.target.value)
                                                     }
                                                 />
-                                                {/* <input
-                          type="time"
-                          className="form-control"
-                          value={row.startTime}
-                          onChange={(e) =>
-                            handleRowChange(index, "startTime", e.target.value)
-                          }
-                        /> */}
+
                                             </td>
                                             <td>
                                                 <TimePicker
@@ -1089,14 +1001,7 @@ const ExamTimetable = () => {
                                                         handleRowChange(index, "endTime", e.target.value)
                                                     }
                                                 />
-                                                {/* <input
-                          type="time"
-                          className="form-control"
-                          value={row.endTime}
-                          onChange={(e) =>
-                            handleRowChange(index, "endTime", e.target.value)
-                          }
-                        /> */}
+
                                             </td>
                                             <td>
                                                 <input
@@ -1125,11 +1030,7 @@ const ExamTimetable = () => {
                         </div>
                     )}
 
-                    <div className="mt-3">
-                        <button className="btn btn-primary btn-sm" onClick={handleSave}>
-                            {t("Save Timetable")}
-                        </button>
-                    </div>
+                    
 
                 </div>
             </div>

@@ -158,7 +158,7 @@ const GradingSystem = () => {
             type="text"
             name="Remark"
             value={values.Remark}
-            lable="Max Percentage"
+            lable="Remark"
             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
             onChange={handleChange}
             className="form-control"

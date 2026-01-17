@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { t } from 'i18next';
-import { AcademicMasterget_all_term, masterAcademicMastercreate_term } from '../../../networkServices/School/exam';
+import { AcademicMasterget_all_term, get_termBranchWise, masterAcademicMastercreate_term } from '../../../networkServices/School/exam';
 import { notify } from '../../../utils/ustil2';
 import Heading from '../../UI/Heading';
 import Input from '../../formComponent/Input';
@@ -38,9 +38,15 @@ const CreateTerm = () => {
     // --- API Calls ---
 
     const fetchTerms = async () => {
+        const payload ={
+          
+            "orgId": userData?.OrganizationId,
+            "branchId": userData?.defaultCentre,
+        }
         try {
-            const response = await AcademicMasterget_all_term();
-            // Checking response structure based on your provided JSON
+            const response = await get_termBranchWise(payload);
+            // const response = await AcademicMasterget_all_term();
+           
             if (response && Array.isArray(response)) {
                 setTableData(response);
             } else if (response?.success && response?.data) {
@@ -65,8 +71,10 @@ const CreateTerm = () => {
                 "termName": values.termName,
                 "orgId": userData?.OrganizationId, 
                 "orgName": "Digital Vidhaya Sarthi Organization", 
-                "branchId": values.branchId?.value, 
-                "branchName":   values.branchId?.label
+                "branchId": userData?.defaultCentre, 
+                // "branchId": values.branchId?.value, 
+                "branchName":   userData?.defaultCenterName
+                // "branchName":   values.branchId?.label
             };
 
             const response = await masterAcademicMastercreate_term(payload);
@@ -98,11 +106,7 @@ const CreateTerm = () => {
     const handleDelete = async (item) => {
         if (window.confirm(t("Are you sure you want to delete this term?"))) {
             try {
-                // You didn't provide a delete API, but typically it looks like this:
-                // const payload = { id: item.id };
-                // const response = await AcademicMasterdelete_term(payload);
-                
-                // For now, just a notification
+               
                 console.log("Delete item:", item);
                 notify(t("Delete functionality implementation required"), "info");
                 
@@ -126,7 +130,7 @@ const CreateTerm = () => {
 
     return (
         <>
-            {/* --- Section 1: Create Term --- */}
+            
             <div className="card border mb-2">
                 <Heading title={t("Create Term")} 
                 // isBreadcrumb={true}
@@ -134,7 +138,7 @@ const CreateTerm = () => {
                 
                 <div className="card-body p-2">
                     <div className="row ">
-                         <ReactSelect
+                         {/* <ReactSelect
                                     placeholderName="Branch"
                                     respclass="col-xl-2 col-md-4 col-sm-6 col-12"
                                     name="branchId"
@@ -146,7 +150,7 @@ const CreateTerm = () => {
                                     handleChange={handleSelect}
                                     value={values.branchId}
                                     className="form-control"
-                                  />
+                                  /> */}
                         <Input
                             type="text"
                             className="form-control"
@@ -192,13 +196,13 @@ const CreateTerm = () => {
                             thead={[
                                 { name: t("S.No"), width: "5%" },
                                 { name: t("Term Name"), width: "35%" },
-                                { name: t("Branch Name"), width: "35%" },
+                                // { name: t("Branch Name"), width: "35%" },
                                 { name: t("Action"), width: "10%", className: "text-center" }
                             ]}
                             tbody={tableData.map((item, index) => ({
                                 "S.No": index + 1,
                                 "Term Name": item.termName,
-                                "Branch Name": item.branchName,
+                                // "Branch Name": item.branchName,
                                 "Action": (
                                     <div className="text-center">
                                         <i 

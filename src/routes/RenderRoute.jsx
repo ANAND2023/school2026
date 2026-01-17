@@ -296,6 +296,7 @@ const allRoutes = {
       component: lazy(() => import("@app/modules/login/ForgetPassword.jsx")),
       exact: true,
     },
+
     {
       path: "/pre-registration",
       component: lazy(() => import("@app/modules/Registration/Registraion.jsx")),
@@ -747,5 +748,17 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/module",
+      component: lazy(
+        () => import("@app/components/Master/ModuleMaster/ModuleBulk.jsx")
+      ),exact: true,
+
+    },
+
+
+    // C:\Users\Anand\Desktop\school\school2026\src\components\Master\ModuleMaster\ModuleBulk.jsx
      ],
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Heading from '../../../components/UI/Heading'
 import { useTranslation } from 'react-i18next';
-import SearchComponentByUHIDMobileName from '../../../components/commonComponents/SearchComponentByUHIDMobileName';
+import SearchComponentByUHIDMobileName from '../../../components/commonComponents/SearchComponent';
 import LabeledInput from '../../../components/formComponent/LabeledInput';
 import Input from '../../../components/formComponent/Input';
 import { Tabfunctionality } from '../../../utils/helpers';

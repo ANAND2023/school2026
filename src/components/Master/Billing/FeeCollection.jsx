@@ -1,9 +1,226 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { t } from 'i18next';
+import Heading from '../../UI/Heading';
+import SearchComponent from '../../commonComponents/SearchComponent';
+import Input from '../../formComponent/Input';
+import ReactSelect from '../../formComponent/ReactSelect';
+import Tables from '../../UI/customTable';
+import moment from 'moment';
+import MultiSelectComp from '../../formComponent/MultiSelectComp';
+
+
+// Mock data for initial table state
+const INITIAL_ITEMS = [
+  { id: 1, isMandatory: true, itemName: 'Tuition Fee', itemRate: 5000, description: 'Monthly Fee', qty: 1, disc: 0, discPerc: 0 },
+  { id: 2, isMandatory: false, itemName: 'Transport Fee', itemRate: 2000, description: 'Bus Route 5', qty: 1, disc: 0, discPerc: 0 },
+];
 
 const FeeCollection = () => {
-  return (
-    <div>FeeCollection</div>
-  )
-}
 
-export default FeeCollection
+  const [studentData, setStudentData] = useState(null);
+  const [feeItems, setFeeItems] = useState(INITIAL_ITEMS);
+
+
+  const [values, setValues] = useState({
+    discountPerc: "",
+    months: [],
+    searchType:  { label: "Fee", value: "Fee" },
+    searchCategory: null,
+    searchSubCategory: null,
+    searchText: ""
+  });
+
+  // Mock Options
+  const monthOptions = [
+    { name: "January", code: "1" },
+    { name: "February", code: "2" },
+    { name: "March", code: "3" }
+  ];
+
+  const typeOptions = [
+    { label: "Fee", value: "Fee" },
+    { label: "Material", value: "Material" }
+  ];
+
+  // --- Handlers ---
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name, selectedOption) => {
+    setValues((prev) => ({ ...prev, [name]: selectedOption }));
+  };
+
+  // Table Input Handler
+  const handleTableChange = (id, field, value) => {
+    const updatedItems = feeItems.map(item =>
+      item.id === id ? { ...item, [field]: value } : item
+    );
+    setFeeItems(updatedItems);
+  };
+
+  // Helper to get student info safely
+  const getStudentVal = (field) => {
+    return studentData.length > 0 ? studentData[0][field] : '';
+  };
+
+  console.log("studentData", studentData);
+  return (
+    <div className='card border'>
+      <Heading title={t("Fee Collection")}
+      />
+
+
+      {!studentData && (
+        <div className="p-2">
+          <SearchComponent onClick={setStudentData} />
+        </div>
+      )}
+
+
+      {studentData && (
+        <div className=" ">
+
+
+          <div className="row mb-2 p-2">
+            <Input
+              type="text"
+              className="form-control"
+              id="studentFirstName"
+              name="studentFirstName"
+              lable={t("Student First Name")}
+              value={studentData?.student?.firstName}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="studentLastName"
+              name="studentLastName"
+              lable={t("Student lastName Name")}
+              value={studentData?.student?.lastName}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="studentID"
+              name="studentID"
+              lable={t("Student ID")}
+              value={studentData?.student?.studentId}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="class"
+              name="class"
+              lable={t("Class")}
+              value={studentData?.academic?.classId}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="admissionDate"
+              name="admissionDate"
+              lable={t("Admission Date")}
+              value={moment(studentData?.academic?.admissionDate).format("DD-MM-YYYY")}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="contactNo"
+              name="contactNo"
+              lable={t("Contact No.")}
+              value={studentData?.student?.phone}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="discountPer"
+              name="discountPer"
+              lable={t("Discount %")}
+              value={studentData?.student?.discountPer}
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              disabled={true}
+            />
+            <MultiSelectComp
+              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+              name="months"
+              id="months"
+              placeholderName={t("Months")}
+              // dynamicOptions={module}
+              dynamicOptions={monthOptions?.map((ele) => ({
+                name: ele?.name,
+                code: ele?.id
+              }))}
+              handleChange={handleSelectChange}
+              value={values.months}
+            />
+          </div>
+          <Heading title={t("Search Item")}  />
+          <div className="row mb-3 align-items-end mt-2 p-2">
+            <ReactSelect
+              placeholderName={t("Type")}
+              id="searchType"
+              name="searchType"
+              searchable={true}
+              respclass="col-xl-2 col-md-3 col-sm-6 col-12"
+              dynamicOptions={typeOptions}
+              value={values?.searchType?.value}
+              handleChange={handleSelectChange}
+            />
+            <ReactSelect
+              placeholderName={t("Category")}
+              id="searchCategory"
+              name="searchCategory"
+              searchable={true}
+              respclass="col-xl-2 col-md-3 col-sm-6 col-12"
+              dynamicOptions={[]} // Bind API options here
+              value={values.searchCategory}
+              handleChange={handleSelectChange}
+            />
+            <ReactSelect
+              placeholderName={t("Sub Category")}
+              id="searchSubCategory"
+              name="searchSubCategory"
+              searchable={true}
+              respclass="col-xl-2 col-md-3 col-sm-6 col-12"
+              dynamicOptions={[]} // Bind API options here
+              value={values.searchSubCategory}
+              handleChange={handleSelectChange}
+            />
+            <Input
+              type="text"
+              className="form-control"
+              id="searchText"
+              name="searchText"
+              lable={t("Search Item")}
+              value={values.searchText}
+              onChange={handleChange}
+              respclass="col-xl-6 col-md-3 col-sm-6 col-12"
+            />
+            {/* <div className="col-xl-2 col-md-12 col-sm-12 col-12 mb-1">
+              <button className="btn btn-sm btn-primary w-100">{t("Search")}</button>
+            </div> */}
+          </div>
+
+
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FeeCollection;

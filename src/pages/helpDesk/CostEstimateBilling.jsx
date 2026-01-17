@@ -20,7 +20,7 @@ import ReactSelect from "../../components/formComponent/ReactSelect";
 import Modal from "../../components/modalComponent/Modal";
 import { useFormik } from "formik";
 import PaymentGateway from "../../components/front-office/PaymentGateway";
-import SearchComponentByUHIDMobileName from "../../components/commonComponents/SearchComponentByUHIDMobileName";  
+import SearchComponentByUHIDMobileName from "../../components/commonComponents/SearchComponent";  
 import DetailsCardForDefaultValue from "../../components/commonComponents/DetailsCardForDefaultValue";
 import {
   handleReactSelectDropDownOptions,

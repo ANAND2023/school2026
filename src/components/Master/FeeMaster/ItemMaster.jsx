@@ -9,7 +9,6 @@ import ReactSelect from "../../formComponent/ReactSelect";
 const ItemMaster = () => {
     const initialData = {
         id: null,
-
         item: "",
         displayName: "",
         subCategory: {},

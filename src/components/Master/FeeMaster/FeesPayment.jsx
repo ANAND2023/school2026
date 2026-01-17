@@ -29,7 +29,7 @@ import {
 
 } from "../../../networkServices/CostEstimateBillingAPI";
 
-import SearchComponentByUHIDMobileName from "../../commonComponents/SearchComponentByUHIDMobileName";
+import SearchComponentByUHIDMobileName from "../../commonComponents/SearchComponent";
 import DetailsCardForDefaultValue from "../../commonComponents/DetailsCardForDefaultValue";
 import Index from "../../../pages/pharmacy/PatientIssue";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";

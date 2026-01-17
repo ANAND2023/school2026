@@ -267,7 +267,7 @@ function AllRegistration() {
 
   const handleAdmission = async () => {
 
-    debugger
+    
     setHandleModelData({
       label: t("Approve Admission"),
       buttonName: t("Save"),
