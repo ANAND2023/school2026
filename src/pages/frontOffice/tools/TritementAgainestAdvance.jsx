@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import Heading from '../../../components/UI/Heading';
-import SearchComponentByUHIDMobileName from '../../../components/commonComponents/SearchComponentByUHIDMobileName';
+import SearchComponentByUHIDMobileName from '../../../components/commonComponents/SearchComponent';
 import { bindPanelByPatientID, getPatientAdvanceAgainstTreatmentApi, opdgetPatientAdvanceCms, patientAdvanceAgainstTreatmentApi, SaveOrUpdatePatientAdvanceAgainstTreatment } from '../../../networkServices/opdserviceAPI';
 import ReactSelect from '../../../components/formComponent/ReactSelect';
 import { handleReactSelectDropDownOptions } from '../../../utils/utils';

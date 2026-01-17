@@ -69,6 +69,7 @@ export const BIND_TABLE_OLDPATIENTSEARCH = [
     width: 50,
   },
 ];
+
 export const BIND_TABLE_CHEMOPATIENTSEARCH = [
   {
     field: "PatientID",
@@ -2962,4 +2963,64 @@ export const IPDbillDataReportConstant = [
   { label: "Receipt Wise", value: 2 },
   { label: "Bill Data Wise", value: 3 },
   { label: "Only Package Data", value: 4 },
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////
+export const BIND_TABLE_STUDENT_SEARCH = [
+  {
+    field: "title",
+    title: "Title",
+    width: 30,
+  },
+  {
+    field: "firstName",
+    title: "First Name",
+    width: 100,
+  },
+  {
+    field: "lastName",
+    title: "Last Name",
+    width: 80,
+  },
+  {
+    field: "studentId",
+    title: "Student Id",
+    width: 100,
+  },
+  {
+    field: "phone",
+    title: "Phone No.",
+    width: 80,
+  },
+  {
+    field: "email",
+    title: "Email",
+    width: 100,
+  },
+  
 ];

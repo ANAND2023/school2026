@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactSelect from "../../components/formComponent/ReactSelect";
 import Modal from "../../components/modalComponent/Modal";
 import { useFormik } from "formik";
-import SearchComponentByUHIDMobileName from "../../components/commonComponents/SearchComponentByUHIDMobileName";
+import SearchComponentByUHIDMobileName from "../../components/commonComponents/SearchComponent";
 import DetailsCardForDefaultValue from "../../components/commonComponents/DetailsCardForDefaultValue";
 import Heading from "../../components/UI/Heading";
 import Index from "../frontOffice/PatientRegistration/Index";

@@ -36,7 +36,7 @@ import {
     notify,
     reactSelectOptionList,
 } from "../../utils/utils";
-import SearchComponentByUHIDMobileName from "../../components/commonComponents/SearchComponentByUHIDMobileName";
+import SearchComponentByUHIDMobileName from "../../components/commonComponents/SearchComponent";
 import DetailsCardForDefaultValue from "../../components/commonComponents/DetailsCardForDefaultValue";
 import Index from "../frontOffice/PatientRegistration/Index";
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
