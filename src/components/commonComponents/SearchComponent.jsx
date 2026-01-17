@@ -5,6 +5,7 @@ import Input from "../formComponent/Input";
 import { BIND_TABLE_STUDENT_SEARCH } from "../../utils/constant";
 import { debounce, focusInput } from "../../utils/utils";
 import { getadmissionlist } from "../../networkServices/School/RegistrationApi";
+import { notify } from "../../utils/ustil2";
 
 const SearchComponent = ({ onClick }) => {
   const [t] = useTranslation();
