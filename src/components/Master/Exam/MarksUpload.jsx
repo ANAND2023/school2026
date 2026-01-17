@@ -15,6 +15,7 @@ import { getadmissionlist } from "../../../networkServices/School/RegistrationAp
 
 import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import Tables from "../../UI/customTable";
+import Heading from "../../UI/Heading";
 
 const MarksUpload = () => {
   const userData = useLocalStorage("userData", "get");
@@ -228,10 +229,14 @@ try {
       selectedSubjects.forEach((sub) => {
         const cell = marks[stu.code]?.[sub.code] || {};
         row[sub.name] = (
-          <div className="d-flex align-items-center justify-content-center gap-2">
-            <div className="form-check form-switch m-0">
+          <div className="d-flex align-items-center justify-content-center gap-2"
+       
+          >
+            <div
+            //  className="form-check form-switch m-0"
+             >
               <input
-                className="form-check-input"
+                // className="form-check-input"
                 type="checkbox"
                 checked={!cell.isAbsent}
                 onChange={(e) =>
@@ -269,10 +274,7 @@ try {
   return (
     <div className="container-fluid py-4">
       <div className="card shadow-sm">
-        <div className="card-header bg-primary text-white fw-bold">
-          {t("Marks Upload")}
-        </div>
-
+         <Heading title={t("Marks Upload")} isBreadcrumb={false}/>
         <div className="card-body">
           {/* Filters */}
           <div className="row g-3 mb-4">

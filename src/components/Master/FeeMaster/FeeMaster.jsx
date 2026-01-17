@@ -9,6 +9,7 @@ import ItemMaster from './ItemMaster';
 import RateScheduleByCalss from './RateScheduleByCalss';
 import ClassWiseItemRateMapping from './ClassWiseItemRateMapping';
 import InsertMonthType from './InsertMonthType';
+import ClassFeeMonthMapping from './ClassFeeMonthMapping';
 
 const FeeMaster = () => {
     const tabs = [
@@ -17,6 +18,7 @@ const FeeMaster = () => {
         { id: 'ItemMaster', label: 'ItemMaster', icon: User, color: '#0d6efd', component: <ItemMaster /> },
         { id: 'InsertMonthType', label: 'InsertMonthType', icon: User, color: '#0d6efd', component: <InsertMonthType /> },
         { id: 'ClassWiseItemRateMapping', label: 'ClassWiseItemRateMapping', icon: User, color: '#0d6efd', component: <ClassWiseItemRateMapping /> },
+        { id: 'ClassFeeMonthMapping', label: 'ClassFeeMonthMapping', icon: User, color: '#0d6efd', component: <ClassFeeMonthMapping /> },
     ];
     return (
         <div>
