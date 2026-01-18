@@ -160,7 +160,7 @@ function Input({
           }
           {lable && (
             <label htmlFor={id} className="lable truncate"
-             style={{ color: currentTheme.primary }}
+             style={{ color: currentTheme.primary, pointerEvents: 'none' }}
             >
               {lable}
             </label>

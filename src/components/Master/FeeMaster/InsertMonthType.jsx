@@ -5,10 +5,11 @@ import Heading from "../../UI/Heading";
 import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import { createcategory, GetAllCategory, GetAllMonthType, GetAllSubCategory, InsertMonthTypes, InsertSubCategory, updatecategory, UpdateSubCategory } from "../../../networkServices/FeeMaster";
 import ReactSelect from "../../formComponent/ReactSelect";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 const InsertMonthType = () => {
     const initialData = {
-      
+
         Month: "",
         Type: {
             value: "",
@@ -16,6 +17,7 @@ const InsertMonthType = () => {
         },
     };
 
+    const localData = useLocalStorage("userData", "get");
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
     const [allCategory, setAllCategory] = useState([]);
@@ -32,18 +34,22 @@ const InsertMonthType = () => {
 
     /* ================= CREATE / UPDATE ================= */
     const handleSave = async () => {
-        
+
         const payload =
         {
-  "name": values?.Month,
-  "schoolTypeId": values?.Type?.value,
-}
-        
+            "name": values?.Month,
+            "schoolTypeId": values?.Type?.value,
+            "OrgId": localData?.OrganizationId,
+            "branchId": localData?.defaultCentre
+        }
+
 
         const update = {
             "id": values.id,
             "name": values?.subCategoryName,
             "displayName": values.displayName,
+            "OrgId": localData?.OrganizationId,
+            "branchId": localData?.defaultCentre
         }
 
         try {
@@ -53,11 +59,12 @@ const InsertMonthType = () => {
 
             if (res?.success) {
                 notify(res?.message, "success");
-              
-                setValues((preV)=>({
+                AllMonthType()
+
+                setValues((preV) => ({
                     ...preV,
                     Month: "",
-                   
+
                 }));
                 setIsEdit(false);
             } else {
@@ -70,7 +77,7 @@ const InsertMonthType = () => {
 
     const getAllCategory = async () => {
         try {
-            const res = await GetAllCategory();
+            const res = await GetAllCategory(localData?.OrganizationId, localData?.defaultCentre);
             if (res?.success) {
                 setAllCategory(res?.data);
             }
@@ -80,7 +87,7 @@ const InsertMonthType = () => {
     };
     const AllMonthType = async () => {
         try {
-            const res = await GetAllMonthType();
+            const res = await GetAllMonthType(localData?.OrganizationId, localData?.defaultCentre);
             if (res?.success) {
                 setTableData(res?.data);
             }
@@ -104,7 +111,7 @@ const InsertMonthType = () => {
     useEffect(() => {
         getAllCategory();
         AllMonthType();
-    }, []);
+    }, [localData?.OrganizationId, localData?.defaultCentre]);
 
     return (
         <div className="card p-2">
@@ -156,14 +163,14 @@ const InsertMonthType = () => {
             <Tables
                 thead={[
                     { name: "Month Name" },
-                   
+
 
                     { name: "Action" }
                 ]}
                 tbody={tableData.map((item) => ({
-                   
+
                     name: item.name,
-                  
+
 
                     action: <>
 

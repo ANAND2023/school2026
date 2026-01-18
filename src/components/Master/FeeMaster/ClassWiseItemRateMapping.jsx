@@ -19,6 +19,7 @@ import {
   UpdateBulkItemClassMonthWise,
 } from "../../../networkServices/FeeMaster";
 import Tables from "../../UI/customTable";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 function ClassWiseItemRateMapping() {
   const [t] = useTranslation();
@@ -28,7 +29,7 @@ function ClassWiseItemRateMapping() {
     Month: { label: "", value: "" },
     item: [],
   };
-
+  const localData = useLocalStorage("userData", "get");
   const [values, setValues] = useState(initialData);
   const [classes, setClasses] = useState([]);
   const [allItem, setAllItem] = useState([]);
@@ -52,7 +53,7 @@ function ClassWiseItemRateMapping() {
 
   const getItems = async () => {
     try {
-      const res = await GetAllItemMaster();
+      const res = await GetAllItemMaster(localData?.OrganizationId, localData?.defaultCentre);
       if (res?.success) setAllItem(res?.data);
     } catch {
       notify("Failed to load items", "error");
@@ -61,7 +62,7 @@ function ClassWiseItemRateMapping() {
 
   const getMonths = async () => {
     try {
-      const res = await GetAllMonthType();
+      const res = await GetAllMonthType(localData?.OrganizationId, localData?.defaultCentre);
       if (res?.success) setAllMonth(res?.data);
     } catch {
       notify("Failed to load months", "error");
@@ -82,10 +83,14 @@ function ClassWiseItemRateMapping() {
 
   useEffect(() => {
     getClass();
-    getItems();
+    
     getMonths();
 
   }, []);
+
+  useEffect(()=>{
+    getItems();
+  },[localData?.OrganizationId, localData?.defaultCentre])
 
   /* ---------------- HANDLERS ---------------- */
 

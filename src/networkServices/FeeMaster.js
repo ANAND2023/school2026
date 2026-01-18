@@ -45,7 +45,7 @@ export const updatecategory = async (params) => {
 };
 
 
-export const GetAllCategory = async (params) => {
+export const GetAllCategory = async (OrgId,BranchId) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
@@ -53,7 +53,7 @@ export const GetAllCategory = async (params) => {
       // data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.GetAllCategory}`,
+      `${apiUrls.GetAllCategory}?OrgId=${OrgId}&BranchId=${BranchId}`,
       options
     );
     store.dispatch(setLoading(false));
@@ -102,7 +102,7 @@ export const UpdateSubCategory = async (params) => {
   }
 };
 
-export const GetAllSubCategory = async (params) => {
+export const GetAllSubCategory = async (OrgId,BranchId) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
@@ -110,7 +110,7 @@ export const GetAllSubCategory = async (params) => {
       // data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.GetAllSubCategory}`,
+      `${apiUrls.GetAllSubCategory}?OrgId=${OrgId}&BranchId=${BranchId}&OrdId=${OrgId}`,
       options
     );
     store.dispatch(setLoading(false));
@@ -159,7 +159,7 @@ export const InsertMonthTypes = async (params) => {
   }
 };
 
-export const GetAllMonthType = async (params) => {
+export const GetAllMonthType = async (OrgId,BranchId) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
@@ -167,7 +167,7 @@ export const GetAllMonthType = async (params) => {
       // data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.GetAllMonthType}`,
+      `${apiUrls.GetAllMonthType}?OrgId=${OrgId}&BranchId=${BranchId}`,
       options
     );
     store.dispatch(setLoading(false));
@@ -178,7 +178,7 @@ export const GetAllMonthType = async (params) => {
   }
 };
 
-export const GetAllItemMaster = async (params) => {
+export const GetAllItemMaster = async (OrgId,BranchId) => {
   store.dispatch(setLoading(true));
   try {
     const options = {
@@ -186,7 +186,7 @@ export const GetAllItemMaster = async (params) => {
       // data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.GetAllItemMaster}`,
+      `${apiUrls.GetAllItemMaster}?OrgId=${OrgId}&BranchId=${BranchId}`,
       options
     );
     store.dispatch(setLoading(false));

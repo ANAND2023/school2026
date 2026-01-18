@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { t } from 'i18next';
 import Heading from '../../UI/Heading';
 import SearchComponent from '../../commonComponents/SearchComponent';
@@ -7,6 +7,8 @@ import ReactSelect from '../../formComponent/ReactSelect';
 import Tables from '../../UI/customTable';
 import moment from 'moment';
 import MultiSelectComp from '../../formComponent/MultiSelectComp';
+import { GetAllCategory, GetAllMonthType, GetAllSubCategory } from '../../../networkServices/FeeMaster';
+import { useLocalStorage } from '../../../utils/hooks/useLocalStorage';
 
 
 // Mock data for initial table state
@@ -16,30 +18,27 @@ const INITIAL_ITEMS = [
 ];
 
 const FeeCollection = () => {
-
+  const localData = useLocalStorage("userData", "get");
   const [studentData, setStudentData] = useState(null);
   const [feeItems, setFeeItems] = useState(INITIAL_ITEMS);
+  const [monthlist, setMonthList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [subCategoryList, setSubCategoryList] = useState([]);
 
 
   const [values, setValues] = useState({
     discountPerc: "",
     months: [],
-    searchType:  { label: "Fee", value: "Fee" },
+    searchType: { label: "All", value: "0" },
     searchCategory: null,
     searchSubCategory: null,
     searchText: ""
   });
 
-  // Mock Options
-  const monthOptions = [
-    { name: "January", code: "1" },
-    { name: "February", code: "2" },
-    { name: "March", code: "3" }
-  ];
+
 
   const typeOptions = [
-    { label: "Fee", value: "Fee" },
-    { label: "Material", value: "Material" }
+    { label: "All", value: "0" },
   ];
 
   // --- Handlers ---
@@ -61,10 +60,46 @@ const FeeCollection = () => {
     setFeeItems(updatedItems);
   };
 
-  // Helper to get student info safely
-  const getStudentVal = (field) => {
-    return studentData.length > 0 ? studentData[0][field] : '';
+  const AllMonthType = async () => {
+    try {
+      const res = await GetAllMonthType(localData?.OrganizationId, localData?.defaultCentre);
+      if (res?.success) {
+        setMonthList(res?.data);
+      }
+    } catch {
+      notify("Failed to load categories", "error");
+    }
   };
+
+  const getAllCategory = async () => {
+    try {
+      const res = await GetAllCategory(localData?.OrganizationId, localData?.defaultCentre);
+      if (res?.success) {
+        setCategoryList(res?.data);
+      }
+    } catch {
+      notify("Failed to load categories", "error");
+    }
+  };
+
+  const getAllSubCategory = async () => {
+    try {
+      const res = await GetAllSubCategory(localData?.OrganizationId, localData?.defaultCentre);
+      if (res?.success) {
+        setSubCategoryList(res?.data);
+      }
+    } catch {
+      notify("Failed to load categories", "error");
+    }
+  };
+
+
+  useEffect(() => {
+    AllMonthType()
+    getAllCategory()
+    getAllSubCategory()
+  }, [localData?.OrganizationId, localData?.defaultCentre])
+
 
   console.log("studentData", studentData);
   return (
@@ -161,7 +196,7 @@ const FeeCollection = () => {
               id="months"
               placeholderName={t("Months")}
               // dynamicOptions={module}
-              dynamicOptions={monthOptions?.map((ele) => ({
+              dynamicOptions={monthlist?.map((ele) => ({
                 name: ele?.name,
                 code: ele?.id
               }))}
@@ -169,7 +204,7 @@ const FeeCollection = () => {
               value={values.months}
             />
           </div>
-          <Heading title={t("Search Item")}  />
+          <Heading title={t("Search Item")} />
           <div className="row mb-3 align-items-end mt-2 p-2">
             <ReactSelect
               placeholderName={t("Type")}
@@ -187,7 +222,7 @@ const FeeCollection = () => {
               name="searchCategory"
               searchable={true}
               respclass="col-xl-2 col-md-3 col-sm-6 col-12"
-              dynamicOptions={[]} // Bind API options here
+              dynamicOptions={categoryList?.map((item) => ({ label: item?.categoryName, value: item?.id }))}
               value={values.searchCategory}
               handleChange={handleSelectChange}
             />
@@ -197,7 +232,7 @@ const FeeCollection = () => {
               name="searchSubCategory"
               searchable={true}
               respclass="col-xl-2 col-md-3 col-sm-6 col-12"
-              dynamicOptions={[]} // Bind API options here
+              dynamicOptions={subCategoryList?.map((item) => ({ label: item?.displayName, value: item?.id }))}
               value={values.searchSubCategory}
               handleChange={handleSelectChange}
             />

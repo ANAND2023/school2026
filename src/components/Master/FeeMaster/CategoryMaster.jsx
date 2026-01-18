@@ -4,8 +4,11 @@ import Tables from "../../UI/customTable";
 import Heading from "../../UI/Heading";
 import { notify } from "../../../utils/utils";
 import { createcategory, GetAllCategory, updatecategory } from "../../../networkServices/FeeMaster";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 const CategoryMaster = () => {
+
+  const localData = useLocalStorage("userData", "get");
   const initialData = {
     id: null,
     categoryName: "",
@@ -33,7 +36,9 @@ const CategoryMaster = () => {
     const payload = {
       categoryName: values.categoryName,
       displayName: values.displayName,
-      remarks: values.remarks
+      remarks: values.remarks,
+      OrgId: localData?.OrganizationId,
+      BranchId: localData?.defaultCentre
     };
 
     try {
@@ -56,7 +61,7 @@ const CategoryMaster = () => {
 
   const getAllCategory = async () => {
     try {
-      const res = await GetAllCategory();
+      const res = await GetAllCategory(localData?.OrganizationId, localData?.defaultCentre);
       if (res?.success) {
         setTableData(res?.data);
       }
