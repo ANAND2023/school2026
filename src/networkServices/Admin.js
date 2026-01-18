@@ -223,4 +223,22 @@ export const MasterGetAllPaymentModes = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const CreateTeacherAttendance = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.CreateTeacherAttendance}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 // user end ...   

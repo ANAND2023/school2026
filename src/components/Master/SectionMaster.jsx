@@ -93,7 +93,7 @@ function SectionMaster() {
                 setValues(initialData)
                 getData()
             } else {
-                notify(Response?.message, "error");
+                notify(Response?.message || Response?.data?.message, "error");
             }
         } catch (error) {
             notify("Error saving reason", "error");
@@ -109,6 +109,10 @@ function SectionMaster() {
     const handleSelect = (name, value) => {
         setValues((prev) => ({ ...prev, [name]: value }));
     };
+    const sortedOptions = [...classes]
+  .sort((a, b) => a.classOrder - b.classOrder) // ascending order by classOrder
+  .map(item => ({ label: item.className, value: item.id })); // ReactSelect format
+
     return (
         <>
             {handleModelData?.isOpen && (
@@ -155,7 +159,7 @@ function SectionMaster() {
                         name="class_Name"
                         removeIsClearable={true}
                         // dynamicOptions={classes}
-                        dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
+                        dynamicOptions={[...handleReactSelectDropDownOptions(sortedOptions, "label", "value")]}
                         handleChange={handleSelect}
                         value={values?.class_Name?.value}
                         // requiredClassName="required-fields"
@@ -177,7 +181,7 @@ function SectionMaster() {
                     tbody={tableData?.map((item, index) => (
                         {
                             sectionName: item.sectionName,
-                            classId: item.classId,
+                            classId: item.className,
 
                             action: <>
                                 <div

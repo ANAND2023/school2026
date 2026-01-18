@@ -126,7 +126,7 @@ function Subject() {
                         // onChange={handleChange}
                         lable={t("Subject Name")}
                         placeholder=" "
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        respclass="col-xl-3 col-md-4 col-sm-4 col-12"
                         // isUpperCase={true}
                         onChange={(e) => handleChange(e)}
                     />

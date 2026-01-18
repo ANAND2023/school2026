@@ -473,6 +473,8 @@ import { getBindCategory } from "../../store/reducers/TokenManagementSlice/Commo
 import SpeechToTextWithSpeechOutput from "../../components/SpeechToTextWithSpeechOutput";
 import { GetLangaugeAPI } from "../../store/reducers/dashboardSlice/CommonFunction";
 import { Bell, Building2, ChevronDown, LogOut, Menu, Moon, Search, Sun, Palette } from "lucide-react";
+import { notify } from "../../utils/utils";
+import { CreateTeacherAttendance } from "../../networkServices/Admin";
 
 // Theme configurations
 const THEMES = {
@@ -498,6 +500,58 @@ const Header = React.memo(() => {
   const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
     (state) => state?.CommonSlice
   );
+ const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+    accuracy: null,
+    source: null, // GPS or fallback
+  });
+ const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      notify("Geolocation not supported", "error");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          source: "GPS",
+        });
+      },
+      async (error) => {
+        // GPS failed, fallback to IP
+        if (error.code === 1) {
+          console.log("Location permission denied", "error");
+        } else if (error.code === 2) {
+          console.log("Location not available", "error");
+        } else if (error.code === 3) {
+          console.log("Location request timeout", "error");
+        }
+
+        // Optional: IP-based fallback
+        try {
+          const res = await fetch("/api/ip-location");
+          const data = await res.json();
+          if (data?.latitude && data?.longitude) {
+            setLocation({
+              latitude: data.latitude,
+              longitude: data.longitude,
+              accuracy: null,
+              source: "IP",
+            });
+            notify("Location detected via IP", "info");
+          }
+        } catch (err) {
+          console.error("IP fallback failed", err);
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
+
   const signout = useSelector((state) => state.logoutSlice);
 
   const currentTheme = THEMES[theme];
@@ -701,7 +755,70 @@ const Header = React.memo(() => {
   //   );
   // }, []);
 
+//   const handleLogin=()=>{
 
+//     const payload ={
+//   "teacherId": userData?.UserId,
+//   "teacherName": userData?.sub,
+//   "attendanceDate": "2026-01-18T06:46:15.362Z",
+//   "status": 1,
+//   "loginDateTime": "2026-01-18T06:46:15.362Z",
+//   "loginLatitude": 0,
+//   "loginLongitude": 0,
+//   "isSelfMarked": true,
+//   "deviceInfo": "string",
+//   "remarks": "string",
+//   "orgId": userData?.OrganizationId,
+//   "branchId": userData?.defaultCentre
+// }
+//       try {
+//         const response = CreateTeacherAttendance(payload);
+//         if(response?.success){
+//           notify(response?.message, "success");
+//         }
+//         else{
+//           notify(response?.message || response?.data?.message, "error");
+//         }
+//       } catch (error) {
+//         console.log(" error ", error)
+//       }
+//   }
+
+const handleLogin = async () => {
+  const now = new Date().toISOString();
+debugger
+  const payload = {
+    teacherId: localData?.UserId,
+    teacherName: localData?.sub,
+    attendanceDate: now,
+    status: 1, // 1 = Present / Login
+    loginDateTime: now,
+   loginLatitude: location?.latitude,
+  loginLongitude: location?.longitude,
+    isSelfMarked: true,
+    deviceInfo: navigator.userAgent,
+    remarks: "Self Login",
+    orgId: localData?.OrganizationId,
+    branchId: localData?.defaultCentre,
+  };
+
+  try {
+    const response = await CreateTeacherAttendance(payload);
+
+    if (response?.success) {
+      notify(response?.message || "Login Successful", "success");
+    } else {
+      notify(response?.message || response?.data?.message, "error");
+    }
+  } catch (error) {
+    console.error("Login Error:", error);
+    notify("Something went wrong", "error");
+  }
+};
+
+useEffect(() => {
+  getCurrentLocation();
+}, []);
 
   return (
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>
@@ -778,6 +895,28 @@ const Header = React.memo(() => {
 
       {/* RIGHT SECTION */}
       <div className="md-header-right">
+        {/* <button
+          className="md-icon-btn"
+          onClick={handleLogin}
+          // onClick={handleThemeToggle}
+          title="Switch Theme"
+          style={{
+            color: isDarkMode ? currentTheme.primary : '#64748b'
+          }}
+        >
+          Login
+        </button> */}
+        <button
+  className="md-icon-btn"
+  onClick={handleLogin}
+  title="Login"
+  style={{
+    color: isDarkMode ? currentTheme.primary : "#64748b",
+  }}
+>
+  Login
+</button>
+
         <button
           className="md-icon-btn"
           onClick={handleThemeToggle}
