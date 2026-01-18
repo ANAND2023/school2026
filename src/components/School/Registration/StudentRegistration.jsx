@@ -20,6 +20,10 @@ const initialData = {
     phone: "",
     altPhone: "",
     email: "",
+    class_Name:{
+        label: "",
+        value: ""
+    },
    
     address: {
         village: "",
@@ -47,7 +51,7 @@ const initialData = {
     previousAcademics: [
         {
             rollNo: "",
-            class: "",
+            class_Name: "",
             percentage: 0,
             yearOfPassing: 0,
             board: "",
@@ -96,6 +100,7 @@ const initialData = {
 
 const StudentRegistration = () => {
     const [values, setValues] = useState(initialData);
+    console.log("values",values)
     const [classes, setClasses] = useState([]);
  const [t] = useTranslation();
   const [handleModelData, setHandleModelData] = useState({});
@@ -145,10 +150,27 @@ school:data.previousSchoolName
         }
     };
     const handleArrayChange = (section, index, field, value) => {
+        
         const data = [...values[section]];
         data[index][field] = value;
         setValues(prev => ({ ...prev, [section]: data }));
     };
+
+    // Generic handler for both Input and ReactSelect
+const handleFieldChange = (section, index = null, field, valueOrOption) => {
+    
+  const value = valueOrOption?.value ?? valueOrOption; // extract value if option object
+  if (index !== null) {
+    // array case
+    const data = [...values[section]];
+    data[index][field] = value;
+    setValues(prev => ({ ...prev, [section]: data }));
+  } else {
+    // normal field
+    setValues(prev => ({ ...prev, [field]: value }));
+  }
+};
+
 
     // Add new parent
     const addParent = () => {
@@ -229,6 +251,15 @@ school:data.previousSchoolName
     };
 
     const handleSubmit = async () => {
+        if(!values?.firstName) return notify("Please enter student name","error") 
+        if(!values?.lastName) return notify("Please enter student lastName","error")
+            if(!values?.dateOfBirth) return notify("Please enter student date of birth","error")
+                if(!values?.gender) return notify("Please select gender","error")
+                    if(!values?.class_Name) return notify("Please select class","error")
+                        if(!values?.medium) return notify("Please select medium","error")
+                            if(!values?.parents?.filter(parent => parent.name).length) return notify("Please add parent name","error")
+                            if(!values?.parents?.filter(parent => parent.mobile).length) return notify("Please add parent Mobile","error")
+                            if(!values?.studentDocuments?.filter(student => student.documentNumber).length) return notify("Please add document Number","error")
         try {
 
             const payload = {
@@ -266,11 +297,12 @@ school:data.previousSchoolName
                 previousAcademics: [
                     {
                         rollNo: values?.previousAcademics[0]?.rollNo,
-                        class: values?.previousAcademics[0]?.class,
+                        class: values?.class_Name?.value,
+                        // class: values?.previousAcademics[0]?.class,
                         percentage: values?.previousAcademics[0]?.percentage,
                         yearOfPassing: values?.previousAcademics[0]?.yearOfPassing,
                         board: values?.previousAcademics[0]?.board,
-                        medium: values?.previousAcademics[0]?.medium,
+                        medium: values?.medium?.value,
                         school: values?.previousAcademics[0]?.school,
                         schoolAddress: values?.previousAcademics[0]?.schoolAddress,
                         tcNo: values?.previousAcademics[0]?.tcNo,
@@ -279,7 +311,7 @@ school:data.previousSchoolName
                 ],
                 parents: values?.parents?.map(parent => ({
                     name: parent.name,
-                    parentType: parent.parentType,
+                    parentType: Number(parent.parentType),
                     mobile: parent.mobile,
                     altMobile: parent.altMobile,
                     email: parent.email,
@@ -287,15 +319,17 @@ school:data.previousSchoolName
                     photo: parent.photo,
                     documents: parent.documents.map(doc => ({
                         documentNumber: doc.documentNumber,
-                        documentType: doc.documentType,
-                        documentUpload: doc.documentUpload
+                        documentType: Number(doc.documentType),
+                        // documentUpload: doc.documentUpload,
+                        "documentID": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                     }))
                 })),
 
                 studentDocuments: values?.studentDocuments?.map(doc => ({
                     documentNumber: doc.documentNumber,
-                    documentType: doc.documentType,
-                    documentUpload: doc.documentUpload,
+                    documentType: Number(doc.documentType),
+                    // documentUpload: doc.documentUpload,
+                     "documentID": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                     sessionId: 2026,
                     yearId: 2026
                 })),
@@ -308,7 +342,9 @@ school:data.previousSchoolName
             }
 
             const response = await StudentRegister(payload);
+            
             if (response?.success) {
+                setValues(initialData)
                 notify(response?.message, "success");
             } else {
                 notify(response?.message, "error");
@@ -364,16 +400,8 @@ school:data.previousSchoolName
       )}
       
         <div className="container-fluid">
-            {/* <Heading title="Student Registration" isBreadcrumb={false} /> */}
-
-            {/* ================= BASIC DETAILS CARD ================= */}
-            <div className="card shadow-sm mb-4">
-                {/* <div className="card-header bg-primary text-white">
-                    <h5 className="mb-0  text-lg py-1 ml-2">
-                       
-                        Basic Information
-                    </h5>
-                </div> */}
+               <div className="card shadow-sm mb-4">
+                
                 <Heading title={t("Student Registration")} isBreadcrumb={false}
                           secondTitle={<div className="col-12 text-right">
                             <button
@@ -409,16 +437,9 @@ school:data.previousSchoolName
                             handleChange={handleSelect}
                             value={values.title?.value}
                         />
-                        {/* <Input
-                            className="form-control"
-                            name="title"
-                            lable="Title"
-                            value={values.title}
-                            onChange={handleChange}
-                            respclass="col-md-2"
-                        /> */}
+                        
                         <Input
-                            className="form-control"
+                           className="form-control required-fields"
                             name="firstName"
                             lable="First Name"
                             value={values.firstName}
@@ -426,12 +447,13 @@ school:data.previousSchoolName
                             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         />
                         <Input
-                            className="form-control"
+                            className="form-control required-fields"
                             name="lastName"
                             lable="Last Name"
                             value={values.lastName}
                             onChange={handleChange}
                             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                         
 
                         />
                         <DatePicker
@@ -440,15 +462,10 @@ school:data.previousSchoolName
                             value={values.dateOfBirth}
                             handleChange={handleChange}
                             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                            className="required-fields"
+
                         />
-                        {/* <Input
-                            className="form-control"
-                            name="gender"
-                            lable="Gender (1=Male, 2=Female)"
-                            value={values.gender}
-                            onChange={handleChange}
-                            respclass="col-md-3"
-                        /> */}
+                       
                         <ReactSelect
                             placeholderName="Gender"
                             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -460,6 +477,7 @@ school:data.previousSchoolName
                             ]}
                             handleChange={handleSelect}
                             value={values.gender?.value}
+                              requiredClassName="required-fields"
                         />
                         <Input
                             className="form-control"
@@ -504,15 +522,8 @@ school:data.previousSchoolName
                     </div>
                 </div>
             </div>
-
-            {/* ================= ADDRESS CARD ================= */}
             <div className="card shadow-sm mb-4">
-                {/* <div className="card-header bg-success text-white">
-                    <h5 className="mb-0  text-lg py-1 ml-2">
-                       
-                        Address Details
-                    </h5>
-                </div> */}
+                
                 <Heading title={t("Address Details")} isBreadcrumb={false}/>
                 <div className="card-body">
                     <div className="row g-3">
@@ -532,12 +543,7 @@ school:data.previousSchoolName
 
             {/* ================= OTHER INFO CARD ================= */}
             <div className="card shadow-sm mb-4">
-                {/* <div className="card-header bg-info text-white">
-                    <h5 className="mb-0  text-lg py-1 ml-2">
-                       
-                        Additional Information
-                    </h5>
-                </div> */}
+                
                 <Heading title={t("Additional Information")} isBreadcrumb={false}/>
                 <div className="card-body">
                     <div className="row g-3">
@@ -557,12 +563,7 @@ school:data.previousSchoolName
 
             {/* ================= PREVIOUS ACADEMICS CARD ================= */}
             <div className="card shadow-sm mb-4">
-                {/* <div className="card-header bg-warning text-dark">
-                    <h5 className="mb-0  text-lg py-1 ml-2">
-                        
-                        Previous Academic Details
-                    </h5>
-                </div> */}
+                
                 <Heading title={t("Previous Academic Details")} isBreadcrumb={false}/>
                 <div className="card-body">
                     <div className="row g-3">
@@ -577,7 +578,7 @@ school:data.previousSchoolName
                             dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")}
                             handleChange={handleSelect}
                             value={values?.class_Name?.value}
-                            requiredClassName=""
+                             requiredClassName="required-fields"
                         />
                         <Input
                         type="text"
@@ -654,7 +655,7 @@ school:data.previousSchoolName
                             ]}
                             handleChange={handleSelect}
                             value={values?.medium?.value}
-                            requiredClassName=""
+                            requiredClassName="required-fields"
                         />
                          <Input
                         type="text"
@@ -765,25 +766,63 @@ school:data.previousSchoolName
 
                             <div className="row g-3">
                                 <Input
-                                    className="form-control"
+                                    className="form-control required-fields"
                                     lable="Name"
                                     value={parent.name}
                                     onChange={(e) => handleArrayChange("parents", parentIndex, "name", e.target.value)}
                                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                                     
                                 />
-                                <Input
+
+                                {/* <Input
                                     className="form-control"
                                     lable="Parent Type (1=Father, 2=Mother, 3=Guardian)"
                                     value={parent.parentType}
                                     onChange={(e) => handleArrayChange("parents", parentIndex, "parentType", e.target.value)}
                                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                />
+                                /> */}
+
+                                {/* <ReactSelect
+                            placeholderName={t("parentType")}
+                            searchable={true}
+                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                            id="parentType"
+                            name="parentType"
+                            removeIsClearable={true}
+                            // dynamicOptions={classes}
+                            dynamicOptions={[
+                                {label:"Father",value:"1"},
+                                {label:"Mother",value:"2"},
+                                {label:"Guardian",value:"3"},
+
+                            ]}
+                            // handleChange={handleSelect}
+                             handleChange={(e) => handleArrayChange("parents", parentIndex, "parentType", e.target.value)}
+                            value={values?.parentType?.value}
+                            requiredClassName=""
+                        /> */}
+                        <ReactSelect
+                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+  name="parentType"
+  handleChange={(name, option) => handleFieldChange("parents", parentIndex, "parentType", option)}
+  value={values.parents[parentIndex].parentType}
+  dynamicOptions={[
+    { label: "Father", value: "1" },
+    { label: "Mother", value: "2" },
+    { label: "Guardian", value: "3" }
+  ]}
+   requiredClassName=" required-fields"
+/>
+
+
+
                                 <Input
-                                    className="form-control"
+                                    className="form-control required-fields"
                                     lable="Mobile"
                                     value={parent.mobile}
                                     onChange={(e) => handleArrayChange("parents", parentIndex, "mobile", e.target.value)}
                                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                               
                                 />
                                 <Input
                                     className="form-control"
@@ -828,22 +867,58 @@ school:data.previousSchoolName
                                     <div key={docIndex} className="border-start border-3 border-primary ps-3 mb-2">
                                         <div className="row g-2 align-items-end">
                                             <Input
-                                                className="form-control form-control-sm"
+                                                // className="form-control form-control-sm"
+                                                  className="form-control required-fields"
                                                 lable="Document Number"
                                                 value={doc.documentNumber}
                                                 onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentNumber", e.target.value)}
                                                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                                             />
-                                            <Input
+                                            {/* <Input
                                                 className="form-control form-control-sm"
                                                 lable="Document Type (1=PAN, 2=Aadhaar)"
                                                 value={doc.documentType}
                                                 onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentType", e.target.value)}
                                                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                            />
+                                            /> */}
+
+                                            <ReactSelect
+                                             respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+  name="documentType"
+  handleChange={(name, option) =>
+    handleParentDocChange(parentIndex, docIndex, "documentType", option.value)
+  }
+  value={
+    values.parents[parentIndex].documents[docIndex].documentType
+      ? {
+          label:
+            values.parents[parentIndex].documents[docIndex].documentType === "1"
+              ? "PAN"
+              : "Aadhaar",
+          value: values.parents[parentIndex].documents[docIndex].documentType,
+        }
+      : null
+  }
+  dynamicOptions={[
+    { label: "PAN", value: "1" },
+    { label: "Aadhaar", value: "2" },
+  ]}
+/>
+
+{/* 
+    <ReactSelect
+  name="documentType"
+  handleChange={(name, option) => handleFieldChange("documentType", parentIndex, "documentType", option)}
+  value={values.parents[parentIndex].documentType}
+  dynamicOptions={[
+    { label: "PAN", value: "1" },
+    { label: "Aadhaar", value: "2" },
+  
+  ]}
+/> */}
                                             <Input
                                                 className="form-control form-control-sm"
-                                                lable="Document Upload (Base64)"
+                                                lable="Document Upload"
                                                 value={doc.documentUpload}
                                                 onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentUpload", e.target.value)}
                                                 respclass="col-md-4"
@@ -881,7 +956,7 @@ school:data.previousSchoolName
                         </button>
                     </div> */}
                     <Heading title={t("Student Documents")} isBreadcrumb={false}
-                        secondTitle={<button className="btn btn-light btn-sm" onClick={addStudentDocument}>
+                        secondTitle={<button className="btn  btn-sm" onClick={addStudentDocument}>
                             
                             Add Document
                         </button>}
@@ -906,19 +981,43 @@ school:data.previousSchoolName
                             </div>
                             <div className="row g-3">
                                 <Input
-                                    className="form-control"
-                                    lable="Document Number"
+                                      className="form-control required-fields"
+                                    lable="Document No."
                                     value={doc.documentNumber}
                                     onChange={(e) => handleArrayChange("studentDocuments", index, "documentNumber", e.target.value)}
                                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                                 />
-                                <Input
+                                {/* <Input
                                     className="form-control"
                                     lable="Document Type (1=TC, 2=Birth Cert)"
                                     value={doc.documentType}
                                     onChange={(e) => handleArrayChange("studentDocuments", index, "documentType", e.target.value)}
                                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                />
+                                /> */}
+                                <ReactSelect
+                                placeholderName={"Document Type"}
+  respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+  name="documentType"
+  handleChange={(name, option) =>
+    handleArrayChange("studentDocuments", index, "documentType", option.value)
+  }
+  value={
+    values.studentDocuments[index].documentType
+      ? {
+          label:
+            values.studentDocuments[index].documentType === "1"
+              ? "TC"
+              : "Birth Cert",
+          value: values.studentDocuments[index].documentType,
+        }
+      : null
+  }
+  dynamicOptions={[
+    { label: "TC", value: "1" },
+    { label: "Birth Cert", value: "2" },
+  ]}
+/>
+
                                 <Input
                                     className="form-control"
                                     lable="Session ID"
@@ -935,7 +1034,7 @@ school:data.previousSchoolName
                                 />
                                 <Input
                                     className="form-control"
-                                    lable="Document Upload (Base64)"
+                                    lable="Document Upload"
                                     value={doc.documentUpload}
                                     onChange={(e) => handleArrayChange("studentDocuments", index, "documentUpload", e.target.value)}
                                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"

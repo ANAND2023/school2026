@@ -167,3 +167,21 @@ export const UploadStudentExamMarks = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const GetStudentExamMarks = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetStudentExamMarks}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};

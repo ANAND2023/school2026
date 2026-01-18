@@ -9,15 +9,16 @@ import {
   GetAllSubjects
 } from "../../../networkServices/AcademicYear";
 
-import { get_created_exam, UploadStudentExamMarks } from "../../../networkServices/School/exam";
+import { get_created_exam, GetStudentExamMarks, UploadStudentExamMarks } from "../../../networkServices/School/exam";
 import { getadmissionlist } from "../../../networkServices/School/RegistrationApi";
 // import { saveMarks } from "../../../networkServices/School/marks"; // ⬅️ your save API
 
 import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import Tables from "../../UI/customTable";
 import Heading from "../../UI/Heading";
+import ColorCodingSearch from "../../commonComponents/ColorCodingSearch";
 
-const MarksUpload = () => {
+const GetMarksUpload = () => {
   const userData = useLocalStorage("userData", "get");
 console.log("userData",userData)
   const [classes, setClasses] = useState([]);
@@ -29,6 +30,7 @@ console.log("userData",userData)
 
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   // marks[studentId][subjectId] = { marksObtained, isAbsent }
   const [marks, setMarks] = useState({});
@@ -193,83 +195,61 @@ try {
 }
     // saveMarks(payload).then(...)
   };
+  const handleGetMarks = async() => {
+    
+    const payload =
+    {
+  "examId": values.exam?.value,
+  "classId":values.class?.value,
+  "subjectId": null,
+  "studentId":null,
+   orgId: userData?.OrganizationId,
+ branchId: userData?.defaultCentre,
 
-  /* ───────────────────────── TABLE HEAD ───────────────────────── */
+      
+}
+    // console.log("SAVE MARKS PAYLOAD 👉", payload);
+try {
+    const response =await GetStudentExamMarks(payload)
+    if(response?.success){
+        notify(response?.message,"success")
+        setTableData(response?.data)
+    }
+    else{
+        notify(response?.message || response?.data?.message,"error")
+    }
+} catch (error) {
+    console.log("error",error)
+}
+    // saveMarks(payload).then(...)
+  };
+
+
   const tableHead = useMemo(() => {
     return [
       { name: t("Student"), width: "20%" },
-      ...selectedSubjects.map((sub) => ({
-        name: (
-          <div className="text-center">
-            <div className="fw-semibold">{sub.name}</div>
-            <div className="form-check form-switch d-flex justify-content-center mt-1">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                onChange={(e) =>
-                  handleAbsentAll(sub.code, e.target.checked)
-                }
-              />
-            </div>
-          </div>
-        ),
-        width: `${60 / selectedSubjects.length}%`
-      })),
-      { name: t("Total"), width: "10%", className: "text-center" }
+      { name: t("Roll No."), width: "20%" },
+      { name: t("Grade"), width: "20%" },
+      { name: t("Marks Obtained"), width: "20%" },
+      { name: t("Max Marks"), width: "20%" },
+      { name: t("Exam Name"), width: "20%" },
+      { name: t("Class"), width: "20%" },
+      { name: t("Subject"), width: "20%" },
+      { name: t("Is Pass"), width: "20%" },
+      // { name: ("Total"), width: "10%", className: "text-center" }
     ];
   }, [selectedSubjects]);
 
-  /* ───────────────────────── TABLE BODY ───────────────────────── */
-  const tableBody = useMemo(() => {
-    return selectedStudents.map((stu) => {
-      const row = {
-        Student: <span className="fw-semibold">{stu.name}</span>
-      };
 
-      selectedSubjects.forEach((sub) => {
-        const cell = marks[stu.code]?.[sub.code] || {};
-        row[sub.name] = (
-          <div className="d-flex align-items-center justify-content-center gap-2"
+ const getRowClass = (item) => {
        
-          >
-            <div
-            //  className="form-check form-switch m-0"
-             >
-              <input
-                // className="form-check-input"
-                type="checkbox"
-                checked={!cell.isAbsent}
-                onChange={(e) =>
-                  handleAbsentToggle(stu.code, sub.code, e.target.checked)
-                }
-              />
-            </div>
-
-            <input
-              type="number"
-              className="form-control form-control-sm text-center"
-              style={{ width: "80px" }}
-              disabled={cell.isAbsent}
-              value={cell.marksObtained}
-              onChange={(e) =>
-                handleMarksChange(stu.code, sub.code, e.target.value)
-              }
-              placeholder="0"
-            />
-          </div>
-        );
-      });
-
-      row.Total = (
-        <span className="fw-bold text-success">
-          {studentTotal(stu.code)}
-        </span>
-      );
-
-      return row;
-    });
-  }, [selectedStudents, selectedSubjects, marks]);
-
+        if (item?.isPass === "YES") {
+            return "color-indicator-24-bg";
+        } 
+        else {
+            return "color-indicator-25-bg";
+        }
+    };
 
   return (
     <div className="container-fluid py-4">
@@ -334,33 +314,57 @@ try {
                 value={selectedStudents}
               />
             </div>
-          </div>
-
-          {selectedStudents.length && selectedSubjects.length ? (
-            <>
-              <Tables thead={tableHead} tbody={tableBody} />
-
-              <div className="text-end mt-3">
+            <div className="text-end">
                 <button
                   className="btn btn-success px-4"
-                  onClick={handleSave}
+                  onClick={handleGetMarks}
                 >
-                  Save Marks
+                 Get Marks
                 </button>
               </div>
+           
+          </div>
+
+         
+            <>
+              <Heading
+                            title={t("Marks Details")}
+                            // title=""
+                            isBreadcrumb={false}
+                            // removeSecondHeadAlignClass={true}
+                            secondTitle={<>
+                            <ColorCodingSearch color={"color-indicator-24-bg"} label={t("Pass")} />
+                            <ColorCodingSearch color={"color-indicator-25-bg"} label={t("Fail")} />
+                                  
+                            </>}
+                        />
+              <Tables thead={tableHead} tbody={
+                tableData.map((items, index, arr) => ({
+                 studentName: items?.studentName,
+                 rollNo: items?.rollNo,
+                 gradeName: items?.gradeName,
+                 marksObtained: items?.marksObtained,
+                 maxMarks: items?.maxMarks,
+                 examId: "",
+                 classId: "",
+                 subjectId: "",
+                 isPass: items?.isPass ===true? "YES":"NO",
+                }))
+               
+              } 
+               getRowClass={getRowClass}
+              />
+
+              
             </>
-          ) : (
-            <div className="text-center text-muted py-5">
-              Select class, exam, subjects & students
-            </div>
-          )}
+         
         </div>
       </div>
     </div>
   );
 };
 
-export default MarksUpload;
+export default GetMarksUpload;
 
 
 

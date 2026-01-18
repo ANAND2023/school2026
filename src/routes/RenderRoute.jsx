@@ -156,6 +156,7 @@ function RenderRoute() {
   getAllUrls.push("/master-exam");
   getAllUrls.push("/master-exam");
   getAllUrls.push("/marks-upload");
+  getAllUrls.push("/get-marks-upload");
   getAllUrls.push("/module-employee-mapping");
   getAllUrls.push("/submenu-employee-mapping");
   getAllUrls.push("/category-master");
@@ -709,6 +710,15 @@ const allRoutes = {
       path: "/marks-upload",
       component: lazy(
         () => import("@app/components/Master/Exam/MarksUpload.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/get-marks-upload",
+      component: lazy(
+        () => import("@app/components/Master/Exam/GetMarksUpload.jsx")
       ),exact: true,
 
     },

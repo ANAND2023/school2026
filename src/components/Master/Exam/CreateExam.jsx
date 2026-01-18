@@ -227,8 +227,12 @@ const CreateExam = () => {
 
 
 
-                        <div className="col-xl-2 col-md-4 col-sm-4 col-12 d-flex gap-4">
-                            <button className="btn btn-primary btn-sm" onClick={handleSave}>
+                        <div className="col-xl-2 col-md-4 col-sm-4 col-12" 
+                        style={
+                            {display:"flex",gap:"10px"}
+                        }
+                        >
+                            <button className="btn btn-success btn-sm" onClick={handleSave}>
                                 {t("Save Exam")}
                             </button>
                             <button className="btn btn-primary btn-sm" onClick={getAllExam}>

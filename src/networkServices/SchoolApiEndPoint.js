@@ -164,6 +164,7 @@ MenuManagmentCreateModuleBulk:`${baseUrlMaster}MenuManagment/create-module-bulk`
 MenuManagmentGeModuleBulk:`${baseUrlMaster}MenuManagment/get-modules`,
 MasterCreatePaymentMode:`${baseUrlMaster}PaymentModeMaster/CreatePaymentMode`,
 MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
+CreateTeacherAttendance:`${baseUrlMaster}AttendanceAndClassManagement/CreateTeacherAttendance`,
   // MenuManagment start ....
 
 //Exam Start
@@ -176,6 +177,7 @@ MasterGetAllPaymentModes:`${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
   get_created_exam: `${baseUrlMaster}AcademicMaster/get_created_exam`,
   create_exam_timetable: `${baseUrlMaster}AcademicMaster/create_exam_timetable`,
   UploadStudentExamMarks: `${baseUrlMaster}StudenExamMarking/UploadStudentExamMarks`,
+  GetStudentExamMarks: `${baseUrlMaster}StudenExamMarking/GetStudentExamMarks`,
 
 //Exam End
 
