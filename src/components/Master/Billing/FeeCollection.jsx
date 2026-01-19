@@ -105,6 +105,33 @@ const FeeCollection = () => {
   return (
     <div className='card border'>
       <Heading title={t("Fee Collection")}
+
+        secondTitle={
+
+          studentData &&
+          (<span className='text-danger mr-2 d-flex justify-content-center align-items-center'
+            style={{
+              background: " #df2222",
+              width: "20px",
+              height: "20px",
+              borderRadius: "50%",
+              cursor: "pointer"
+            }}
+            title='close'
+            onClick={() => {
+              setStudentData(null)
+            }}
+          >
+            <i class="fa fa-times " aria-hidden="true"
+              style={{
+                color: " #ffffff",
+
+              }}
+            ></i>
+          </span>)
+
+
+        }
       />
 
 
@@ -120,6 +147,9 @@ const FeeCollection = () => {
 
 
           <div className="row mb-2 p-2">
+            <div className=''>
+
+            </div>
             <Input
               type="text"
               className="form-control"

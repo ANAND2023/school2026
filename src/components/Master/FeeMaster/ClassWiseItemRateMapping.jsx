@@ -13,6 +13,7 @@ import {
 } from "../../../networkServices/AcademicYear";
 
 import {
+  AllFeeRateSchedule,
   GetAllItemMaster,
   GetAllMonthType,
   GetClassMonthFeeDetails,
@@ -53,6 +54,7 @@ function ClassWiseItemRateMapping() {
 
   const getItems = async () => {
     try {
+      debugger
       const res = await GetAllItemMaster(localData?.OrganizationId, localData?.defaultCentre);
       if (res?.success) setAllItem(res?.data);
     } catch {
@@ -69,9 +71,10 @@ function ClassWiseItemRateMapping() {
     }
   };
   const getData = async (classId,monthTypeId) => {
-    debugger
+    
     try {
-      const res = await GetClassMonthFeeDetails(classId,monthTypeId);
+      const res = await AllFeeRateSchedule();
+      // const res = await GetClassMonthFeeDetails(classId,monthTypeId);
       if(res?.success){
         setTableData(res?.data);
       }
@@ -131,14 +134,14 @@ function ClassWiseItemRateMapping() {
       return;
     }
 
-    const payload = {
+    const payload = [{
       classId: values.class_Name.value,
       monthTypeMasterId: values.Month.value,
       items: itemRates.map((item) => ({
         itemId: item.itemId,
         rate: Number(item.rate),
       })),
-    };
+    }]
 
     try {
       const res = await UpdateBulkItemClassMonthWise(payload);
@@ -155,7 +158,7 @@ function ClassWiseItemRateMapping() {
   };
 
   useEffect(() => {
-    getData(values?.class_Name?.value,values?.Month?.value)
+    if(values?.class_Name?.value && values?.Month?.value) getData(values?.class_Name?.value,values?.Month?.value)
   },[values?.class_Name?.value,values?.Month?.value])
   /* ---------------- UI ---------------- */
 

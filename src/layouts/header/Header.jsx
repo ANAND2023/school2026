@@ -917,7 +917,7 @@ useEffect(() => {
   Login
 </button>
 
-        <button
+        {/* <button
           className="md-icon-btn"
           onClick={handleThemeToggle}
           title="Switch Theme"
@@ -926,7 +926,7 @@ useEffect(() => {
           }}
         >
           {isDarkMode ? <Moon size={18} /> : <Sun size={18} />}
-        </button>
+        </button> */}
 
         <button className="md-icon-btn" title="Notifications">
           <Bell size={20} />
@@ -942,9 +942,10 @@ useEffect(() => {
             <div style={{
               fontSize: '0.85rem',
               fontWeight: '600',
-              color: '#1e293b'
+              color: '#1e293b',
+              textTransform: 'uppercase'
             }}>
-              {localData?.empName}
+              {localData?.sub}
             </div>
           </div>
           <div

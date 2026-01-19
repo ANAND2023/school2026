@@ -204,7 +204,7 @@ export const GetClassMonthItemFees = async (params) => {
       // data: params,
     };
     const data = await makeApiRequest(
-      `${apiUrls.GetClassMonthItemFees}?schoolTypeId=${params?.schoolTypeId??null}&classId=${params?.classId??null}&sectionId=${params?.sectionId??null}&sessionId=${params?.sessionId??null}`,
+      `${apiUrls.GetClassMonthItemFees}?schoolTypeId=${params?.schoolTypeId??null}&classId=${params?.classId??null}&sectionId=${params?.sectionId??null}&sessionId=${params?.sessionId??null}&OrgId=${params?.OrgId??null}&BranchId=${params?.BranchId??null}`,
       options
     );
     store.dispatch(setLoading(false));
@@ -261,6 +261,24 @@ export const UpdateBulkItemClassMonthWise = async (params) => {
     };
     const data = await makeApiRequest(
       `${apiUrls.UpdateBulkItemClassMonthWise}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+export const InserUpdatetFeeRateSchedule = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.InserUpdatetFeeRateSchedule}`,
       options
     );
     store.dispatch(setLoading(false));

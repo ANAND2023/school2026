@@ -91,7 +91,9 @@ InsertFeeRateSchedule:`${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
 InsertMonthType:`${feeUrl}MonthType/InsertMonthType`,
 GetAllMonthType:`${feeUrl}MonthType/GetAllMonthType`,
 UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
+InserUpdatetFeeRateSchedule:`${feeUrl}FeeRateSchedule/InserUpdatetFeeRateSchedule`,
 GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
+
 // UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
 // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
