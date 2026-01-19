@@ -24,7 +24,6 @@ const initialData = {
     label: "",
     value: "",
   },
-
   address: {
     village: "",
     taluk: "",
@@ -98,13 +97,12 @@ const initialData = {
 
 const StudentRegistration = () => {
   const [values, setValues] = useState(initialData);
-  console.log("values", values);
   const [classes, setClasses] = useState([]);
   const [t] = useTranslation();
   const [handleModelData, setHandleModelData] = useState({});
   const [modalData, setModalData] = useState({});
+
   const handleChangeModel = (data) => {
-    console.log("first", data);
     setModalData(data);
     setValues((pre) => ({
       ...pre,
@@ -115,7 +113,7 @@ const StudentRegistration = () => {
     }));
     setHandleModelData((val) => ({ ...val, isOpen: false }));
   };
-  /* ================= HANDLERS ================= */
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -124,6 +122,7 @@ const StudentRegistration = () => {
   const handleSelect = (name, option) => {
     setValues((prev) => ({ ...prev, [name]: option }));
   };
+
   const handleNestedChange = (section, field, value) => {
     setValues((prev) => ({
       ...prev,
@@ -133,6 +132,7 @@ const StudentRegistration = () => {
       },
     }));
   };
+
   const getClass = async () => {
     try {
       const response = await GetAllClasses();
@@ -140,33 +140,29 @@ const StudentRegistration = () => {
         setClasses(response?.data);
       } else {
         notify(response?.message, "error");
-        setTableData([]);
       }
     } catch (error) {
       notify("Error saving reason", "error");
     }
   };
+
   const handleArrayChange = (section, index, field, value) => {
     const data = [...values[section]];
     data[index][field] = value;
     setValues((prev) => ({ ...prev, [section]: data }));
   };
 
-  // Generic handler for both Input and ReactSelect
   const handleFieldChange = (section, index = null, field, valueOrOption) => {
-    const value = valueOrOption?.value ?? valueOrOption; // extract value if option object
+    const value = valueOrOption?.value ?? valueOrOption;
     if (index !== null) {
-      // array case
       const data = [...values[section]];
       data[index][field] = value;
       setValues((prev) => ({ ...prev, [section]: data }));
     } else {
-      // normal field
       setValues((prev) => ({ ...prev, [field]: value }));
     }
   };
 
-  // Add new parent
   const addParent = () => {
     setValues((prev) => ({
       ...prev,
@@ -186,7 +182,6 @@ const StudentRegistration = () => {
     }));
   };
 
-  // Remove parent
   const removeParent = (index) => {
     setValues((prev) => ({
       ...prev,
@@ -194,7 +189,6 @@ const StudentRegistration = () => {
     }));
   };
 
-  // Add document to parent
   const addParentDocument = (parentIndex) => {
     const updatedParents = [...values.parents];
     updatedParents[parentIndex].documents.push({
@@ -205,7 +199,6 @@ const StudentRegistration = () => {
     setValues((prev) => ({ ...prev, parents: updatedParents }));
   };
 
-  // Remove document from parent
   const removeParentDocument = (parentIndex, docIndex) => {
     const updatedParents = [...values.parents];
     updatedParents[parentIndex].documents = updatedParents[
@@ -214,14 +207,12 @@ const StudentRegistration = () => {
     setValues((prev) => ({ ...prev, parents: updatedParents }));
   };
 
-  // Handle parent document change
   const handleParentDocChange = (parentIndex, docIndex, field, value) => {
     const updatedParents = [...values.parents];
     updatedParents[parentIndex].documents[docIndex][field] = value;
     setValues((prev) => ({ ...prev, parents: updatedParents }));
   };
 
-  // Add student document
   const addStudentDocument = () => {
     setValues((prev) => ({
       ...prev,
@@ -238,7 +229,6 @@ const StudentRegistration = () => {
     }));
   };
 
-  // Remove student document
   const removeStudentDocument = (index) => {
     setValues((prev) => ({
       ...prev,
@@ -306,7 +296,6 @@ const StudentRegistration = () => {
           {
             rollNo: values?.previousAcademics[0]?.rollNo,
             class: values?.class_Name?.value,
-            // class: values?.previousAcademics[0]?.class,
             percentage: values?.previousAcademics[0]?.percentage,
             yearOfPassing: values?.previousAcademics[0]?.yearOfPassing,
             board: values?.previousAcademics[0]?.board,
@@ -328,7 +317,6 @@ const StudentRegistration = () => {
           documents: parent.documents.map((doc) => ({
             documentNumber: doc.documentNumber,
             documentType: Number(doc.documentType),
-            // documentUpload: doc.documentUpload,
             documentID: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           })),
         })),
@@ -336,7 +324,6 @@ const StudentRegistration = () => {
         studentDocuments: values?.studentDocuments?.map((doc) => ({
           documentNumber: doc.documentNumber,
           documentType: Number(doc.documentType),
-          // documentUpload: doc.documentUpload,
           documentID: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           sessionId: 2026,
           yearId: 2026,
@@ -357,16 +344,17 @@ const StudentRegistration = () => {
       } else {
         notify(response?.message, "error");
       }
-    } catch (error) {
-      console.log("error", error);
-    }
+    } catch (error) {}
   };
+
   useEffect(() => {
     getClass();
   }, []);
+
   const setIsOpen = () => {
     setHandleModelData((val) => ({ ...val, isOpen: false }));
   };
+
   const handleEnq = async () => {
     setModalData("data");
     setHandleModelData({
@@ -374,12 +362,11 @@ const StudentRegistration = () => {
       width: "70vw",
       label: t("Registration To Admission"),
       Component: <Enquiry handleChangeModel={handleChangeModel} />,
-      //    <BulkRegistration modalData={"data"} setModalData={setModalData} />,
       extrabutton: <></>,
       footer: <></>,
     });
   };
-  /* ================= UI ================= */
+
   return (
     <>
       {handleModelData?.isOpen && (
@@ -397,7 +384,6 @@ const StudentRegistration = () => {
           handleAPI={handleModelData?.handleInsertAPI}
         >
           {handleModelData?.Component}
-          {/* <RegistrationForm  values={values} setValues={setValues}  /> */}
         </Modal>
       )}
 
@@ -410,7 +396,6 @@ const StudentRegistration = () => {
               <div className="col-12 text-right">
                 <button
                   onClick={handleEnq}
-                  // className="btn btn-lg btn-success"
                   className="btn btn-sm btn-primary"
                   type="button"
                 >
@@ -418,7 +403,6 @@ const StudentRegistration = () => {
                 </button>
                 <button
                   onClick={handleEnq}
-                  // className="btn btn-lg btn-success"
                   className="btn btn-sm btn-primary mx-2"
                   type="button"
                 >
@@ -543,7 +527,6 @@ const StudentRegistration = () => {
           </div>
         </div>
 
-        {/* ================= OTHER INFO CARD ================= */}
         <div className="card shadow-sm mb-4">
           <Heading title={t("Additional Information")} isBreadcrumb={false} />
           <div className="card-body">
@@ -567,7 +550,6 @@ const StudentRegistration = () => {
           </div>
         </div>
 
-        {/* ================= PREVIOUS ACADEMICS CARD ================= */}
         <div className="card shadow-sm mb-4">
           <Heading
             title={t("Previous Academic Details")}
@@ -582,7 +564,6 @@ const StudentRegistration = () => {
                 id="class_Name"
                 name="class_Name"
                 removeIsClearable={true}
-                // dynamicOptions={classes}
                 dynamicOptions={handleReactSelectDropDownOptions(
                   classes,
                   "className",
@@ -598,7 +579,6 @@ const StudentRegistration = () => {
                 id="rollNo"
                 name="rollNo"
                 value={values?.rollNo ? values?.rollNo : ""}
-                // onChange={handleChange}
                 lable={"Roll No."}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -611,7 +591,6 @@ const StudentRegistration = () => {
                 id="percentage"
                 name="percentage"
                 value={values?.percentage ? values?.percentage : ""}
-                // onChange={handleChange}
                 lable={"Percentage"}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -625,27 +604,19 @@ const StudentRegistration = () => {
                 id="yearOfPassing"
                 name="yearOfPassing"
                 value={values?.yearOfPassing ? values?.yearOfPassing : ""}
-                // onChange={handleChange}
                 lable={"Year Of Passing"}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                 isUpperCase={true}
                 onChange={handleChange}
               />
-              {/* <DatePicker
-                            name="yearOfPassing"
-                            lable="Year Of Passing"
-                            value={values.yearOfPassing}
-                            handleChange={handleChange}
-                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                        /> */}
+
               <Input
                 type="text"
                 className="form-control "
                 id="board"
                 name="board"
                 value={values?.board ? values?.board : ""}
-                // onChange={handleChange}
                 lable={"Board"}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -659,7 +630,6 @@ const StudentRegistration = () => {
                 id="medium"
                 name="medium"
                 removeIsClearable={true}
-                // dynamicOptions={classes}
                 dynamicOptions={[
                   { label: "HINDI", value: "HINDI" },
                   { label: "ENGLISH", value: "ENGLISH" },
@@ -674,7 +644,6 @@ const StudentRegistration = () => {
                 id="school"
                 name="school"
                 value={values?.school ? values?.school : ""}
-                // onChange={handleChange}
                 lable={"School Name"}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -687,7 +656,6 @@ const StudentRegistration = () => {
                 id="schoolAddress"
                 name="schoolAddress"
                 value={values?.schoolAddress ? values?.schoolAddress : ""}
-                // onChange={handleChange}
                 lable={"Address "}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -700,7 +668,6 @@ const StudentRegistration = () => {
                 id="tcNo"
                 name="tcNo"
                 value={values?.tcNo ? values?.tcNo : ""}
-                // onChange={handleChange}
                 lable={"TC No. "}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -713,41 +680,18 @@ const StudentRegistration = () => {
                 id="description"
                 name="description"
                 value={values?.description ? values?.description : ""}
-                // onChange={handleChange}
                 lable={"Description"}
                 placeholder=" "
                 respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                 isUpperCase={true}
                 onChange={handleChange}
               />
-              {/* {Object.keys(values.previousAcademics[0]).map((key) => (
-                            <Input
-                                key={key}
-                                className="form-control"
-                                lable={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
-                                value={values.previousAcademics[0][key]}
-                                onChange={(e) =>
-                                    handleArrayChange("previousAcademics", 0, key, e.target.value)
-                                }
-                                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                            />
-                        ))} */}
             </div>
           </div>
         </div>
 
-        {/* ================= PARENT DETAILS CARD (DYNAMIC) ================= */}
         <div className="card shadow-sm mb-4">
           <div className="card-header ">
-            {/* <div className="  text-white d-flex justify-content-between align-items-center w-100">
-                        <h5 className="mb-0">
-                            Parent/Guardian Details
-                        </h5>
-
-                        <button className="btn btn-light btn-sm" onClick={addParent}>
-                            Add Parent
-                        </button>
-                    </div> */}
             <Heading
               title={t("Parent/Guardian Details")}
               isBreadcrumb={false}
@@ -799,33 +743,6 @@ const StudentRegistration = () => {
                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                   />
 
-                  {/* <Input
-                                    className="form-control"
-                                    lable="Parent Type (1=Father, 2=Mother, 3=Guardian)"
-                                    value={parent.parentType}
-                                    onChange={(e) => handleArrayChange("parents", parentIndex, "parentType", e.target.value)}
-                                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                /> */}
-
-                  {/* <ReactSelect
-                            placeholderName={t("parentType")}
-                            searchable={true}
-                            respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                            id="parentType"
-                            name="parentType"
-                            removeIsClearable={true}
-                            // dynamicOptions={classes}
-                            dynamicOptions={[
-                                {label:"Father",value:"1"},
-                                {label:"Mother",value:"2"},
-                                {label:"Guardian",value:"3"},
-
-                            ]}
-                            // handleChange={handleSelect}
-                             handleChange={(e) => handleArrayChange("parents", parentIndex, "parentType", e.target.value)}
-                            value={values?.parentType?.value}
-                            requiredClassName=""
-                        /> */}
                   <ReactSelect
                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                     name="parentType"
@@ -904,18 +821,15 @@ const StudentRegistration = () => {
                   />
                 </div>
 
-                {/* Parent Documents Section */}
                 <div className="mt-3">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <strong className="text-muted">
                       <i className="bi bi-file-earmark-text me-2"></i>Documents
                     </strong>
                     <button
-                      // className="btn btn-outline-primary btn-sm"
                       className="btn btn-primary btn-lg"
                       onClick={() => addParentDocument(parentIndex)}
                     >
-                      {/* <i className="bi bi-plus me-1"></i> */}
                       Add Document
                     </button>
                   </div>
@@ -927,7 +841,6 @@ const StudentRegistration = () => {
                     >
                       <div className="row g-2 align-items-end">
                         <Input
-                          // className="form-control form-control-sm"
                           className="form-control required-fields"
                           lable="Document Number"
                           value={doc.documentNumber}
@@ -941,13 +854,6 @@ const StudentRegistration = () => {
                           }
                           respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                         />
-                        {/* <Input
-                                                className="form-control form-control-sm"
-                                                lable="Document Type (1=PAN, 2=Aadhaar)"
-                                                value={doc.documentType}
-                                                onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentType", e.target.value)}
-                                                respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                            /> */}
 
                         <ReactSelect
                           respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -983,17 +889,6 @@ const StudentRegistration = () => {
                           ]}
                         />
 
-                        {/* 
-    <ReactSelect
-  name="documentType"
-  handleChange={(name, option) => handleFieldChange("documentType", parentIndex, "documentType", option)}
-  value={values.parents[parentIndex].documentType}
-  dynamicOptions={[
-    { label: "PAN", value: "1" },
-    { label: "Aadhaar", value: "2" },
-  
-  ]}
-/> */}
                         <Input
                           className="form-control form-control-sm"
                           lable="Document Upload"
@@ -1032,19 +927,8 @@ const StudentRegistration = () => {
           </div>
         </div>
 
-        {/* ================= STUDENT DOCUMENTS CARD (DYNAMIC) ================= */}
         <div className="card shadow-sm mb-4">
           <div className="card-header ">
-            {/* <div className="text-white d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0  text-lg py-1 ml-2">
-                           
-                            Student Documents
-                        </h5>
-                        <button className="btn btn-light btn-sm" onClick={addStudentDocument}>
-                            
-                            Add Document
-                        </button>
-                    </div> */}
             <Heading
               title={t("Student Documents")}
               isBreadcrumb={false}
@@ -1085,13 +969,7 @@ const StudentRegistration = () => {
                     }
                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                   />
-                  {/* <Input
-                                    className="form-control"
-                                    lable="Document Type (1=TC, 2=Birth Cert)"
-                                    value={doc.documentType}
-                                    onChange={(e) => handleArrayChange("studentDocuments", index, "documentType", e.target.value)}
-                                    respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-                                /> */}
+
                   <ReactSelect
                     placeholderName={"Document Type"}
                     respclass="col-xl-2 col-md-4 col-sm-4 col-12"
@@ -1170,14 +1048,7 @@ const StudentRegistration = () => {
           </div>
         </div>
 
-        {/* ================= TRANSPORT CARD ================= */}
         <div className="card shadow-sm mb-4">
-          {/* <div className="card-header bg-danger text-white">
-                    <h5 className="mb-0  text-lg py-1 ml-2">
-                       
-                        Transport Details
-                    </h5>
-                </div> */}
           <Heading title={t("Transport Details")} isBreadcrumb={false} />
           <div className="card-body">
             <div className="row g-3">
@@ -1202,8 +1073,6 @@ const StudentRegistration = () => {
             </div>
           </div>
         </div>
-
-        {/* ================= SUBMIT BUTTON ================= */}
         <div className="d-flex justify-content-end gap-2 mb-4">
           <button className="btn btn-primary btn-lg" onClick={handleSubmit}>
             Registration
