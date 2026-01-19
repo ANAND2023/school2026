@@ -114,7 +114,7 @@ const InsertMonthType = () => {
     }, [localData?.OrganizationId, localData?.defaultCentre]);
 
     return (
-        <div className="card p-2">
+        <div className="card">
             <Heading title="Month/Semester Master" isBreadcrumb={false} />
 
             {/* ================= FORM ================= */}

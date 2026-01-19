@@ -110,7 +110,7 @@ const SubCategoryMaster = () => {
   }, [localData?.OrganizationId, localData?.defaultCentre]);
 
   return (
-    <div className="card p-2">
+    <div className="card">
       <Heading title="Sub Category Master" isBreadcrumb={false} />
 
       {/* ================= FORM ================= */}

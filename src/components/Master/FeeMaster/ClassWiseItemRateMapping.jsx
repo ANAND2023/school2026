@@ -161,7 +161,7 @@ function ClassWiseItemRateMapping() {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="card p-1">
+    <div className="card">
       <Heading title={t("Rate Schedule By Class")} isBreadcrumb={false} />
 
       <div className="row p-2">
