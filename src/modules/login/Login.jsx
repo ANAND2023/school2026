@@ -13,7 +13,7 @@ import ILLUSTRATION_URL from "@app/assets/image/login-image.png";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const localData = useLocalStorage("userData", "get");
   const { handleChange, values, handleSubmit, isSubmitting } = useFormik({
     initialValues: {
       userName: "",
@@ -54,9 +54,9 @@ const Login = () => {
           useLocalStorage("theme", "set", "default_theme");
           // useLocalStorage("appTheme", "set", "light_theme");
         }
-
+        debugger
         if (loginData?.payload?.success) {
-          speakMessage(`Welcome ${loginData?.payload?.data?.userDetails?.empName || ""}`);
+          speakMessage(`Welcome ${loginData?.payload?.userData?.sub || ""}`);
           navigate("/dashboard");
         }
       } catch (error) {
