@@ -5,6 +5,8 @@ import Heading from "../../UI/Heading";
 import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import { GetAllItemMaster, GetAllSubCategory, ItemInsertItemMaster, UpdateItemMaster, } from "../../../networkServices/FeeMaster";
 import ReactSelect from "../../formComponent/ReactSelect";
+import { use } from "react";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 const ItemMaster = () => {
     const initialData = {
@@ -15,6 +17,7 @@ const ItemMaster = () => {
         unit: "1"
     };
 
+    const localData = useLocalStorage("userData", "get");
     const [values, setValues] = useState(initialData);
     const [tableData, setTableData] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
@@ -39,18 +42,22 @@ const ItemMaster = () => {
         const payload =
         {
             "subCategoryId": values?.subCategory?.value,
-            "name":values?.item,
+            "name": values?.item,
             "displayName": values?.displayName,
-            "unit": values?.unit
+            "unit": values?.unit,
+            "BranchId": localData?.defaultCentre,
+            "OrgId": localData?.OrganizationId
         }
 
 
-        const update =        {
-  "name": values?.item,
-  "displayName":values?.displayName,
-  "unit": values?.unit,
-  "id": values.id,
-}
+        const update = {
+            "name": values?.item,
+            "displayName": values?.displayName,
+            "unit": values?.unit,
+            "id": values.id,
+            "BranchId": localData?.defaultCentre,
+            "OrgId": localData?.OrganizationId
+        }
 
         try {
             const res = isEdit
@@ -59,7 +66,7 @@ const ItemMaster = () => {
 
             if (res?.success) {
                 notify(res?.message, "success");
-               AllItemMaster
+                AllItemMaster
                 setValues(initialData);
                 setIsEdit(false);
             } else {
@@ -73,7 +80,7 @@ const ItemMaster = () => {
 
     const AllSubCategory = async () => {
         try {
-            const res = await GetAllSubCategory();
+            const res = await GetAllSubCategory(localData?.OrganizationId, localData?.defaultCentre);
             if (res?.success) {
                 setSubCategory(res?.data);
             }
@@ -83,7 +90,7 @@ const ItemMaster = () => {
     };
     const AllItemMaster = async () => {
         try {
-            const res = await GetAllItemMaster();
+            const res = await GetAllItemMaster(localData?.OrganizationId, localData?.defaultCentre);
             if (res?.success) {
                 setTableData(res?.data);
             }
@@ -108,9 +115,13 @@ const ItemMaster = () => {
 
     useEffect(() => {
 
-        AllSubCategory();
-        AllItemMaster()
     }, []);
+    useEffect(() => {
+        AllItemMaster()
+
+        AllSubCategory();
+
+    }, [localData?.OrganizationId, localData?.defaultCentre]);
 
     return (
         <div className="card p-2">
@@ -169,7 +180,7 @@ const ItemMaster = () => {
             {/* ================= TABLE ================= */}
             <Tables
                 thead={[
-                   
+
                     { name: "Sub Category Name" },
 
                     { name: "Item Name" },
@@ -184,31 +195,31 @@ const ItemMaster = () => {
                     displayName: item.displayName,
                     unit: item.unit,
 
-                   action: <>
+                    action: <>
 
-              <div
-                className="d-flex align-items-center justify-content-center gap-2"
-              // className="row gap-2"
-              >
-                <button
-                  id="editBtn"
-                  onclick="handleEdit(item.id)"
-                  title="Edit"
-                  className="d-flex align-items-center justify-content-center"
-                >
-                  <i class=" bi-pencil-square"></i>
-                </button>
+                        <div
+                            className="d-flex align-items-center justify-content-center gap-2"
+                        // className="row gap-2"
+                        >
+                            <button
+                                id="editBtn"
+                                onclick="handleEdit(item.id)"
+                                title="Edit"
+                                className="d-flex align-items-center justify-content-center"
+                            >
+                                <i class=" bi-pencil-square"></i>
+                            </button>
 
-                <button
-                  id="deleteBtn"
-                  onclick="handleDelete(item.id)"
-                  title="Delete"
-                >
-                  <i class="bi-trash3"></i>
-                </button>
-              </div>
+                            <button
+                                id="deleteBtn"
+                                onclick="handleDelete(item.id)"
+                                title="Delete"
+                            >
+                                <i class="bi-trash3"></i>
+                            </button>
+                        </div>
 
-            </>,
+                    </>,
                 }))}
             />
         </div>

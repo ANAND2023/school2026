@@ -53,6 +53,7 @@ function ClassWiseItemRateMapping() {
 
   const getItems = async () => {
     try {
+      debugger
       const res = await GetAllItemMaster(localData?.OrganizationId, localData?.defaultCentre);
       if (res?.success) setAllItem(res?.data);
     } catch {
@@ -155,7 +156,7 @@ function ClassWiseItemRateMapping() {
   };
 
   useEffect(() => {
-    getData(values?.class_Name?.value,values?.Month?.value)
+    if(values?.class_Name?.value && values?.Month?.value) getData(values?.class_Name?.value,values?.Month?.value)
   },[values?.class_Name?.value,values?.Month?.value])
   /* ---------------- UI ---------------- */
 

@@ -105,6 +105,33 @@ const FeeCollection = () => {
   return (
     <div className='card border'>
       <Heading title={t("Fee Collection")}
+
+        secondTitle={
+
+          studentData &&
+          (<span className='text-danger mr-2 d-flex justify-content-center align-items-center'
+            style={{
+              background: " #df2222",
+              width: "20px",
+              height: "20px",
+              borderRadius: "50%",
+              cursor: "pointer"
+            }}
+            title='close'
+            onClick={() => {
+              setStudentData(null)
+            }}
+          >
+            <i class="fa fa-times " aria-hidden="true"
+              style={{
+                color: " #ffffff",
+
+              }}
+            ></i>
+          </span>)
+
+
+        }
       />
 
 
@@ -120,24 +147,8 @@ const FeeCollection = () => {
 
 
           <div className="row mb-2 p-2">
-            <div className='col-xl-2 col-md-4 col-sm-6 col-12'>
-              <div
-                style={{
-                  border: "1px solid #447dd5",
-                  padding: "2px 5px",
-                  borderRadius: "3px",
-                  backgroundColor: "#447dd5",
-                  color: "white",
-                  // marginRight: "3px",
-                  // height: "29.5px !important",
-                  maxWidth: "27px"
+            <div className=''>
 
-                }}
-                className='ml-2'
-              // onClick={sendReset}
-              >
-                <i className="fa fa-search " aria-hidden="true"></i>
-              </div>
             </div>
             <Input
               type="text"
