@@ -127,7 +127,7 @@ const Users = () => {
   }, []);
   return (
     <>
-      <div className="card p-2">
+      <div className="card ">
         <Heading title="User Master" isBreadcrumb={false} />
 
         {/* ================= FORM ================= */}

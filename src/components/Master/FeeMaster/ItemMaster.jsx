@@ -113,7 +113,7 @@ const ItemMaster = () => {
     }, []);
 
     return (
-        <div className="card p-2">
+        <div className="card ">
             <Heading title="Item Master" isBreadcrumb={false} />
 
             {/* ================= FORM ================= */}

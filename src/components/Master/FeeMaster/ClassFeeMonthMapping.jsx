@@ -158,11 +158,11 @@ const handleSelect = (name, option) => {
   /* ================= UI ================= */
 
   return (
-    <div className="card p-3">
+    <div className="card">
       <Heading title="Class Fee Month Mapping" isBreadcrumb={false} />
 
       {/* ===== CLASS SELECT ===== */}
-      <div className="row mb-3">
+      <div className="row mb-3 p-1">
         <ReactSelect
           placeholderName="Class"
           searchable
@@ -180,7 +180,7 @@ const handleSelect = (name, option) => {
           value={values?.class_Name?.value}
         />
 
-        <div className="col-xl-2 d-flex align-items-end">
+        <div className="col-xl-2 ">
           <button className="btn btn-sm btn-primary" onClick={handleSave}>
             Save
           </button>

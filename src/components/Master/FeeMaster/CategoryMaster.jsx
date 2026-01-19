@@ -86,7 +86,7 @@ const CategoryMaster = () => {
   }, []);
 
   return (
-    <div className="card p-2">
+    <div className="card">
       <Heading title="Category Master" isBreadcrumb={false} />
 
       {/* ================= FORM ================= */}
