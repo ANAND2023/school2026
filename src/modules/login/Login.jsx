@@ -1,7 +1,7 @@
 import React from "react";
 import "@app/assets/css/login.css";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "@app/assets/image/logo.png"; // Ensure path is correct
+
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { notify } from "../../utils/utils";
@@ -9,7 +9,8 @@ import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 import { signInAction } from "../../store/reducers/loginSlice/loginSlice";
 import { speakMessage } from "../../utils/ustil2";
 import ILLUSTRATION_URL from "@app/assets/image/login-image.png";
-
+// import logo from "../../../public/img/logo.png"
+import logo from "../../../public/img/logo.png"
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,11 +91,27 @@ const Login = () => {
       <div className="login-right-section">
         <div className="form-container">
 
-          <div className="header-text">
+          {/* <div className="header-text">
             <h2>Samaritans English Medium Sr. Sec. School</h2>
             <p className="sub-header">Parents & Students Sign In</p>
-          </div>
-
+          </div> */}
+<div style={{ 
+             display: 'flex', 
+             alignItems: 'center', 
+             gap: '12px',
+            //  opacity: menuSidebarCollapsed ? 0 : 1,
+            //  transition: 'opacity 0.2s',
+            //  pointerEvents: menuSidebarCollapsed ? 'none' : 'auto'
+           }}>
+             <img 
+               src={logo} 
+               alt="Logo" 
+               style={{
+                 width:"400px", 
+                //  maxWidth: 'unset'
+               }}
+             />
+           </div>
           <form onSubmit={handleSubmit} className="login-form">
 
             <div className="input-group">
