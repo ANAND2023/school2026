@@ -252,7 +252,7 @@ function ClassWiseFeeRateMApping() {
                   
                 ]}
                 tbody={tableData.map((item, index) => ({
-                    itemName: item.itemName,
+                    name: item.name,
                     unit: item.unit,
                     rate: item.rate,
                    

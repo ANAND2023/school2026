@@ -678,7 +678,30 @@ const StudentRegistration = () => {
                   <Input className="form-control" name="email" lable="Email Address" value={values.email} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control" name="aadhaar" lable="Aadhaar Number" value={values.aadhaar} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control" name="siblingId" lable="Sibling ID (if applicable)" value={values.siblingId} onChange={handleChange} respclass="col-md-3" />
+                 <ReactSelect placeholderName={t("Class")} searchable={true} respclass="col-xl-2 col-md-4 col-sm-4 col-12" id="class_Name" name="class_Name" removeIsClearable={true} dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")} handleChange={handleSelect} value={values?.class_Name?.value} requiredClassName="required-fields" />
+              <Input type="text" className="form-control" id="rollNo" name="rollNo" value={values?.rollNo || ""} lable={"Roll No."} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="percentage" name="percentage" value={values?.percentage || ""} lable={"Percentage"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="yearOfPassing" name="yearOfPassing" value={values?.yearOfPassing || ""} lable={"Year Of Passing"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="board" name="board" value={values?.board || ""} lable={"Board"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <ReactSelect placeholderName={t("Medium")} searchable={true} respclass="col-xl-2 col-md-4 col-sm-4 col-12" id="medium" name="medium" removeIsClearable={true} dynamicOptions={[{ label: "HINDI", value: "HINDI" }, { label: "ENGLISH", value: "ENGLISH" }]} handleChange={handleSelect} value={values?.medium?.value} requiredClassName="required-fields" />
+              <Input type="text" className="form-control" id="school" name="school" value={values?.school || ""} lable={"School Name"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="schoolAddress" name="schoolAddress" value={values?.schoolAddress || ""} lable={"Address"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="tcNo" name="tcNo" value={values?.tcNo || ""} lable={"TC No."} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="description" name="description" value={values?.description || ""} lable={"Description"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+           
                 </div>
+                {/* <div className="row g-3">
+              <ReactSelect placeholderName={t("Class")} searchable={true} respclass="col-xl-2 col-md-4 col-sm-4 col-12" id="class_Name" name="class_Name" removeIsClearable={true} dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")} handleChange={handleSelect} value={values?.class_Name?.value} requiredClassName="required-fields" />
+              <Input type="text" className="form-control" id="rollNo" name="rollNo" value={values?.rollNo || ""} lable={"Roll No."} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="percentage" name="percentage" value={values?.percentage || ""} lable={"Percentage"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="yearOfPassing" name="yearOfPassing" value={values?.yearOfPassing || ""} lable={"Year Of Passing"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="board" name="board" value={values?.board || ""} lable={"Board"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <ReactSelect placeholderName={t("Medium")} searchable={true} respclass="col-xl-2 col-md-4 col-sm-4 col-12" id="medium" name="medium" removeIsClearable={true} dynamicOptions={[{ label: "HINDI", value: "HINDI" }, { label: "ENGLISH", value: "ENGLISH" }]} handleChange={handleSelect} value={values?.medium?.value} requiredClassName="required-fields" />
+              <Input type="text" className="form-control" id="school" name="school" value={values?.school || ""} lable={"School Name"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="schoolAddress" name="schoolAddress" value={values?.schoolAddress || ""} lable={"Address"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="tcNo" name="tcNo" value={values?.tcNo || ""} lable={"TC No."} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="description" name="description" value={values?.description || ""} lable={"Description"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+            </div> */}
               </div>
               <div className="col-lg-2 col-md-3 d-flex justify-content-center pt-1">
                  <PhotoUploader label="Student Photo" onUploadSuccess={handleStudentPhotoUpload} currentPhotoId={values.studentPhotoId} />
@@ -712,7 +735,7 @@ const StudentRegistration = () => {
         </div>
 
         {/* Previous Academics */}
-        <div className="card shadow-sm mb-4">
+        {/* <div className="card shadow-sm mb-4">
           <Heading title={t("Previous Academic Details")} isBreadcrumb={false} />
           <div className="card-body">
             <div className="row g-3">
@@ -728,7 +751,7 @@ const StudentRegistration = () => {
               <Input type="text" className="form-control" id="description" name="description" value={values?.description || ""} lable={"Description"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Parent Details */}
         <div className="card shadow-sm mb-4">

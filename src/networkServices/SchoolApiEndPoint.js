@@ -72,7 +72,7 @@ export const apiUrls = {
   createEmployeeSubmenuMappingBulk: `${baseUrlMaster}MenuManagment/create-employee-submenu-mapping-bulk`,
 
   // GetAllBranches:"branchmasters/GetBranch",
-  Createorganisation: "organizationmaster/createorganisation",
+  // Createorganisation: "organizationmaster/createorganisation",
   // GetAllOrganisation:"organizationmaster/GetAllOrganisation",
   GetAllOrganisation: `${baseUrlMaster}organizationmaster/GetAllOrganisation`,
   // branch End ...
@@ -86,7 +86,7 @@ export const apiUrls = {
   UpdateSubCategory: `${feeUrl}SubCategory/UpdateSubCategory`,
   ItemInsertItemMaster: `${feeUrl}Item/InsertItemMaster`,
   GetAllItemMaster: `${feeUrl}Item/GetAllItemMaster`,
-  GetClassMonthItemFees: `${feeUrl}FeeRateSchedule/GetClassMonthItemFees`,
+  // GetClassMonthItemFees: `${feeUrl}FeeRateSchedule/GetClassMonthItemFees`,
   UpdateItemMaster: `${feeUrl}Item/UpdateItemMaster`,
   FeeRateSchedule: `${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
   AllFeeRateSchedule: `${feeUrl}FeeRateSchedule/GetAllFeeRateSchedule`,
@@ -100,9 +100,12 @@ export const apiUrls = {
 
   CreateBankAccount: `${baseUrlMaster}feemaster/CreateBankAccount`,
 // GetAllBranches:"branchmasters/GetBranch",
-Createorganisation:"organizationmaster/createorganisation",
+// Createorganisation:"organizationmaster/createorganisation",
 // GetAllOrganisation:"organizationmaster/GetAllOrganisation",
-GetAllOrganisation:`${baseUrlMaster}organizationmaster/GetAllOrganisation`,
+// GetAllOrganisation:"organizationmaster/GetAllOrganisation",
+// GetAllOrganisation:`${baseUrlMaster}organizationmaster/GetAllOrganisation`,
+Createorganisation:`${baseUrlMaster}OrganizationMaster/createorganisation`,
+// gateway/master/api/v1/OrganizationMaster/createorganisation' \
 // branch End ...
   
 // Fee Master Start .....
@@ -127,6 +130,7 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
 
 // UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
 // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
+  CreateBankAccount: `${baseUrlMaster}feemaster/CreateBankAccount`,
 
   // GetAllBankAccounts:"feemaster/GetAllBankAccounts",
   GetAllBankAccounts: `${baseUrlMaster}feemaster/GetAllBankAccounts`,

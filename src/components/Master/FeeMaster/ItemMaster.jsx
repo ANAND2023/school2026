@@ -66,7 +66,7 @@ const ItemMaster = () => {
 
             if (res?.success) {
                 notify(res?.message, "success");
-                AllItemMaster
+                AllItemMaster()
                 setValues(initialData);
                 setIsEdit(false);
             } else {
