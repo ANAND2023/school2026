@@ -13,6 +13,7 @@ import {
 } from "../../../networkServices/AcademicYear";
 
 import {
+  AllFeeRateSchedule,
   GetAllItemMaster,
   GetAllMonthType,
   GetClassMonthFeeDetails,
@@ -70,9 +71,10 @@ function ClassWiseItemRateMapping() {
     }
   };
   const getData = async (classId,monthTypeId) => {
-    debugger
+    
     try {
-      const res = await GetClassMonthFeeDetails(classId,monthTypeId);
+      const res = await AllFeeRateSchedule();
+      // const res = await GetClassMonthFeeDetails(classId,monthTypeId);
       if(res?.success){
         setTableData(res?.data);
       }
@@ -132,14 +134,14 @@ function ClassWiseItemRateMapping() {
       return;
     }
 
-    const payload = {
+    const payload = [{
       classId: values.class_Name.value,
       monthTypeMasterId: values.Month.value,
       items: itemRates.map((item) => ({
         itemId: item.itemId,
         rate: Number(item.rate),
       })),
-    };
+    }]
 
     try {
       const res = await UpdateBulkItemClassMonthWise(payload);

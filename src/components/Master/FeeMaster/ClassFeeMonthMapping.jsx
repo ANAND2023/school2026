@@ -11,10 +11,12 @@ import {
   GetClassMonthItemFees,
 } from "../../../networkServices/FeeMaster";
 import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
+import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 
 const ClassFeeMonthMapping = () => {
   /* ================= STATE ================= */
-
+const localData = useLocalStorage("userData", "get");
+console.log("localData",localData);
   const [classes, setClasses] = useState([]);
   const [months, setMonths] = useState([]);
   const [items, setItems] = useState([]);
@@ -23,14 +25,7 @@ const ClassFeeMonthMapping = () => {
     class_Name: null,
   });
 
-  /**
-   * feeMatrix
-   * {
-   *   monthId: {
-   *     itemId: true/false
-   *   }
-   * }
-   */
+
   const [feeMatrix, setFeeMatrix] = useState({});
 
   /* ================= API CALLS ================= */
@@ -47,23 +42,27 @@ const ClassFeeMonthMapping = () => {
   };
 
   const fetchMonths = async () => {
-    const res = await GetAllMonthType();
+
+
+    const res = await GetAllMonthType(localData?.OrganizationId,localData?.defaultCentre);
     if (res?.success) setMonths(res.data);
   };
 
   const fetchItems = async (classID) => {
     // const res = await GetAllItemMaster();
+
     const payload={
       classId: classID,
-      schoolTypeId:"",
+      schoolTypeId:"11111",
       sectionId:"",
       sessionId:"ssasa",
+      OrgId:localData?.OrganizationId??"",
+      BranchId:localData?.defaultCentre??"",
     }
     const res = await GetClassMonthItemFees(payload);
     if (res?.success) setItems(res.data);
   };
 
-  /* ================= LOGIC ================= */
 
   const toggleFee = (monthId, itemId) => {
     setFeeMatrix((prev) => ({
@@ -83,8 +82,6 @@ const ClassFeeMonthMapping = () => {
       return feeMatrix[monthId][item.id] ? sum + rate : sum;
     }, 0);
   };
-
-  /* ================= PAYLOAD ================= */
 
   const buildPayload = () => {
     return months
@@ -155,7 +152,6 @@ const handleSelect = (name, option) => {
         setValues((prev) => ({ ...prev, [name]: option }));
         fetchItems(option?.value);
     };
-  /* ================= UI ================= */
 
   return (
     <div className="card">

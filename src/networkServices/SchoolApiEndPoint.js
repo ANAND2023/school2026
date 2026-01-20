@@ -99,6 +99,34 @@ export const apiUrls = {
   // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
   CreateBankAccount: `${baseUrlMaster}feemaster/CreateBankAccount`,
+// GetAllBranches:"branchmasters/GetBranch",
+Createorganisation:"organizationmaster/createorganisation",
+// GetAllOrganisation:"organizationmaster/GetAllOrganisation",
+GetAllOrganisation:`${baseUrlMaster}organizationmaster/GetAllOrganisation`,
+// branch End ...
+  
+// Fee Master Start .....
+createcategory:`${feeUrl}Category/createcategory`,
+updatecategory:`${feeUrl}Category/updatecategory`,
+GetAllCategory:`${feeUrl}Category/GetAllCategory`,
+InsertSubCategory:`${feeUrl}SubCategory/InsertSubCategory`,
+GetAllSubCategory:`${feeUrl}SubCategory/GetAllSubCategory`,
+UpdateSubCategory:`${feeUrl}SubCategory/UpdateSubCategory`,
+ItemInsertItemMaster:`${feeUrl}Item/InsertItemMaster`,
+GetAllItemMaster:`${feeUrl}Item/GetAllItemMaster`,
+GetClassMonthItemFees:`${feeUrl}FeeRateSchedule/GetClassMonthItemFees`,
+UpdateItemMaster:`${feeUrl}Item/UpdateItemMaster`,
+FeeRateSchedule:`${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
+AllFeeRateSchedule:`${feeUrl}FeeRateSchedule/GetAllFeeRateSchedule`,
+InsertFeeRateSchedule:`${feeUrl}FeeRateSchedule/InsertFeeRateSchedule`,
+InsertMonthType:`${feeUrl}MonthType/InsertMonthType`,
+GetAllMonthType:`${feeUrl}MonthType/GetAllMonthType`,
+UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
+InserUpdatetFeeRateSchedule:`${feeUrl}FeeRateSchedule/InserUpdatetFeeRateSchedule`,
+GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
+
+// UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
+// gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
   // GetAllBankAccounts:"feemaster/GetAllBankAccounts",
   GetAllBankAccounts: `${baseUrlMaster}feemaster/GetAllBankAccounts`,
