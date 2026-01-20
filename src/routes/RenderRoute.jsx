@@ -432,16 +432,16 @@ const allRoutes = {
     },
 
     // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Billing\FeeCollection.jsx
-    {
-      Guard: Authenticated,
-      layout: Layout,
-      path: "/create-payment-mode",
-      component: lazy(
-        () => import("@app/components/Master/FeeMaster/CreatePaymentMode.jsx")
-      ),
+    // {
+    //   Guard: Authenticated,
+    //   layout: Layout,
+    //   path: "/create-payment-mode",
+    //   component: lazy(
+    //     () => import("@app/components/Master/FeeMaster/CreatePaymentMode.jsx")
+    //   ),
     
-      exact: true,
-    },
+    //   exact: true,
+    // },
     {
       Guard: Authenticated,
       layout: Layout,

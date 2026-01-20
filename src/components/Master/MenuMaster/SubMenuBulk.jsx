@@ -234,8 +234,8 @@ const SubMenuBulk = () => {
                         className="form-control"
                     />
                     <ReactSelect
-                        placeholderName=" Menu"
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                        placeholderName="Menu"
+                        respclass="col-xl-3 col-md-4 col-sm-6 col-12"
                         name="menuId"
                         dynamicOptions={menuList?.map((ele) => ({
                             value: ele.id,
@@ -255,15 +255,7 @@ const SubMenuBulk = () => {
                         className="form-control"
                     />
 
-                    <Input
-                        type="text"
-                        name="code"
-                        value={values.code}
-                        lable="Code"
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-                        onChange={handleChange}
-                        className="form-control"
-                    />
+                   
 
                     <Input
                         type="text"
@@ -274,7 +266,15 @@ const SubMenuBulk = () => {
                         onChange={handleChange}
                         className="form-control"
                     />
-
+ <Input
+                        type="text"
+                        name="code"
+                        value={values.code}
+                        lable="Code"
+                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                        onChange={handleChange}
+                        className="form-control"
+                    />
 
                     <ReactSelect
                         placeholderName="icon"

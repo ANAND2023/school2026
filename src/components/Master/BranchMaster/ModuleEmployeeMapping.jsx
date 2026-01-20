@@ -10,10 +10,10 @@ import {
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import { MenuManagmentGeModuleBulk } from "../../../networkServices/MenuMaster";
 import { GetAllUsers } from "../../../networkServices/Admin";
-import { handleReactSelectDropDownOptions } from "../../../utils/utils";
+import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import MultiSelectComp from "../../formComponent/MultiSelectComp";
 import { useTranslation } from "react-i18next";
-import { notify } from "../../../utils/ustil2";
+
 
 const ModuleEmployeeMapping = () => {
   const localData = useLocalStorage("userData", "get");
@@ -60,7 +60,7 @@ const ModuleEmployeeMapping = () => {
         "employeeName": values?.employeeId?.label ?? "",
         "moduleId": mod?.code ?? "",
         "moduleName": mod?.name ?? "",
-        "branchId": userData?.defaultCentre ?? "",
+        "branchId": localData?.defaultCentre ?? "",
         "orgId": localData?.OrganizationId
 
       })) : []
@@ -80,12 +80,12 @@ const ModuleEmployeeMapping = () => {
   };
   const getModuleBulk = async () => {
 
-
+debugger
     const payload =
     {
       "searchText": "",
       "isAll": 1,
-        "branchId": userData?.defaultCentre ?? "",
+        "branchId": localData?.defaultCentre ?? "",
         "orgId": localData?.OrganizationId??"",
       // "orgId": "5bbf859d-9907-4117-aead-c260d030d335",
       // "branchId": "",
@@ -107,21 +107,7 @@ const ModuleEmployeeMapping = () => {
       // notify("Something went wrong", "error");
     }
   };
-  // const getData = async () => {
-  //   const payload = {
-  //     employeeId: "",
-  //     organisationID: values?.orgId,
-  //     isAll: 1
-  //   };
-
-  //   try {
-  //     const res = await GetAllBranches(payload);
-  //     if (res?.success) setBranch(res.data);
-  //     else notify(res?.message, "error");
-  //   } catch {
-  //     notify("Error fetching branches", "error");
-  //   }
-  // };
+  
   const getAllUsers = async () => {
     const payload = {
       "pageNumber": 1,
@@ -149,9 +135,6 @@ const ModuleEmployeeMapping = () => {
     getModuleBulk();
   }, []);
 
-  /* =======================
-      DELETE
-  ======================== */
   const handleDelete = (index) => {
     const data = [...tableData];
     data.splice(index, 1);
