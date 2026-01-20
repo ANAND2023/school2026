@@ -214,4 +214,5 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   // Usersupdateuser:`${mainUrl}Users/updateuser`,
   // Usersdeleteuser:`${mainUrl}Users/deleteuser`,
   // Users end ....
+  
 };
