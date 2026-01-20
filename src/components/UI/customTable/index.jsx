@@ -229,7 +229,8 @@ function Tables({
                         style={{
                           width: headData?.width ? headData?.width : "",
                           textAlign: headData?.textAlign
-                            ? headData?.textAlign
+                            ?""
+                            // ? headData?.textAlign
                             : "",
                           marginLeft: "3px",
                         }}

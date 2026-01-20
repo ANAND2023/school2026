@@ -1,261 +1,283 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import Heading from "../../UI/Heading";
-import Input from "../../formComponent/Input";
 import ReactSelect from "../../formComponent/ReactSelect";
 
-import MultiSelectComp from "../../formComponent/MultiSelectComp";
 
 import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
+import { GetAllClasses } from "../../../networkServices/AcademicYear";
 import {
-  GetAllClasses,
-} from "../../../networkServices/AcademicYear";
-
-import {
-  AllFeeRateSchedule,
-  GetAllItemMaster,
-  GetAllMonthType,
-  GetClassMonthFeeDetails,
+  GetClassMonthItemFees,
   UpdateBulkItemClassMonthWise,
 } from "../../../networkServices/FeeMaster";
-import Tables from "../../UI/customTable";
+
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+import Tables from "../../UI/customTable";
 
 function ClassWiseItemRateMapping() {
   const [t] = useTranslation();
-
-  const initialData = {
-    class_Name: { label: "", value: "" },
-    Month: { label: "", value: "" },
-    item: [],
-  };
   const localData = useLocalStorage("userData", "get");
-  const [values, setValues] = useState(initialData);
+
   const [classes, setClasses] = useState([]);
-  const [allItem, setAllItem] = useState([]);
-  const [allMonth, setAllMonth] = useState([]);
-  const [tableData, setTableData] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("");
+  const [monthData, setMonthData] = useState([]);
 
-  // 👇 table + rate data
-  const [itemRates, setItemRates] = useState([]);
+  /**
+   * matrixSelection = {
+   *   monthTypeId: {
+   *     itemId: { itemId, rate }
+   *   }
+   * }
+   */
+  const [matrixSelection, setMatrixSelection] = useState({});
 
-  /* ---------------- GET MASTER DATA ---------------- */
+  /* ===================== LOADERS ===================== */
 
   const getClass = async () => {
-    try {
-      const res = await GetAllClasses();
-      if (res?.success) setClasses(res?.data);
-      else notify(res?.message, "error");
-    } catch {
-      notify("Failed to load classes", "error");
-    }
+    const res = await GetAllClasses();
+    if (res?.success) setClasses(res.data);
   };
 
-  const getItems = async () => {
-    try {
-      debugger
-      const res = await GetAllItemMaster(localData?.OrganizationId, localData?.defaultCentre);
-      if (res?.success) setAllItem(res?.data);
-    } catch {
-      notify("Failed to load items", "error");
-    }
-  };
+  const loadMonthItems = async (classId) => {
+    const payload = {
+      classId,
+      schoolTypeId: "2",
+      sectionId: "",
+      sessionId: "1",
+      OrgId: localData?.OrganizationId ?? "",
+      BranchId: localData?.defaultCentre ?? "",
+    };
 
-  const getMonths = async () => {
-    try {
-      const res = await GetAllMonthType(localData?.OrganizationId, localData?.defaultCentre);
-      if (res?.success) setAllMonth(res?.data);
-    } catch {
-      notify("Failed to load months", "error");
-    }
-  };
-  const getData = async (classId,monthTypeId) => {
-    
-    try {
-      const res = await AllFeeRateSchedule();
-      // const res = await GetClassMonthFeeDetails(classId,monthTypeId);
-      if(res?.success){
-        setTableData(res?.data);
-      }
-    //   if (res?.success) setAllMonth(res?.data);
-    } catch {
-      notify("Failed to load months", "error");
-    }
+    const res = await GetClassMonthItemFees(payload);
+    if (!res?.success) return;
+
+    setMonthData(res.data);
+
+    // Pre-map already mapped items
+    const mapped = {};
+    res.data.forEach((m) => {
+      m.items.forEach((i) => {
+        if (i.isMapped) {
+          if (!mapped[m.monthTypeId]) mapped[m.monthTypeId] = {};
+          mapped[m.monthTypeId][i.itemId] = {
+            itemId: i.itemId,
+            rate: i.rate,
+          };
+        }
+      });
+    });
+    setMatrixSelection(mapped);
   };
 
   useEffect(() => {
     getClass();
-    
-    getMonths();
-
   }, []);
 
-  useEffect(()=>{
-    getItems();
-  },[localData?.OrganizationId, localData?.defaultCentre])
+  /* ===================== DERIVED ===================== */
 
-  /* ---------------- HANDLERS ---------------- */
+  const items = useMemo(() => {
+    return monthData.length ? monthData[0].items : [];
+  }, [monthData]);
 
-  const handleSelect = (name, value) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
+  /* ===================== TOGGLES ===================== */
+
+  // Single cell toggle
+  const toggleCell = (monthId, item) => {
+    setMatrixSelection((prev) => {
+      const copy = { ...prev };
+      if (!copy[monthId]) copy[monthId] = {};
+
+      if (copy[monthId][item.itemId]) {
+        delete copy[monthId][item.itemId];
+      } else {
+        copy[monthId][item.itemId] = {
+          itemId: item.itemId,
+          rate: item.rate,
+        };
+      }
+      return copy;
+    });
   };
 
-  // 🔥 Multi select → table bind
-  const handleMultiSelectChange = (name, selectedOptions) => {
-    setValues({ ...values, [name]: selectedOptions });
+  // Row select all (month)
+  const toggleRow = (month) => {
+    const allChecked = items.every(
+      (i) => matrixSelection?.[month.monthTypeId]?.[i.itemId]
+    );
 
-    const mapped = selectedOptions.map((item) => ({
-      itemId: item.code,
-      itemName: item.name,
-      rate: 0,
+    const updated = {};
+    if (!allChecked) {
+      items.forEach((i) => {
+        updated[i.itemId] = { itemId: i.itemId, rate: i.rate };
+      });
+    }
+
+    setMatrixSelection((prev) => ({
+      ...prev,
+      [month.monthTypeId]: updated,
     }));
-
-    setItemRates(mapped);
   };
 
-  // 🔥 Rate change per row
-  const handleRateChange = (index, value) => {
-    const updated = [...itemRates];
-    updated[index].rate = value;
-    setItemRates(updated);
+  // Column select all (item)
+  const toggleColumn = (item) => {
+    const allChecked = monthData.every(
+      (m) => matrixSelection?.[m.monthTypeId]?.[item.itemId]
+    );
+
+    setMatrixSelection((prev) => {
+      const copy = { ...prev };
+      monthData.forEach((m) => {
+        if (!copy[m.monthTypeId]) copy[m.monthTypeId] = {};
+        if (allChecked) {
+          delete copy[m.monthTypeId][item.itemId];
+        } else {
+          copy[m.monthTypeId][item.itemId] = {
+            itemId: item.itemId,
+            rate: item.rate,
+          };
+        }
+      });
+      return copy;
+    });
   };
 
-  /* ---------------- SAVE ---------------- */
+  /* ===================== TOTAL ===================== */
+
+  const monthTotal = (monthId) =>
+    Object.values(matrixSelection?.[monthId] || {}).reduce(
+      (sum, i) => sum + Number(i.rate || 0),
+      0
+    );
+
+  /* ===================== SAVE ===================== */
 
   const handleSave = async () => {
-    if (!values?.class_Name?.value || !values?.Month?.value) {
-      notify("Class and Month are required", "error");
+    const payload = Object.entries(matrixSelection).map(
+      ([monthTypeMasterId, itemsObj]) => ({
+        classId: selectedClass,
+        monthTypeMasterId,
+        items: Object.values(itemsObj),
+      })
+    );
+
+    if (!payload.length) {
+      notify("Nothing selected", "error");
       return;
     }
 
-    if (itemRates.length === 0) {
-      notify("Please select at least one item", "error");
-      return;
-    }
-
-    const payload = [{
-      classId: values.class_Name.value,
-      monthTypeMasterId: values.Month.value,
-      items: itemRates.map((item) => ({
-        itemId: item.itemId,
-        rate: Number(item.rate),
-      })),
-    }]
-
-    try {
-      const res = await UpdateBulkItemClassMonthWise(payload);
-      if (res?.success) {
-        notify(res?.message, "success");
-        setValues(initialData);
-        setItemRates([]);
-      } else {
-        notify(res?.message, "error");
-      }
-    } catch {
-      notify("Error while saving data", "error");
-    }
+    const res = await UpdateBulkItemClassMonthWise(payload);
+    notify(res.message, res.success ? "success" : "error");
   };
 
-  useEffect(() => {
-    if(values?.class_Name?.value && values?.Month?.value) getData(values?.class_Name?.value,values?.Month?.value)
-  },[values?.class_Name?.value,values?.Month?.value])
-  /* ---------------- UI ---------------- */
+  /* ===================== TABLE HEAD ===================== */
+
+  const thead = useMemo(() => {
+    if (!items.length) return [];
+
+    return [
+      "Month",
+      ...items.map((item) => ({
+        name: (
+          <div className="d-flex flex-column align-items-start">
+            <div>{item.itemName}</div>
+            <small>₹{item.rate}</small>
+            <div>
+              <input
+                type="checkbox"
+                checked={monthData.every(
+                  (m) => matrixSelection?.[m.monthTypeId]?.[item.itemId]
+                )}
+                onChange={() => toggleColumn(item)}
+              />
+            </div>
+          </div>
+        ),
+        type: "",
+      })),
+      "Monthly Total",
+    ];
+  }, [items, monthData, matrixSelection]);
+
+  /* ===================== TABLE BODY ===================== */
+
+  const tbody = useMemo(() => {
+    return monthData.map((month) => {
+      const row = {
+        Month: (
+          <div className="d-flex align-items-center gap-2 justify-content-start">
+            <input
+              type="checkbox"
+              checked={items.every(
+                (i) =>
+                  matrixSelection?.[month.monthTypeId]?.[i.itemId]
+              )}
+              onChange={() => toggleRow(month)}
+            />
+            <b>{month.monthName}</b>
+          </div>
+        ),
+      };
+
+      items.forEach((item) => {
+        row[item.itemName] = (
+          <input
+            type="checkbox"
+            checked={
+              !!matrixSelection?.[month.monthTypeId]?.[item.itemId]
+            }
+            onChange={() => toggleCell(month.monthTypeId, item)}
+          />
+        );
+      });
+
+      row["Monthly Total"] = (
+        <span className="fw-bold text-success">
+          ₹{monthTotal(month.monthTypeId)}
+        </span>
+      );
+
+      return row;
+    });
+  }, [monthData, items, matrixSelection]);
+
+  /* ===================== UI ===================== */
 
   return (
     <div className="card">
-      <Heading title={t("Rate Schedule By Class")} isBreadcrumb={false} />
+      <Heading title="Class Month Item Mapping" />
 
       <div className="row p-2">
         <ReactSelect
-          placeholderName={t("Class")}
-          searchable
-          respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-          name="class_Name"
+          placeholderName="Class"
+          respclass="col-md-4"
           dynamicOptions={handleReactSelectDropDownOptions(
             classes,
             "className",
             "id"
           )}
-          handleChange={handleSelect}
-          value={values?.class_Name?.value}
+          handleChange={(_, v) => {
+            setSelectedClass(v.value);
+            loadMonthItems(v.value);
+          }}
+          value={selectedClass}
         />
 
-        <ReactSelect
-          placeholderName={t("Month")}
-          searchable
-          respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-          name="Month"
-          dynamicOptions={handleReactSelectDropDownOptions(
-            allMonth,
-            "name",
-            "id"
-          )}
-          handleChange={handleSelect}
-          value={values?.Month?.value}
-        />
-
-        <MultiSelectComp
-          respclass="col-xl-4 col-md-6 col-sm-12 col-12"
-          name="item"
-          placeholderName={t("Items")}
-          dynamicOptions={allItem.map((ele) => ({
-            name: ele?.name,
-            code: ele?.id,
-          }))}
-          handleChange={handleMultiSelectChange}
-          value={values?.item}
-        />
-
-        <div className="col-xl-2 col-md-4 col-sm-6 col-12">
-          <button
-            onClick={handleSave}
-            className="btn btn-sm btn-primary"
-            type="button"
-          >
-            {t("Save")}
+        <div className="col-md-2">
+          <button className="btn btn-primary " onClick={handleSave}>
+            Save
           </button>
         </div>
       </div>
 
-
-      <Tables
-        thead={[
-          { name: "Item Name" },
-          { name: "Rate" },
-        ]}
-        tbody={itemRates.map((item, index) => ({
-          itemName: item.itemName,
-          rate: (
-            <input
-              type="number"
-              className="form-control form-control-sm"
-              value={item.rate}
-              onChange={(e) =>
-                handleRateChange(index, e.target.value)
-              }
-            />
-          ),
-        }))}
-      />
+      {tbody.length > 0 && (
         <Tables
-        thead={[
-          { name: "Item Name" },
-          { name: "unit" },
-          
-          { name: "rate" },
-          { name: "subCategory" },
-          { name: "isMapped" },
-        ]}
-        tbody={tableData.map((item, index) => ({
-          itemName: item.itemName,
-          unit: item.unit,
-          rate: item.rate,
-          subCategoryId: item.subCategoryId,
-          isMapped: item.isMapped===false ? "No" : "Yes",
-         
-        }))}
-      />
+          thead={thead}
+          tbody={tbody}
+          isSearch={false}
+          borderDark
+        />
+      )}
     </div>
   );
 }
@@ -264,269 +286,1033 @@ export default ClassWiseItemRateMapping;
 
 
 
+// import React, { useEffect, useMemo, useState } from "react";
+// import { useTranslation } from "react-i18next";
+
+// import Heading from "../../UI/Heading";
+// import ReactSelect from "../../formComponent/ReactSelect";
 
 
-// import React, { act, useEffect, useState } from "react";
+// import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
+// import { GetAllClasses } from "../../../networkServices/AcademicYear";
+// import {
+//   GetClassMonthItemFees,
+//   UpdateBulkItemClassMonthWise,
+// } from "../../../networkServices/FeeMaster";
+
+// import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+// import Tables from "../../UI/customTable";
+
+// function ClassWiseItemRateMapping() {
+//   const [t] = useTranslation();
+//   const localData = useLocalStorage("userData", "get");
+
+//   const [classes, setClasses] = useState([]);
+//   const [selectedClass, setSelectedClass] = useState("");
+//   const [monthData, setMonthData] = useState([]);
+
+//   /**
+//    * matrixSelection = {
+//    *   monthTypeId: {
+//    *     itemId: { itemId, rate }
+//    *   }
+//    * }
+//    */
+//   const [matrixSelection, setMatrixSelection] = useState({});
+
+//   /* ===================== LOADERS ===================== */
+
+//   const getClass = async () => {
+//     const res = await GetAllClasses();
+//     if (res?.success) setClasses(res.data);
+//   };
+
+//   const loadMonthItems = async (classId) => {
+//     const payload = {
+//       classId,
+//       schoolTypeId: "2",
+//       sectionId: "",
+//       sessionId: "1",
+//       OrgId: localData?.OrganizationId ?? "",
+//       BranchId: localData?.defaultCentre ?? "",
+//     };
+
+//     const res = await GetClassMonthItemFees(payload);
+//     if (!res?.success) return;
+
+//     setMonthData(res.data);
+
+//     // Pre-map already mapped items
+//     const mapped = {};
+//     res.data.forEach((m) => {
+//       m.items.forEach((i) => {
+//         if (i.isMapped) {
+//           if (!mapped[m.monthTypeId]) mapped[m.monthTypeId] = {};
+//           mapped[m.monthTypeId][i.itemId] = {
+//             itemId: i.itemId,
+//             rate: i.rate,
+//           };
+//         }
+//       });
+//     });
+//     setMatrixSelection(mapped);
+//   };
+
+//   useEffect(() => {
+//     getClass();
+//   }, []);
+
+//   /* ===================== DERIVED ===================== */
+
+//   const items = useMemo(() => {
+//     return monthData.length ? monthData[0].items : [];
+//   }, [monthData]);
+
+//   /* ===================== TOGGLES ===================== */
+
+//   // Single cell toggle
+//   const toggleCell = (monthId, item) => {
+//     setMatrixSelection((prev) => {
+//       const copy = { ...prev };
+//       if (!copy[monthId]) copy[monthId] = {};
+
+//       if (copy[monthId][item.itemId]) {
+//         delete copy[monthId][item.itemId];
+//       } else {
+//         copy[monthId][item.itemId] = {
+//           itemId: item.itemId,
+//           rate: item.rate,
+//         };
+//       }
+//       return copy;
+//     });
+//   };
+
+//   // Row select all (month)
+//   const toggleRow = (month) => {
+//     const allChecked = items.every(
+//       (i) => matrixSelection?.[month.monthTypeId]?.[i.itemId]
+//     );
+
+//     const updated = {};
+//     if (!allChecked) {
+//       items.forEach((i) => {
+//         updated[i.itemId] = { itemId: i.itemId, rate: i.rate };
+//       });
+//     }
+
+//     setMatrixSelection((prev) => ({
+//       ...prev,
+//       [month.monthTypeId]: updated,
+//     }));
+//   };
+
+//   // Column select all (item)
+//   const toggleColumn = (item) => {
+//     const allChecked = monthData.every(
+//       (m) => matrixSelection?.[m.monthTypeId]?.[item.itemId]
+//     );
+
+//     setMatrixSelection((prev) => {
+//       const copy = { ...prev };
+//       monthData.forEach((m) => {
+//         if (!copy[m.monthTypeId]) copy[m.monthTypeId] = {};
+//         if (allChecked) {
+//           delete copy[m.monthTypeId][item.itemId];
+//         } else {
+//           copy[m.monthTypeId][item.itemId] = {
+//             itemId: item.itemId,
+//             rate: item.rate,
+//           };
+//         }
+//       });
+//       return copy;
+//     });
+//   };
+
+//   /* ===================== TOTAL ===================== */
+
+//   const monthTotal = (monthId) =>
+//     Object.values(matrixSelection?.[monthId] || {}).reduce(
+//       (sum, i) => sum + Number(i.rate || 0),
+//       0
+//     );
+
+//   /* ===================== SAVE ===================== */
+
+//   const handleSave = async () => {
+//     const payload = Object.entries(matrixSelection).map(
+//       ([monthTypeMasterId, itemsObj]) => ({
+//         classId: selectedClass,
+//         monthTypeMasterId,
+//         items: Object.values(itemsObj),
+//       })
+//     );
+
+//     if (!payload.length) {
+//       notify("Nothing selected", "error");
+//       return;
+//     }
+
+//     const res = await UpdateBulkItemClassMonthWise(payload);
+//     notify(res.message, res.success ? "success" : "error");
+//   };
+
+//   /* ===================== TABLE HEAD ===================== */
+
+//   const thead = useMemo(() => {
+//     if (!items.length) return [];
+
+//     return [
+//       "Month",
+//       ...items.map((item) => ({
+//         name: (
+//           <div className="text-center">
+//             <div>{item.itemName}</div>
+//             <small>₹{item.rate}</small>
+//             <div>
+//               <input
+//                 type="checkbox"
+//                 checked={monthData.every(
+//                   (m) => matrixSelection?.[m.monthTypeId]?.[item.itemId]
+//                 )}
+//                 onChange={() => toggleColumn(item)}
+//               />
+//             </div>
+//           </div>
+//         ),
+//         type: "",
+//       })),
+//       "Monthly Total",
+//     ];
+//   }, [items, monthData, matrixSelection]);
+
+//   /* ===================== TABLE BODY ===================== */
+
+//   const tbody = useMemo(() => {
+//     return monthData.map((month) => {
+//       const row = {
+//         Month: (
+//           <div className="d-flex align-items-center gap-2 justify-content-center">
+//             <input
+//               type="checkbox"
+//               checked={items.every(
+//                 (i) =>
+//                   matrixSelection?.[month.monthTypeId]?.[i.itemId]
+//               )}
+//               onChange={() => toggleRow(month)}
+//             />
+//             <b>{month.monthName}</b>
+//           </div>
+//         ),
+//       };
+
+//       items.forEach((item) => {
+//         row[item.itemName] = (
+//           <input
+//             type="checkbox"
+//             checked={
+//               !!matrixSelection?.[month.monthTypeId]?.[item.itemId]
+//             }
+//             onChange={() => toggleCell(month.monthTypeId, item)}
+//           />
+//         );
+//       });
+
+//       row["Monthly Total"] = (
+//         <span className="fw-bold text-success">
+//           ₹{monthTotal(month.monthTypeId)}
+//         </span>
+//       );
+
+//       return row;
+//     });
+//   }, [monthData, items, matrixSelection]);
+
+//   /* ===================== UI ===================== */
+
+//   return (
+//     <div className="card">
+//       <Heading title="Class Month Item Mapping" />
+
+//       <div className="row p-2">
+//         <ReactSelect
+//           placeholderName="Class"
+//           respclass="col-md-4"
+//           dynamicOptions={handleReactSelectDropDownOptions(
+//             classes,
+//             "className",
+//             "id"
+//           )}
+//           handleChange={(_, v) => {
+//             setSelectedClass(v.value);
+//             loadMonthItems(v.value);
+//           }}
+//           value={selectedClass}
+//         />
+
+//         <div className="col-md-2">
+//           <button className="btn btn-primary mt-4" onClick={handleSave}>
+//             Save
+//           </button>
+//         </div>
+//       </div>
+
+//       {tbody.length > 0 && (
+//         <Tables
+//           thead={thead}
+//           tbody={tbody}
+//           isSearch={false}
+//           borderDark
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default ClassWiseItemRateMapping;
+
+
+
+
+// import React, { useEffect, useMemo, useState } from "react";
+// import { useTranslation } from "react-i18next";
+
+// import Heading from "../../UI/Heading";
+// import ReactSelect from "../../formComponent/ReactSelect";
+
+// import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
+// import { GetAllClasses } from "../../../networkServices/AcademicYear";
+// import {
+//   GetClassMonthItemFees,
+//   UpdateBulkItemClassMonthWise,
+// } from "../../../networkServices/FeeMaster";
+
+// import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+// import Tables from "../../UI/customTable";
+
+// function ClassWiseItemRateMapping() {
+//   const [t] = useTranslation();
+//   const localData = useLocalStorage("userData", "get");
+
+//   const [classes, setClasses] = useState([]);
+//   const [selectedClass, setSelectedClass] = useState("");
+//   const [monthData, setMonthData] = useState([]);
+
+//   /**
+//    * matrixSelection = {
+//    *   monthTypeId: {
+//    *     itemId: { itemId, rate }
+//    *   }
+//    * }
+//    */
+//   const [matrixSelection, setMatrixSelection] = useState({});
+
+//   /* -------------------- LOADERS -------------------- */
+
+//   const getClass = async () => {
+//     const res = await GetAllClasses();
+//     if (res?.success) setClasses(res.data);
+//   };
+
+//   const loadMonthItems = async (classId) => {
+//     const payload = {
+//       classId,
+//       schoolTypeId: "2",
+//       sectionId: "",
+//       sessionId: "1",
+//       OrgId: localData?.OrganizationId ?? "",
+//       BranchId: localData?.defaultCentre ?? "",
+//     };
+
+//     const res = await GetClassMonthItemFees(payload);
+//     if (!res?.success) return;
+
+//     setMonthData(res.data);
+
+//     const mapped = {};
+//     res.data.forEach((m) => {
+//       m.items.forEach((i) => {
+//         if (i.isMapped) {
+//           if (!mapped[m.monthTypeId]) mapped[m.monthTypeId] = {};
+//           mapped[m.monthTypeId][i.itemId] = {
+//             itemId: i.itemId,
+//             rate: i.rate,
+//           };
+//         }
+//       });
+//     });
+
+//     setMatrixSelection(mapped);
+//   };
+
+//   useEffect(() => {
+//     getClass();
+//   }, []);
+
+//   /* -------------------- DERIVED -------------------- */
+
+//   const items = useMemo(() => {
+//     return monthData.length ? monthData[0].items : [];
+//   }, [monthData]);
+
+//   /* -------------------- TOGGLES -------------------- */
+
+//   const toggleCell = (monthId, item) => {
+//     setMatrixSelection((prev) => {
+//       const copy = { ...prev };
+//       if (!copy[monthId]) copy[monthId] = {};
+
+//       if (copy[monthId][item.itemId]) {
+//         delete copy[monthId][item.itemId];
+//       } else {
+//         copy[monthId][item.itemId] = {
+//           itemId: item.itemId,
+//           rate: item.rate,
+//         };
+//       }
+//       return copy;
+//     });
+//   };
+
+//   const toggleRow = (month) => {
+//     const allChecked = items.every(
+//       (i) => matrixSelection?.[month.monthTypeId]?.[i.itemId]
+//     );
+
+//     const updated = {};
+//     if (!allChecked) {
+//       items.forEach((i) => {
+//         updated[i.itemId] = { itemId: i.itemId, rate: i.rate };
+//       });
+//     }
+
+//     setMatrixSelection((prev) => ({
+//       ...prev,
+//       [month.monthTypeId]: updated,
+//     }));
+//   };
+
+//   const toggleColumn = (item) => {
+//     const allChecked = monthData.every(
+//       (m) => matrixSelection?.[m.monthTypeId]?.[item.itemId]
+//     );
+
+//     setMatrixSelection((prev) => {
+//       const copy = { ...prev };
+//       monthData.forEach((m) => {
+//         if (!copy[m.monthTypeId]) copy[m.monthTypeId] = {};
+//         if (allChecked) {
+//           delete copy[m.monthTypeId][item.itemId];
+//         } else {
+//           copy[m.monthTypeId][item.itemId] = {
+//             itemId: item.itemId,
+//             rate: item.rate,
+//           };
+//         }
+//       });
+//       return copy;
+//     });
+//   };
+
+//   const monthTotal = (monthId) =>
+//     Object.values(matrixSelection?.[monthId] || {}).reduce(
+//       (sum, i) => sum + Number(i.rate || 0),
+//       0
+//     );
+
+//   /* -------------------- SAVE -------------------- */
+
+//   const handleSave = async () => {
+//     const payload = Object.entries(matrixSelection).map(
+//       ([monthTypeMasterId, itemsObj]) => ({
+//         classId: selectedClass,
+//         monthTypeMasterId,
+//         items: Object.values(itemsObj),
+//       })
+//     );
+
+//     if (!payload.length) {
+//       notify("Nothing selected", "error");
+//       return;
+//     }
+
+//     const res = await UpdateBulkItemClassMonthWise(payload);
+//     notify(res.message, res.success ? "success" : "error");
+//   };
+
+//   /* -------------------- TABLE DATA -------------------- */
+
+//   const thead = useMemo(() => {
+//     if (!items.length) return [];
+
+//     return [
+//       "Month",
+//       ...items.map((item) => ({
+//         name: (
+//           <>
+//             {item.itemName}
+//             <br />₹{item.rate}
+//             <br />
+//             <button
+//               className="btn btn-sm btn-light mt-1"
+//               onClick={() => toggleColumn(item)}
+//             >
+//               Select All
+//             </button>
+//           </>
+//         ),
+//         type: "",
+//       })),
+//       "Monthly Total",
+//     ];
+//   }, [items, matrixSelection]);
+
+//   const tbody = useMemo(() => {
+//     return monthData.map((month) => {
+//       const row = {
+//         Month: (
+//           <>
+//             <b>{month.monthName}</b>
+//             <br />
+//             <button
+//               className="btn btn-sm btn-primary mt-1"
+//               onClick={() => toggleRow(month)}
+//             >
+//               Select All
+//             </button>
+//           </>
+//         ),
+//       };
+
+//       items.forEach((item) => {
+//         row[item.itemName] = (
+//           <input
+//             type="checkbox"
+//             checked={
+//               !!matrixSelection?.[month.monthTypeId]?.[item.itemId]
+//             }
+//             onChange={() => toggleCell(month.monthTypeId, item)}
+//           />
+//         );
+//       });
+
+//       row["Monthly Total"] = (
+//         <span className="fw-bold text-success">
+//           ₹{monthTotal(month.monthTypeId)}
+//         </span>
+//       );
+
+//       return row;
+//     });
+//   }, [monthData, items, matrixSelection]);
+
+//   /* -------------------- UI -------------------- */
+
+//   return (
+//     <div className="card">
+//       <Heading title="Class Month Item Mapping" />
+
+//       <div className="row p-2">
+//         <ReactSelect
+//           placeholderName="Class"
+//           respclass="col-md-4"
+//           dynamicOptions={handleReactSelectDropDownOptions(
+//             classes,
+//             "className",
+//             "id"
+//           )}
+//           handleChange={(_, v) => {
+//             setSelectedClass(v.value);
+//             loadMonthItems(v.value);
+//           }}
+//           value={selectedClass}
+//         />
+
+//         <div className="col-md-2">
+//           <button className="btn btn-primary mt-4" onClick={handleSave}>
+//             Save
+//           </button>
+//         </div>
+//       </div>
+
+//       {tbody.length > 0 && (
+//         <Tables
+//           thead={thead}
+//           tbody={tbody}
+//           isSearch={false}
+//           borderDark
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default ClassWiseItemRateMapping;
+
+
+
+// import React, { useEffect, useMemo, useState } from "react";
+// import { useTranslation } from "react-i18next";
+
+// import Heading from "../../UI/Heading";
+// import ReactSelect from "../../formComponent/ReactSelect";
+
+// import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
+// import { GetAllClasses } from "../../../networkServices/AcademicYear";
+// import {
+//   GetClassMonthItemFees,
+//   UpdateBulkItemClassMonthWise,
+// } from "../../../networkServices/FeeMaster";
+
+// import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+
+// function ClassWiseItemRateMapping() {
+//   const [t] = useTranslation();
+//   const localData = useLocalStorage("userData", "get");
+
+//   const [classes, setClasses] = useState([]);
+//   const [selectedClass, setSelectedClass] = useState("");
+
+//   // API raw data
+//   const [monthData, setMonthData] = useState([]);
+
+//   /**
+//    * matrixSelection:
+//    * {
+//    *   monthTypeId: {
+//    *     itemId: { itemId, rate }
+//    *   }
+//    * }
+//    */
+//   const [matrixSelection, setMatrixSelection] = useState({});
+
+//   /* ----------------------------- LOADERS ----------------------------- */
+
+//   const getClass = async () => {
+//     const res = await GetAllClasses();
+//     if (res?.success) setClasses(res.data);
+//   };
+
+//   const loadMonthItems = async (classId) => {
+//     const payload = {
+//       classId,
+//       schoolTypeId: "2",
+//       sectionId: "",
+//       sessionId: "1",
+//       OrgId: localData?.OrganizationId ?? "",
+//       BranchId: localData?.defaultCentre ?? "",
+//     };
+
+//     const res = await GetClassMonthItemFees(payload);
+
+//     if (res?.success) {
+//       setMonthData(res.data);
+
+//       // pre-map isMapped items
+//       const mapped = {};
+//       res.data.forEach((m) => {
+//         m.items.forEach((i) => {
+//           if (i.isMapped) {
+//             if (!mapped[m.monthTypeId]) mapped[m.monthTypeId] = {};
+//             mapped[m.monthTypeId][i.itemId] = {
+//               itemId: i.itemId,
+//               rate: i.rate,
+//             };
+//           }
+//         });
+//       });
+//       setMatrixSelection(mapped);
+//     }
+//   };
+
+//   useEffect(() => {
+//     getClass();
+//   }, []);
+
+//   /* ---------------------------- DERIVED DATA ---------------------------- */
+
+//   const items = useMemo(() => {
+//     if (monthData.length === 0) return [];
+//     return monthData[0].items; // same items for all months
+//   }, [monthData]);
+
+//   /* ---------------------------- TOGGLES ---------------------------- */
+
+//   // single cell
+//   const toggleCell = (monthId, item) => {
+//     setMatrixSelection((prev) => {
+//       const copy = { ...prev };
+//       if (!copy[monthId]) copy[monthId] = {};
+
+//       if (copy[monthId][item.itemId]) {
+//         delete copy[monthId][item.itemId];
+//         if (Object.keys(copy[monthId]).length === 0) delete copy[monthId];
+//       } else {
+//         copy[monthId][item.itemId] = {
+//           itemId: item.itemId,
+//           rate: 0,
+//           // rate: item.rate,
+//         };
+//       }
+//       return copy;
+//     });
+//   };
+
+//   // row select all
+//   const toggleRow = (month) => {
+//     const allChecked = items.every(
+//       (i) => matrixSelection?.[month.monthTypeId]?.[i.itemId]
+//     );
+
+//     const updated = {};
+//     if (!allChecked) {
+//       items.forEach((i) => {
+//         updated[i.itemId] = { itemId: i.itemId, rate: i.rate };
+//       });
+//     }
+
+//     setMatrixSelection((prev) => ({
+//       ...prev,
+//       [month.monthTypeId]: allChecked ? {} : updated,
+//     }));
+//   };
+
+//   // column select all
+//   const toggleColumn = (item) => {
+//     const allChecked = monthData.every(
+//       (m) => matrixSelection?.[m.monthTypeId]?.[item.itemId]
+//     );
+
+//     setMatrixSelection((prev) => {
+//       const copy = { ...prev };
+//       monthData.forEach((m) => {
+//         if (!copy[m.monthTypeId]) copy[m.monthTypeId] = {};
+//         if (allChecked) {
+//           delete copy[m.monthTypeId][item.itemId];
+//         } else {
+//           copy[m.monthTypeId][item.itemId] = {
+//             itemId: item.itemId,
+//             rate: item.rate,
+//           };
+//         }
+//       });
+//       return copy;
+//     });
+//   };
+
+//   /* ---------------------------- TOTALS ---------------------------- */
+
+//   const monthTotal = (monthId) =>
+//     Object.values(matrixSelection?.[monthId] || {}).reduce(
+//       (sum, i) => sum + Number(i.rate || 0),
+//       0
+//     );
+
+//   /* ---------------------------- SAVE ---------------------------- */
+
+//   const handleSave = async () => {
+//     const payload = Object.entries(matrixSelection).map(
+//       ([monthTypeMasterId, itemsObj]) => ({
+//         classId: selectedClass,
+//         monthTypeMasterId,
+//         items: Object.values(itemsObj),
+//       })
+//     );
+
+//     if (payload.length === 0) {
+//       notify("Nothing selected", "error");
+//       return;
+//     }
+
+//     const res = await UpdateBulkItemClassMonthWise(payload);
+//     res?.success
+//       ? notify(res.message, "success")
+//       : notify(res.message, "error");
+//   };
+
+//   /* ---------------------------- UI ---------------------------- */
+
+//   return (
+//     <div className="card">
+//       <Heading title="Class Month Item Mapping" />
+
+//       <div className="row p-2">
+//         <ReactSelect
+//           placeholderName="Class"
+//           respclass="col-md-4"
+//           dynamicOptions={handleReactSelectDropDownOptions(
+//             classes,
+//             "className",
+//             "id"
+//           )}
+//           handleChange={(_, v) => {
+//             setSelectedClass(v.value);
+//             loadMonthItems(v.value);
+//           }}
+//           value={selectedClass}
+//         />
+
+//         <div className="col-md-2">
+//           <button className="btn btn-primary mt-4" onClick={handleSave}>
+//             Save
+//           </button>
+//         </div>
+//       </div>
+
+//       {monthData.length > 0 && (
+//         <div className="table-responsive">
+//           <table className="table table-bordered text-center">
+//             <thead className="bg-primary text-white">
+//               <tr>
+//                 <th>Month</th>
+//                 {items.map((item) => (
+//                   <th key={item.itemId}>
+//                     {item.itemName}
+//                     <br />
+//                     ₹{item.rate}
+//                     <br />
+//                     <button
+//                       className="btn btn-sm btn-light mt-1"
+//                       onClick={() => toggleColumn(item)}
+//                     >
+//                       Select All
+//                     </button>
+//                   </th>
+//                 ))}
+//                 <th>Monthly Total</th>
+//               </tr>
+//             </thead>
+
+//             <tbody>
+//               {monthData.map((month) => (
+//                 <tr key={month.monthTypeId}>
+//                   <td>
+//                     <b>{month.monthName}</b>
+//                     <br />
+//                     <button
+//                       className="btn btn-sm btn-primary mt-1"
+//                       onClick={() => toggleRow(month)}
+//                     >
+//                       Select All
+//                     </button>
+//                   </td>
+
+//                   {items.map((item) => (
+//                     <td key={item.itemId}>
+//                       <input
+//                         type="checkbox"
+//                         checked={
+//                           !!matrixSelection?.[month.monthTypeId]?.[
+//                             item.itemId
+//                           ]
+//                         }
+//                         onChange={() => toggleCell(month.monthTypeId, item)}
+//                       />
+//                     </td>
+//                   ))}
+
+//                   <td className="fw-bold text-success">
+//                     ₹{monthTotal(month.monthTypeId)}
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default ClassWiseItemRateMapping;
+
+
+
+
+// import React, { useEffect, useState } from "react";
 // import { useTranslation } from "react-i18next";
 
 // import Heading from "../../UI/Heading";
 // import Input from "../../formComponent/Input";
 // import ReactSelect from "../../formComponent/ReactSelect";
-// import Modal from "../../modalComponent/Modal";
-// import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
-// import { GetAllClasses, CreateSection, GetAllSections } from "../../../networkServices/AcademicYear";
-// import Tables from "../../UI/customTable";
-// import { AllFeeRateSchedule, GetAllItemMaster, GetAllMonthType, InsertFeeRateSchedule, UpdateBulkItemClassMonthWise } from "../../../networkServices/FeeMaster";
+
 // import MultiSelectComp from "../../formComponent/MultiSelectComp";
 
+// import { notify, handleReactSelectDropDownOptions } from "../../../utils/utils";
+// import {
+//   GetAllClasses,
+// } from "../../../networkServices/AcademicYear";
+
+// import {
+
+//   GetClassMonthItemFees,
+//   UpdateBulkItemClassMonthWise,
+// } from "../../../networkServices/FeeMaster";
+// import Tables from "../../UI/customTable";
+// import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
+
 // function ClassWiseItemRateMapping() {
-//     const [t] = useTranslation(); const initialData = {
-//         item: [],
-//         class_Name: { label: "", value: "" },
-//         item_Name: { label: "Yes", value: "true" },
-//         isCurrent: { label: "Yes", value: "true" },
+//   const [t] = useTranslation();
+
+//   const initialData = {
+//     class_Name: { label: "", value: "" },
+//     Month: { label: "", value: "" },
+//     item: [],
+//   };
+//   const localData = useLocalStorage("userData", "get");
+//   const [values, setValues] = useState(initialData);
+//   const [classes, setClasses] = useState([]);
+
+//   const [items, setItems] = useState([]);
+// console.log("items",items)
+//   // 👇 table + rate data
+//   const [itemRates, setItemRates] = useState([]);
+
+//   const getClass = async () => {
+//     try {
+//       const res = await GetAllClasses();
+//       if (res?.success) setClasses(res?.data);
+//       else notify(res?.message, "error");
+//     } catch {
+//       notify("Failed to load classes", "error");
 //     }
-//     const [values, setValues] = useState(initialData);
-//     const [classes, setClasses] = useState([]);
-//     const [allItem, setAllItem] = useState([]);
-//     const [allMonth, setAllMonth] = useState([]);
-
-//     const [tableData, setTableData] = useState(
-//         []
-//     );
-//     const [handleModelData, setHandleModelData] = useState({});
-
-//     const [modalData, setModalData] = useState({});
-//     const handleChange = (e, type, limit = 9999999999999) => {
-//         const { name, value } = e.target
-
-//         setValues((prev) => ({ ...prev, [name]: value }));
-
-//     };
-
-
-//     const getClass = async () => {
-
-//         try {
-//             const response = await GetAllClasses();
-//             if (response?.success) {
-//                 setClasses(response?.data)
-//             } else {
-//                 notify(response?.message, "error");
-              
-//             }
-//         } catch (error) {
-//             notify("Error saving reason", "error");
-//         }
-//     };
-
-
-    
-
-//     useEffect(() => {
-       
-//         getClass()
-//     }, [])
-
-
-//     const setIsOpen = () => {
-//         setHandleModelData((val) => ({ ...val, isOpen: false }));
-//     };
-
-//     const handleSave = async () => {
-
-//         const Payload =
-//         {
-//   "classId":values?.class_Name?.value,
-//   "monthTypeMasterId": values?.Month?.value,
-//   "items": [
-//     {
-//       "itemId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//       "rate": 0
-//     }
-//   ]
-// }
-
-//         try {
-//             const Response = await UpdateBulkItemClassMonthWise(Payload);
-//             if (Response?.success) {
-//                 notify(Response?.message, "success");
-//                 setValues(initialData)
-               
-//             } else {
-//                 notify(Response?.message, "error");
-//             }
-//         } catch (error) {
-//             notify("Error saving reason", "error");
-//         }
-//     };
-//     const AllItemMaster = async () => {
-//         try {
-//             const res = await GetAllItemMaster();
-//             if (res?.success) {
-//                 setAllItem(res?.data);
-//             }
-//         } catch {
-//             notify("Failed to load categories", "error");
-//         }
-//     };
-//     const handleCapitalLatter = (e) => {
-
-//         let event = { ...e }
-//         event.target.value = event.target.value.toUpperCase()
-//         handleChange(e)
-
-//     }
-//       const handleMultiSelectChange = (name, selectedOptions) => {
-//     setValues({ ...values, [name]: selectedOptions });
 //   };
 
-//     const handleSelect = (name, value) => {
-//         setValues((prev) => ({ ...prev, [name]: value }));
-//     };
-//     const AllMonthType = async () => {
-//             try {
-//                 const res = await GetAllMonthType();
-//                 if (res?.success) {
-//                     setAllMonth(res?.data);
-//                 }
-//             } catch {
-//                 notify("Failed to load categories", "error");
-//             }
-//         };
-//     useEffect(() => {
-//         AllItemMaster();
-//         AllMonthType();
-//     }, []);
-//     return (
-//         <>
-//             {handleModelData?.isOpen && (
-//                 <Modal
-//                     visible={handleModelData?.isOpen}
-//                     setVisible={setIsOpen}
-//                     modalWidth={handleModelData?.width}
-//                     Header={t(handleModelData?.label)}
-//                     buttonType={"button"}
-//                     buttons={handleModelData?.extrabutton}
-//                     buttonName={handleModelData?.buttonName}
-//                     modalData={modalData}
-//                     setModalData={setModalData}
-//                     footer={handleModelData?.footer}
-//                     handleAPI={handleModelData?.handleInsertAPI}
-//                 >
-//                     {handleModelData?.Component}
-//                 </Modal>
-//             )}
 
-//             <div className="card p-1">
-//                 <Heading title={t("Rate Schedule By Class")} isBreadcrumb={false} />
 
-//                 <div className="row p-2">
+//   useEffect(() => {
+//     getClass();
+//   }, []);
 
-//                     <ReactSelect
-//                         placeholderName={t("Class")}
-//                         searchable={true}
-//                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-//                         id="class_Name"
-//                         name="class_Name"
-//                         removeIsClearable={true}
-//                         // dynamicOptions={classes}
-//                         dynamicOptions={[...handleReactSelectDropDownOptions(classes, "className", "id")]}
-//                         handleChange={handleSelect}
-//                         value={values?.class_Name?.value}
-//                     // requiredClassName="required-fields"
-//                     />
-//                     <ReactSelect
-//                         placeholderName={t("Month")}
-//                         searchable={true}
-//                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-//                         id="Month"
-//                         name="Month"
-//                         removeIsClearable={true}
-//                         // dynamicOptions={classes}
-//                         dynamicOptions={[...handleReactSelectDropDownOptions(allMonth, "name", "id")]}
-//                         handleChange={handleSelect}
-//                         value={values?.Month?.value}
-//                     // requiredClassName="required-fields"
-//                     />
-                    
-//                     <MultiSelectComp
-//             respclass="col-xl-3 col-md-4 col-sm-6 col-12"
-//             name="item"
-//             id="item"
-//             placeholderName={t("item")}
-//             // dynamicOptions={module}
-//             dynamicOptions={allItem?.map((ele) => ({
-//               name: ele?.name,
-//               code: ele?.id
-//             }))}
-//             handleChange={handleMultiSelectChange}
-//             value={values?.item}
-//           />
-                   
-//                     <Input
-//                         type="number"
-//                         className="form-control"
-//                         // className="form-control required-fields"
-//                         id="rate"
-//                         name="rate"
-//                         value={values?.rate ? values?.rate : ""}
-//                         // onChange={handleChange}
-//                         lable={("Rate")}
-//                         placeholder=" "
-//                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
-//                         // isUpperCase={true}
-//                         onChange={(e) => handleCapitalLatter(e)}
-//                     />
-                   
-//                     <div className="col-xl-2 col-md-4 col-sm-4 col-12">
+//   const handleSelect = (name, value) => {
+//     setValues((prev) => ({ ...prev, [name]: value }));
+//     if(name==="class_Name"){
+//       Itemtable(value?.value)
+//     }
+//   };
 
-//                         <button
-//                             onClick={handleSave}
-//                             className="btn btn-sm btn-primary"
-//                             type="button"
-//                         >
-//                             {t("Save")}
-//                         </button>
-//                     </div>
-//                 </div>
 
-//                 <Tables
-//                     thead={[{ name: "Section", }, { name: "Class", }, { name: "Action" }]}
-//                     tbody={tableData?.map((item, index) => (
-//                         {
-//                             sectionName: item.sectionName,
-//                             classId: item.classId,
+//   // 🔥 Rate change per row
+//   const handleRateChange = (index, value) => {
+//     const updated = [...itemRates];
+//     updated[index].rate = value;
+//     setItemRates(updated);
+//   };
 
-//                             action: <>
-//                                 <div
-//                                     className="d-flex align-items-center justify-content-center gap-2"
-//                                 // className="row gap-2"
-//                                 >
-//                                     <button
-//                                         id="editBtn"
-//                                         onclick="handleEdit(item.id)"
-//                                         title="Edit"
-//                                         className="d-flex align-items-center justify-content-center"
-//                                     >
-//                                         <i class=" bi-pencil-square"></i>
-//                                     </button>
+// const Itemtable=async(classID)=>{
+//   try {
+//      const payload={
+//           classId: classID,
+//           schoolTypeId:"2",
+//           sectionId:"",
+//           sessionId:"1",
+//           OrgId:localData?.OrganizationId??"",
+//           BranchId:localData?.defaultCentre??"",
+//         }
+//         const res = await GetClassMonthItemFees(payload);
+//         if(res?.success){
+//           setItems(res?.data);
+//         }
+//        else{
+//          notify(res?.message, "error");
+//        };
+//   } catch (error) {
+//     console.log("error",error)
+//   }
+// }
 
-//                                     <button
-//                                         id="deleteBtn"
-//                                         onclick="handleDelete(item.id)"
-//                                         title="Delete"
-//                                     >
-//                                         <i class="bi-trash3"></i>
-//                                     </button>
-//                                 </div>
-//                             </>,
-//                         }))}
+//   const handleSave = async () => {
+//     if (!values?.class_Name?.value || !values?.Month?.value) {
+//       notify("Class and Month are required", "error");
+//       return;
+//     }
 
-//                 />
-//             </div>
-//         </>
-//     );
+//     if (itemRates.length === 0) {
+//       notify("Please select at least one item", "error");
+//       return;
+//     }
+
+//     const payload = [{
+//       classId: values.class_Name.value,
+//       monthTypeMasterId: values.Month.value,
+//       items: itemRates.map((item) => ({
+//         itemId: item.itemId,
+//         rate: Number(item.rate),
+//       })),
+//     }]
+
+//     try {
+//       const res = await UpdateBulkItemClassMonthWise(payload);
+//       if (res?.success) {
+//         notify(res?.message, "success");
+      
+//       } else {
+//         notify(res?.message, "error");
+//       }
+//     } catch {
+//       notify("Error while saving data", "error");
+//     }
+//   };
+
+
+//   return (
+//     <div className="card">
+//       <Heading title={t("Rate Schedule By Class")} isBreadcrumb={false} />
+
+//       <div className="row p-2">
+//         <ReactSelect
+//           placeholderName={t("Class")}
+//           searchable
+//           respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+//           name="class_Name"
+//           dynamicOptions={handleReactSelectDropDownOptions(
+//             classes,
+//             "className",
+//             "id"
+//           )}
+//           handleChange={handleSelect}
+//           value={values?.class_Name?.value}
+//         />
+
+       
+
+//         <div className="col-xl-2 col-md-4 col-sm-6 col-12">
+//           <button
+//             onClick={handleSave}
+//             className="btn btn-sm btn-primary"
+//             type="button"
+//           >
+//             {t("Save")}
+//           </button>
+//         </div>
+//       </div>
+
+
+//       <Tables
+//         thead={[
+//           { name: "Item Name" },
+//           { name: "Rate" },
+//         ]}
+//         tbody={itemRates.map((item, index) => ({
+//           itemName: item.itemName,
+//           rate: (
+//             <input
+//               type="number"
+//               className="form-control form-control-sm"
+//               value={item.rate}
+//               onChange={(e) =>
+//                 handleRateChange(index, e.target.value)
+//               }
+//             />
+//           ),
+//         }))}
+//       />
+       
+//     </div>
+//   );
 // }
 
 // export default ClassWiseItemRateMapping;
+
+

@@ -160,6 +160,7 @@ function RenderRoute() {
   getAllUrls.push("/module-employee-mapping");
   getAllUrls.push("/submenu-employee-mapping");
   getAllUrls.push("/category-master");
+  getAllUrls.push("/organization-master");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -767,7 +768,16 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/organization-master",
+      component: lazy(
+        () => import("@app/components/Master/OrganizationMaster.jsx")
+      ),exact: true,
 
+    },
+// C:\Users\Anand\Desktop\school\school2026\src\components\Master\OrganizationMaster.jsx
 
     // C:\Users\Anand\Desktop\school\school2026\src\components\Master\ModuleMaster\ModuleBulk.jsx
      ],

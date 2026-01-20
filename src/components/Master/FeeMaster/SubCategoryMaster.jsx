@@ -116,7 +116,7 @@ const SubCategoryMaster = () => {
       {/* ================= FORM ================= */}
       <div className="row p-2">
         <ReactSelect
-          placeholderName="categoryName"
+          placeholderName="Category Name"
           respclass="col-xl-3 col-md-4 col-sm-6 col-12"
           name="categoryName"
           dynamicOptions={handleReactSelectDropDownOptions(allCategory, "categoryName", "id")}
