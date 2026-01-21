@@ -288,6 +288,8 @@ export const InserUpdatetFeeRateSchedule = async (params) => {
     console.error("Error Found", error);
   }
 };
+
+
 export const GetClassMonthFeeDetails = async (classId,monthTypeId) => {
   store.dispatch(setLoading(true));
   try {

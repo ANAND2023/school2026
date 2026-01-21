@@ -864,6 +864,7 @@ button {
   border: 1px solid #0bd4d4;
   border-radius: 5px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 99999 !important;
 }
 
 .p-autocomplete-panel .p-autocomplete-item {

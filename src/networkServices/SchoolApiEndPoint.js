@@ -95,6 +95,9 @@ export const apiUrls = {
   GetAllMonthType: `${feeUrl}MonthType/GetAllMonthType`,
   UpdateBulkItemClassMonthWise: `${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
   GetClassMonthFeeDetails: `${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
+  GetClassItemRates: `${feeUrl}FeeRateSchedule/GetClassItemRates`,
+  StudentBillingsave: `${feeUrl}StudentBilling/save`,
+
   // UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
   // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
