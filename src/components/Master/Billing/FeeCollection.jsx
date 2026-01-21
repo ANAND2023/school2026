@@ -304,7 +304,8 @@ const FeeCollection = () => {
         (item) => item.isMandatory === true
       )
       const payload = {
-        studentId: studentData?.student?.studentId,
+        studentId: studentData?.student?.studentMasterId,
+        // studentId: studentData?.student?.studentId,
         admissionId: studentData?.admission?.admissionId || "0",
         orgId: localData?.OrganizationId,
         branchId: localData?.defaultCentre,
@@ -321,6 +322,7 @@ const FeeCollection = () => {
           // isMandatory: i.isMandatory ? 1 : 0
         })),
         payments: addedPayments.map((p) => ({
+          // paymentModeId: "1",
           paymentModeId: p.mode.value,
           paymentModeName: p.mode.label,
           amount: p.amount,
@@ -411,8 +413,8 @@ const FeeCollection = () => {
       )}
 
       {studentData && (
-        <div className="p-2">
-          <div className="row mb-2 p-2">
+        <div className="">
+          <div className="row p-2">
             <Input
               type="text"
               className="form-control"
@@ -485,8 +487,8 @@ const FeeCollection = () => {
             />
           </div>
 
-          <Heading title={t("Search Item")} />
-          <div className="row mb-3 align-items-end mt-2 p-2">
+          {/* <Heading title={t("Search Item")} /> */}
+          <div className="row  align-items-end  p-2">
             <ReactSelect
               placeholderName={t("Type")}
               id="searchType"
@@ -614,6 +616,7 @@ const FeeCollection = () => {
               paymentModes={paymentModeList}
               addedPayments={addedPayments}
               setAddedPayments={setAddedPayments}
+              totalAmount={summary.grossAmount}
             />
           </div>
 
