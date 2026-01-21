@@ -98,6 +98,7 @@ export const apiUrls = {
   // UpdateBulkItemClassMonthWise:`${feeUrl}ClassWiseFee/UpdateBulkItemClassMonthWise`,
   // gateway/fee/api/v1/FeeRateSchedule/InsertFeeRateSchedule
 
+  CreateBankAccount: `${baseUrlMaster}feemaster/CreateBankAccount`,
 // GetAllBranches:"branchmasters/GetBranch",
 // Createorganisation:"organizationmaster/createorganisation",
 // GetAllOrganisation:"organizationmaster/GetAllOrganisation",
@@ -219,4 +220,5 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   // Usersupdateuser:`${mainUrl}Users/updateuser`,
   // Usersdeleteuser:`${mainUrl}Users/deleteuser`,
   // Users end ....
+  
 };
