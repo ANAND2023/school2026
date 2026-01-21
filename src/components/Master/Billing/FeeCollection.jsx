@@ -294,25 +294,31 @@ const FeeCollection = () => {
   };
 
   const handleSave = async () => {
+    debugger
     if (itemlist.length === 0)
       return notify("Please add items first", "warning");
 
     try {
+
+      const filteredItems = itemlist.filter(
+        (item) => item.isMandatory === true
+      )
       const payload = {
         studentId: studentData?.student?.studentId,
-        admissionId: studentData?.academic?.admissionId || "0",
+        admissionId: studentData?.admission?.admissionId || "0",
         orgId: localData?.OrganizationId,
         branchId: localData?.defaultCentre,
         billDate: moment().format(),
-        items: itemlist.map((i) => ({
+        items: filteredItems.map((i) => ({
           itemId: i.itemId,
           itemName: i.itemName,
           amount: i.rate,
-          quantity: i.qty,
+          // quantity: i.qty,
           discountPercent: i.discountPercent,
-          discountAmount: i.discountAmount,
+          taxPercent: 0,
+          // discountAmount: i.discountAmount,
           monthId: 0,
-          isMandatory: i.isMandatory ? 1 : 0
+          // isMandatory: i.isMandatory ? 1 : 0
         })),
         payments: addedPayments.map((p) => ({
           paymentModeId: p.mode.value,
@@ -321,10 +327,10 @@ const FeeCollection = () => {
           referenceNo: p.refNo,
           bankName: p.bankName,
         })),
-        grossAmount: summary.grossAmount,
-        discountAmount: summary.discountAmount,
-        netAmount: summary.netAmount,
-        remarks: summary.remarks,
+        // grossAmount: summary.grossAmount,
+        // discountAmount: summary.discountAmount,
+        // netAmount: summary.netAmount,
+        // remarks: summary.remarks,
       };
 
       const response = await StudentBillingsave(payload);
@@ -411,18 +417,18 @@ const FeeCollection = () => {
               type="text"
               className="form-control"
               lable={t("Student First Name")}
-              value={studentData?.student?.firstName}
+              value={`${studentData?.student?.firstName} ${studentData?.student?.lastName}`}
               respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               disabled={true}
             />
-            <Input
+            {/* <Input
               type="text"
               className="form-control"
               lable={t("Student Last Name")}
               value={studentData?.student?.lastName}
               respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               disabled={true}
-            />
+            /> */}
             <Input
               type="text"
               className="form-control"
@@ -439,7 +445,7 @@ const FeeCollection = () => {
               respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               disabled={true}
             />
-            <Input
+            {/* <Input
               type="text"
               className="form-control"
               lable={t("Admission Date")}
@@ -448,7 +454,7 @@ const FeeCollection = () => {
               )}
               respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               disabled={true}
-            />
+            /> */}
             <Input
               type="text"
               className="form-control"
