@@ -28,14 +28,15 @@ const FeeCollection = () => {
   const thead = [
     { name: "S.No", width: "1%" },
     { name: "Mandatory", width: "1%" },
+    { name: "Month", width: "5%" },
     { name: "Item Name", width: "15%" },
-    { name: "Item Description", width: "10%" },
+    // { name: "Item Description", width: "10%" },
     { name: "Rate", width: "8%" },
-    { name: "Quantity", width: "5%" },
-    { name: "Unit", width: "5%" },
+    // { name: "Qty", width: "5%" },
+    // { name: "Unit", width: "5%" },
     { name: "Disc (Amt)", width: "8%" },
     { name: "Disc (%)", width: "8%" },
-    { name: "Total", width: "8%" },
+    { name: "Net Amount", width: "8%" },
     { name: "Action", width: "1%" },
   ];
 
@@ -540,7 +541,7 @@ const FeeCollection = () => {
                 className="w-100"
                 minLength={1}
                 delay={100}
-                panelStyle={{ zIndex: 100000, width: "100%" }}
+                panelStyle={{ zIndex: 100000}}
               />
             </div>
           </div>
@@ -562,10 +563,12 @@ const FeeCollection = () => {
                         onChange={(e) =>
                           handleTableChange(item.uniqueId, "isMandatory", e.checked)
                         }
+                        disabled={true}
+                        // disabled={item?.isMandatory===1 ? true : false}
                       />
                     ),
+                    month: item?.monthName,
                     item_name: item?.itemName,
-                    description: item?.description,
                     rate: (
                       <input
                         type="number"
@@ -576,8 +579,8 @@ const FeeCollection = () => {
                         }
                       />
                     ),
-                    qty: item?.qty,
-                    unit: item?.unit,
+                    // qty: item?.qty,
+                    // unit: item?.unit,
                     disc: (
                       <input
                         type="number"
@@ -604,8 +607,10 @@ const FeeCollection = () => {
                     ).toFixed(2),
                     action: (
                       <i
-                        className="fa fa-trash text-danger pointer"
+                        className={`fa fa-trash text-danger pointer   ${item?.isMandatory===1 ? "disable-reject " : "disable-reject"}`}
                         onClick={() => handleDeleteItem(item.uniqueId)}
+                        // disabled={true}
+                        // disabled={item?.isMandatory===1 ? true : false}
                       ></i>
                     ),
                   };
