@@ -668,26 +668,26 @@ const StudentRegistration = () => {
             <div className="row align-items-start">
               <div className="col-lg-10 col-md-9">
                 <div className="row g-3">
-                  <ReactSelect placeholderName="title" respclass="col-md-2" name="title" dynamicOptions={[{ label: "Miss", value: "MISS" }, { label: "Mr", value: "MR" }, { label: "Ms", value: "MS" }]} handleChange={handleSelect} value={values.title?.value} />
+                  <ReactSelect placeholderName="title"  respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="title" dynamicOptions={[{ label: "Miss", value: "MISS" }, { label: "Mr", value: "MR" }, { label: "Ms", value: "MS" }]} handleChange={handleSelect} value={values.title?.value} />
                   <Input className="form-control required-fields" name="firstName" lable="First Name" value={values.firstName} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control required-fields" name="lastName" lable="Last Name" value={values.lastName} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
-                  <DatePicker name="dateOfBirth" lable="Date of Birth" value={values.dateOfBirth} handleChange={handleChange} respclass="col-xl-2 col-md-4 col-sm-4 col-12" className="required-fields" />
-                  <ReactSelect placeholderName="Gender" respclass="col-xl-2 col-md-4 col-sm-4 col-12" name="gender" dynamicOptions={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }, { label: "Other", value: "Other" }]} handleChange={handleSelect} value={values.gender?.value} requiredClassName="required-fields" />
+                  <DatePicker name="dateOfBirth" lable="Date of Birth" value={values.dateOfBirth} handleChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" className="required-fields" />
+                  <ReactSelect placeholderName="Gender" respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="gender" dynamicOptions={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }, { label: "Other", value: "Other" }]} handleChange={handleSelect} value={values.gender?.value} requiredClassName="required-fields" />
                   <Input className="form-control" name="phone" lable="Mobile Number" value={values.phone} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control" name="altPhone" lable="Alternate Mobile" value={values.altPhone} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control" name="email" lable="Email Address" value={values.email} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control" name="aadhaar" lable="Aadhaar Number" value={values.aadhaar} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
-                  <Input className="form-control" name="siblingId" lable="Sibling ID (if applicable)" value={values.siblingId} onChange={handleChange} respclass="col-md-3" />
-                 <ReactSelect placeholderName={t("Class")} searchable={true} respclass="col-xl-2 col-md-4 col-sm-4 col-12" id="class_Name" name="class_Name" removeIsClearable={true} dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")} handleChange={handleSelect} value={values?.class_Name?.value} requiredClassName="required-fields" />
-              <Input type="text" className="form-control" id="rollNo" name="rollNo" value={values?.rollNo || ""} lable={"Roll No."} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <Input type="text" className="form-control" id="percentage" name="percentage" value={values?.percentage || ""} lable={"Percentage"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <Input type="text" className="form-control" id="yearOfPassing" name="yearOfPassing" value={values?.yearOfPassing || ""} lable={"Year Of Passing"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <Input type="text" className="form-control" id="board" name="board" value={values?.board || ""} lable={"Board"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <ReactSelect placeholderName={t("Medium")} searchable={true} respclass="col-xl-2 col-md-4 col-sm-4 col-12" id="medium" name="medium" removeIsClearable={true} dynamicOptions={[{ label: "HINDI", value: "HINDI" }, { label: "ENGLISH", value: "ENGLISH" }]} handleChange={handleSelect} value={values?.medium?.value} requiredClassName="required-fields" />
-              <Input type="text" className="form-control" id="school" name="school" value={values?.school || ""} lable={"School Name"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <Input type="text" className="form-control" id="schoolAddress" name="schoolAddress" value={values?.schoolAddress || ""} lable={"Address"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <Input type="text" className="form-control" id="tcNo" name="tcNo" value={values?.tcNo || ""} lable={"TC No."} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
-              <Input type="text" className="form-control" id="description" name="description" value={values?.description || ""} lable={"Description"} placeholder=" " respclass="col-xl-2 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+                  {/* <Input className="form-control" name="siblingId" lable="Sibling ID (if applicable)" value={values.siblingId} onChange={handleChange} respclass="col-md-3" /> */}
+                 <ReactSelect placeholderName={t("Class")} searchable={true} respclass="col-xl-3 col-md-4 col-sm-4 col-12" id="class_Name" name="class_Name" removeIsClearable={true} dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")} handleChange={handleSelect} value={values?.class_Name?.value} requiredClassName="required-fields" />
+              <Input type="text" className="form-control" id="rollNo" name="rollNo" value={values?.rollNo || ""} lable={"Roll No."} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="percentage" name="percentage" value={values?.percentage || ""} lable={"Percentage"} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="yearOfPassing" name="yearOfPassing" value={values?.yearOfPassing || ""} lable={"Year Of Passing"} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="board" name="board" value={values?.board || ""} lable={"Board"} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <ReactSelect placeholderName={t("Medium")} searchable={true} respclass="col-xl-3 col-md-4 col-sm-4 col-12" id="medium" name="medium" removeIsClearable={true} dynamicOptions={[{ label: "HINDI", value: "HINDI" }, { label: "ENGLISH", value: "ENGLISH" }]} handleChange={handleSelect} value={values?.medium?.value} requiredClassName="required-fields" />
+              <Input type="text" className="form-control" id="school" name="school" value={values?.school || ""} lable={"School Name"} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="schoolAddress" name="schoolAddress" value={values?.schoolAddress || ""} lable={"Address"} placeholder=" " respclass="col-xl-6 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="tcNo" name="tcNo" value={values?.tcNo || ""} lable={"TC No."} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
+              <Input type="text" className="form-control" id="description" name="description" value={values?.description || ""} lable={"Description"} placeholder=" " respclass="col-xl-3 col-md-4 col-sm-4 col-12" isUpperCase={true} onChange={handleChange} />
            
                 </div>
                 {/* <div className="row g-3">
@@ -762,11 +762,11 @@ const StudentRegistration = () => {
             {values.parents.map((parent, parentIndex) => (
               <div key={parentIndex} className="border rounded p-3 mb-3 position-relative">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <h6 className="text-secondary mb-0">
+                  {/* <h6 className="text-secondary mb-0">
                     <i className="bi bi-person-badge me-2"></i>
                     Parent {parentIndex + 1}
                     {parent.parentType === 1 ? " (Father)" : parent.parentType === 2 ? " (Mother)" : " (Guardian)"}
-                  </h6>
+                  </h6> */}
                   {values.parents.length > 1 && (<i className="bi bi-trash me-1 text-danger" onClick={() => removeParent(parentIndex)} style={{ cursor: "pointer" }}></i>)}
                 </div>
 
@@ -782,19 +782,19 @@ const StudentRegistration = () => {
                     </div>
 
                     <div className="mt-3">
-                        <div className="d-flex justify-content-between align-items-center mb-2">
-                            <strong className="text-muted"><i className="bi bi-file-earmark-text me-2"></i>Documents</strong>
+                        {/* <div className="d-flex justify-content-between align-items-center mb-2"> */}
+                            {/* <strong className="text-muted"><i className="bi bi-file-earmark-text me-2"></i>Documents</strong> */}
                             <button className="btn btn-primary btn-sm" onClick={() => addParentDocument(parentIndex)}>Add Document</button>
-                        </div>
+                        {/* </div> */}
                         {parent.documents.map((doc, docIndex) => (
                             <div key={docIndex} className="border-start border-3 border-primary ps-3 mb-2">
-                            <div className="row g-2 align-items-end">
+                            <div className="row g-2 mt-2">
                                 <Input className="form-control required-fields" lable="Document Number" value={doc.documentNumber} onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentNumber", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                                 <ReactSelect respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="documentType" handleChange={(name, option) => handleParentDocChange(parentIndex, docIndex, "documentType", option.value)} value={values.parents[parentIndex].documents[docIndex].documentType ? { label: values.parents[parentIndex].documents[docIndex].documentType === "1" ? "PAN" : "Aadhaar", value: values.parents[parentIndex].documents[docIndex].documentType } : null} dynamicOptions={[{ label: "PAN", value: "1" }, { label: "Aadhaar", value: "2" }]} />
                                 
                                 {/* REPLACED TEXT INPUT WITH UPLOADER */}
                                 <DocumentUploader
-                                  className="col-xl-2 col-md-4 col-sm-4 col-12"
+                                //   className="col-xl-2 col-md-4 col-sm-4 col-12"
                                   documentType={values.parents[parentIndex].documents[docIndex].documentType}
                                   onUploadSuccess={(id) => handleParentDocIdChange(parentIndex, docIndex, id)}
                                   currentDocId={values.parents[parentIndex].documents[docIndex].documentID}

@@ -137,6 +137,12 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
 
   // GetAllBankAccounts:"feemaster/GetAllBankAccounts",
   GetAllBankAccounts: `${baseUrlMaster}feemaster/GetAllBankAccounts`,
+
+
+
+
+
+  
   CreateFeeConcession: "feemaster/CreateFeeConcession",
   GetAllFeeConcessions: "feemaster/GetAllFeeConcessions",
   CreateFeeHead: "feemaster/CreateFeeHead",
@@ -145,8 +151,8 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   GetAllFeeStructures: "feemaster/GetAllFeeStructures",
   CreateLateFeePenalty: "feemaster/CreateLateFeePenalty",
   GetAllLateFeePenalties: "feemaster/GetAllLateFeePenalties",
-  CreatePaymentMode: "feemaster/CreatePaymentMode",
-  GetAllPaymentModes: "feemaster/GetAllPaymentModes",
+  // CreatePaymentMode: "feemaster/CreatePaymentMode",
+  // GetAllPaymentModes: "feemaster/GetAllPaymentModes",
   CreateScholarship: "feemaster/CreateScholarship",
   GetAllScholarships: "feemaster/GetAllScholarships",
   CreateTax: "feemaster/CreateTax",
@@ -217,5 +223,16 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   // Usersupdateuser:`${mainUrl}Users/updateuser`,
   // Usersdeleteuser:`${mainUrl}Users/deleteuser`,
   // Users end ....
+  
+
+
+
+
+
+CreatePeriod: `${baseUrlMaster}AttendanceAndClassManagement/CreatePeriod`,
+GetPeriods: `${baseUrlMaster}AttendanceAndClassManagement/GetPeriods`,
+CreateBellSchedule: `${baseUrlMaster}AttendanceAndClassManagement/CreateBellSchedule`,
+GetBellSchedules: `${baseUrlMaster}AttendanceAndClassManagement/GetBellSchedules`,
+CreateStudentAttendance: `${baseUrlMaster}AttendanceAndClassManagement/CreateStudentAttendance`,
 
 };

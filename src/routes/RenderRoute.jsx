@@ -161,6 +161,9 @@ function RenderRoute() {
   getAllUrls.push("/submenu-employee-mapping");
   getAllUrls.push("/category-master");
   getAllUrls.push("/organization-master");
+  getAllUrls.push("/period");
+  getAllUrls.push("/bell-schedule");
+  getAllUrls.push("/student-attendance");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -432,16 +435,16 @@ const allRoutes = {
     },
 
     // C:\Users\Anand\Desktop\school\school2026\src\components\Master\Billing\FeeCollection.jsx
-    {
-      Guard: Authenticated,
-      layout: Layout,
-      path: "/create-payment-mode",
-      component: lazy(
-        () => import("@app/components/Master/FeeMaster/CreatePaymentMode.jsx")
-      ),
+    // {
+    //   Guard: Authenticated,
+    //   layout: Layout,
+    //   path: "/create-payment-mode",
+    //   component: lazy(
+    //     () => import("@app/components/Master/FeeMaster/CreatePaymentMode.jsx")
+    //   ),
     
-      exact: true,
-    },
+    //   exact: true,
+    // },
     {
       Guard: Authenticated,
       layout: Layout,
@@ -777,6 +780,37 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/period",
+      component: lazy(
+        () => import("@app/components/TimeTableManagement/CreatePeriod.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/bell-schedule",
+      component: lazy(
+        () => import("@app/components/TimeTableManagement/BellSchedule.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/student-attendance",
+      component: lazy(
+        () => import("@app/components/AttendanceManagement/StudentAttendance.jsx")
+      ),exact: true,
+
+    },
+    // C:\Users\Anand\Desktop\school\school2026\src\components\AttendanceManagement\StudentAttendance.jsx
+    
+    // C:\Users\Anand\Desktop\school\school2026\src\components\TimeTableManagement\CreatePeriod.jsx
+    // C:\Users\Anand\Desktop\school\school2026\src\components\AttendanceManagement\CreatePeriod.jsx
 // C:\Users\Anand\Desktop\school\school2026\src\components\Master\OrganizationMaster.jsx
 
     // C:\Users\Anand\Desktop\school\school2026\src\components\Master\ModuleMaster\ModuleBulk.jsx

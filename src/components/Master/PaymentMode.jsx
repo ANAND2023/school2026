@@ -32,9 +32,7 @@ function PaymentMode() {
     const [modalData, setModalData] = useState({});
     const handleSelect = (name, value) => {
         setValues((prev) => ({ ...prev, [name]: value }));
-        if (name == "branchId") {
-            getData(value?.value);
-        }
+       
     };
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -42,22 +40,7 @@ function PaymentMode() {
         setValues((prev) => ({ ...prev, [name]: value }));
 
     };
-    const getAllBranch = async () => {
-        const payload = {
-            employeeId: "",
-            organisationID: localData?.OrganizationId,
-            isAll: 1
-        };
-
-        try {
-            const res = await GetAllBranches(payload);
-            if (res?.success) setBranch(res.data);
-            else notify(res?.message, "error");
-        } catch {
-            notify("Error fetching branches", "error");
-        }
-    };
-
+  
     const setIsOpen = () => {
         setHandleModelData((val) => ({ ...val, isOpen: false }));
     };
@@ -69,7 +52,7 @@ function PaymentMode() {
         {
             "context": {
                 "orgId": localData?.OrganizationId,
-                "branchId": values.branchId?.value ?? "",
+                "branchId": localData?.defaultCentre ?? "",
             },
             "modeName": values?.modeName ?? "",
             "requiresReferenceNo": values?.requiresReferenceNo?.value == "true" ? true : false,
@@ -107,10 +90,10 @@ function PaymentMode() {
             notify("Error saving reason", "error");
         }
     };
-    const getData = async (ID) => {
+    const getData = async () => {
         const payload = {
             "orgId": localData?.OrganizationId,
-            "branchId": ID ?? "",
+            "branchId": localData?.defaultCentre ?? "",
             "isAll": 0
         }
         try {
@@ -128,8 +111,8 @@ function PaymentMode() {
     };
 
     useEffect(() => {
-        // getData()
-        getAllBranch()
+        getData()
+        // getAllBranch()
     }, [])
     return (
         <>
@@ -154,18 +137,7 @@ function PaymentMode() {
             <div className="card p-1">
                 <Heading title={t("Payment Mode")} isBreadcrumb={false} />
                 <div className="row p-2">
-                    <ReactSelect
-                        id="branchId"
-                        name="branchId"
-                        placeholderName="Select Branch"
-                        dynamicOptions={branch?.map((ele) => ({
-                            label: ele?.name,
-                            value: ele?.id
-                        }))}
-                        respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-                        handleChange={handleSelect}
-                        value={values.branchId}
-                    />
+                   
                     <Input
                         type="text"
                         className="form-control required-fields"
@@ -199,7 +171,7 @@ function PaymentMode() {
                     <ReactSelect
                         placeholderName={t("Requires Reference No")}
                         searchable={true}
-                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        respclass="col-xl-3 col-md-4 col-sm-4 col-12"
                         id="requiresReferenceNo"
                         name="requiresReferenceNo"
                         removeIsClearable={true}
