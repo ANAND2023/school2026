@@ -217,7 +217,7 @@ const SubMenuBulk = () => {
 
     return (
         <>
-            <div className="card p-2">
+            <div className="card">
                 <Heading title="Sub Menu Master" isBreadcrumb={false} />
                 <div className="row p-2">
                     <ReactSelect

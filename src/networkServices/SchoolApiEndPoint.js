@@ -221,4 +221,15 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   // Usersdeleteuser:`${mainUrl}Users/deleteuser`,
   // Users end ....
   
+
+
+
+
+
+CreatePeriod: `${baseUrlMaster}AttendanceAndClassManagement/CreatePeriod`,
+GetPeriods: `${baseUrlMaster}AttendanceAndClassManagement/GetPeriods`,
+CreateBellSchedule: `${baseUrlMaster}AttendanceAndClassManagement/CreateBellSchedule`,
+GetBellSchedules: `${baseUrlMaster}AttendanceAndClassManagement/GetBellSchedules`,
+CreateStudentAttendance: `${baseUrlMaster}AttendanceAndClassManagement/CreateStudentAttendance`,
+
 };
