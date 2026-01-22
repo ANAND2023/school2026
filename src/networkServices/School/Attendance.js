@@ -98,3 +98,60 @@ export const CreateStudentAttendance = async (params) => {
     console.error("Error Found", error);
   }
 };
+
+export const CreateClassTimetable = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.CreateClassTimetable}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetClassTimetable = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetClassTimetable}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+export const GetStudentAttendance = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.GetStudentAttendance}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};

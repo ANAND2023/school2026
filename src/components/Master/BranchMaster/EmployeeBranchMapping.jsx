@@ -187,14 +187,7 @@ const getAllUsers = async () => {
           tbody={tableData.map((item, index) => ({
             employeeName: item.employeeName,
             branchName: item.branchName,
-            // action: (
-            //   <button
-            //     className="btn btn-sm btn-danger"
-            //     onClick={() => handleDelete(index)}
-            //   >
-            //     🗑️
-            //   </button>
-            // )
+         
             action: <>
 
                             <div

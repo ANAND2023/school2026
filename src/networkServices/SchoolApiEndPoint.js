@@ -196,6 +196,9 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   MasterCreatePaymentMode: `${baseUrlMaster}PaymentModeMaster/CreatePaymentMode`,
   MasterGetAllPaymentModes: `${baseUrlMaster}PaymentModeMaster/GetAllPaymentModes`,
   CreateTeacherAttendance: `${baseUrlMaster}AttendanceAndClassManagement/CreateTeacherAttendance`,
+  CreateClassTimetable: `${baseUrlMaster}AttendanceAndClassManagement/CreateClassTimetable`,
+  GetClassTimetable: `${baseUrlMaster}AttendanceAndClassManagement/GetClassTimetable`,
+  GetStudentAttendance: `${baseUrlMaster}AttendanceAndClassManagement/GetStudentAttendance`,
   // MenuManagment start ....
 
   //Exam Start

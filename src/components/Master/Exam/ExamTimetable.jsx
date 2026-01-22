@@ -653,7 +653,6 @@ const ExamTimetable = () => {
         Subject: []
     });
 
-    /* ================= EXAM ROW STATE ================= */
     const [examRows, setExamRows] = useState([]);
     const [allExam, setAllExam] = useState([]);
     const [allTerm, setAllTerm] = useState([]);
@@ -668,11 +667,11 @@ const ExamTimetable = () => {
         }
     };
 
-  
+
 
     const handleSelect = (name, option) => {
         setValues((prev) => ({ ...prev, [name]: option }));
-        if(name==="term"){
+        if (name === "term") {
             getAllExam(option.value)
         }
     };
@@ -709,9 +708,8 @@ const ExamTimetable = () => {
         setExamRows(updated);
     };
 
-    /* ================= SAVE ================= */
     const handleSave = async () => {
-        if (!values.class_Name?.value  || examRows.length === 0) {
+        if (!values.class_Name?.value || examRows.length === 0) {
             notify(t("Please fill all mandatory fields"), "error");
             return;
         }
@@ -755,7 +753,7 @@ const ExamTimetable = () => {
         }
     };
 
- 
+
 
     const fetchTerms = async () => {
         try {
@@ -775,7 +773,7 @@ const ExamTimetable = () => {
     };
 
 
-    const getAllExam = async ( term) => {
+    const getAllExam = async (term) => {
 
 
         const payload =
@@ -803,11 +801,11 @@ const ExamTimetable = () => {
     // useEffect(() => {
     //     // getAllExam(values?.term?.value);
     // }, [values.term]);
- 
-       useEffect(() => {
+
+    useEffect(() => {
         GetSubject()
         getClass();
-         fetchTerms();
+        fetchTerms();
     }, [])
     return (
         <>
@@ -874,10 +872,10 @@ const ExamTimetable = () => {
                             value={values.Subject}
                         />
                         <div className="col-xl-2 col-md-4 col-sm-4 col-12">
-                        <button className="btn btn-primary btn-sm" onClick={handleSave}>
-                            {t("Save Timetable")}
-                        </button>
-                    </div>
+                            <button className="btn btn-primary btn-sm" onClick={handleSave}>
+                                {t("Save Timetable")}
+                            </button>
+                        </div>
                     </div>
                     {examRows.length > 0 && (
                         <div className="table-responsive mt-4">
@@ -1030,7 +1028,7 @@ const ExamTimetable = () => {
                         </div>
                     )}
 
-                    
+
 
                 </div>
             </div>

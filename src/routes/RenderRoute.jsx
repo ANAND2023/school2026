@@ -165,6 +165,7 @@ function RenderRoute() {
   getAllUrls.push("/bell-schedule");
   getAllUrls.push("/student-attendance");
   getAllUrls.push("/teacher-attendance");
+  getAllUrls.push("/time-table");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -802,6 +803,15 @@ const allRoutes = {
     {
       Guard: Authenticated,
       layout: Layout,
+      path: "/time-table",
+      component: lazy(
+        () => import("@app/components/TimeTableManagement/TimeTable.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
       path: "/student-attendance",
       component: lazy(
         () => import("@app/components/AttendanceManagement/StudentAttendance.jsx")
@@ -817,6 +827,17 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/student-attendance-list",
+      component: lazy(
+        () => import("@app/components/AttendanceManagement/StudentAttendanceList.jsx")
+      ),exact: true,
+
+    },
+    
+    // C:\Users\Anand\Desktop\school\school2026\src\components\TimeTableManagement\TimeTable.jsx
     // C:\Users\Anand\Desktop\school\school2026\src\components\AttendanceManagement\GetTeacherAttendance.jsx
     // C:\Users\Anand\Desktop\school\school2026\src\components\AttendanceManagement\StudentAttendance.jsx
     
