@@ -213,6 +213,8 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   //Exam End
 
   // Users Start ....
+  //Attandance
+  GetTeacherAttendance: `${baseUrlMaster}AttendanceAndClassManagement/GetTeacherAttendance`,
 
   // identity/api/v1/Users/createusers
   UsersCreateUser: `${mainUrl}Users/createusers`,
