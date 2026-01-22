@@ -164,6 +164,7 @@ function RenderRoute() {
   getAllUrls.push("/period");
   getAllUrls.push("/bell-schedule");
   getAllUrls.push("/student-attendance");
+  getAllUrls.push("/teacher-attendance");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -807,6 +808,16 @@ const allRoutes = {
       ),exact: true,
 
     },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/teacher-attendance",
+      component: lazy(
+        () => import("@app/components/AttendanceManagement/GetTeacherAttendance.jsx")
+      ),exact: true,
+
+    },
+    // C:\Users\Anand\Desktop\school\school2026\src\components\AttendanceManagement\GetTeacherAttendance.jsx
     // C:\Users\Anand\Desktop\school\school2026\src\components\AttendanceManagement\StudentAttendance.jsx
     
     // C:\Users\Anand\Desktop\school\school2026\src\components\TimeTableManagement\CreatePeriod.jsx
