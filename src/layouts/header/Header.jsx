@@ -475,6 +475,7 @@ import { GetLangaugeAPI } from "../../store/reducers/dashboardSlice/CommonFuncti
 import { Bell, Building2, ChevronDown, LogOut, Menu, Moon, Search, Sun, Palette } from "lucide-react";
 import { notify } from "../../utils/utils";
 import { CreateTeacherAttendance } from "../../networkServices/Admin";
+import { GetAttendance } from "../../networkServices/School/Attendance";
 
 // Theme configurations
 const THEMES = {
@@ -493,20 +494,23 @@ const Header = React.memo(() => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
-
+  const [todayAttendance, setTodayAttendance] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  console.log("isLoggedIn", isLoggedIn)
+  console.log("isLoggedIn1", todayAttendance)
   const navbarVariant = useSelector((state) => state.ui.navbarVariant);
   const headerBorder = useSelector((state) => state.ui.headerBorder);
   const screenSize = useSelector((state) => state.ui.screenSize);
   const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
     (state) => state?.CommonSlice
   );
- const [location, setLocation] = useState({
+  const [location, setLocation] = useState({
     latitude: null,
     longitude: null,
     accuracy: null,
     source: null, // GPS or fallback
   });
- const getCurrentLocation = () => {
+  const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       notify("Geolocation not supported", "error");
       return;
@@ -555,7 +559,7 @@ const Header = React.memo(() => {
   const signout = useSelector((state) => state.logoutSlice);
 
   const currentTheme = THEMES[theme];
-    const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
+  const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
   const activeRole = GetRoleList?.find(r => r.moduleId == localData?.defaultRole) || null;
 
   useEffect(() => {
@@ -624,7 +628,7 @@ const Header = React.memo(() => {
 
   // --- CHANGED: Improved Branch Change Logic ---
   const handleChangeCentre = async (e) => {
-    
+
     const newCentreId = e?.target?.value;
 
 
@@ -670,7 +674,7 @@ const Header = React.memo(() => {
 
   // --- CHANGED: Improved Role Change Logic ---
   const handleChangeRole = async (e) => {
-    
+
     const newRoleId = e.target.value;
     try {
       // 1. Update Claims
@@ -710,115 +714,86 @@ const Header = React.memo(() => {
       }));
     }
   }, [dispatch]);
+  //   const now = new Date().toISOString(); // ISO format
+  // console.log("first",now)
+  const handleLogin = async () => {
+    //  const now = new Date().toLocaleString("en-IN", {
+    //   timeZone: "Asia/Kolkata"
+    // });
+    const now = new Date().toISOString(); // ISO format
 
-  // useEffect(() => {
-  //   dispatch(
-  //     getNotification({
-  //       RoleID: localData?.defaultRole,
-  //       EmployeeID: localData?.employeeID,
-  //       CentreID: localData?.defaultCentre,
-  //     })
-  //   );
-  // }, []);
+    // const now = new Date().toISOString();
 
-  // useEffect(() => {
-  //   if (routeFlag && signout.success) {
-  //     // window.location.reload();
-  //     // navigate("/login");
-  //   }
-  // }, [signout.success]);
+    const payload = {
+      teacherId: localData?.UserId,
+      teacherName: localData?.sub,
+      attendanceDate: now,
+      status: 1, // 1 = Present / Login
+      loginDateTime: now,
+      loginLatitude: location?.latitude,
+      loginLongitude: location?.longitude,
+      isSelfMarked: true,
+      deviceInfo: navigator.userAgent,
+      remarks: "Self Login",
+      orgId: localData?.OrganizationId,
+      branchId: localData?.defaultCentre,
+    };
 
-  let translation = {}
-  const loadTranslations = async (lng, lngkey) => {
     try {
-      const apiResp = await GetLangaugeAPI(lngkey)
-      if (apiResp?.success) {
-        apiResp?.data?.map((val) => {
-          translation[val["FIELDNAME"]] = val["DISPLAYNAME"]
-        })
+      const response = await CreateTeacherAttendance(payload);
+
+      if (response?.success) {
+        notify(response?.message || "Login Successful", "success");
+      } else {
+        notify(response?.message || response?.data?.message, "error");
       }
-      i18n.addResourceBundle(lng, 'translation', translation, true, true);
-      i18n.changeLanguage(lng);
     } catch (error) {
-      console.error(`Error fetching translations for ${lng}:`, error);
+      console.error("Login Error:", error);
+      notify("Something went wrong", "error");
     }
   };
 
-  // useEffect(() => {
-  //   dispatch(getBindCategory());
-  //   loadTranslations(localData?.empLanguageCode, localData?.empLanguage)
+  const fetchAttendance = async (month, year) => {
+    try {
+      debugger
+      const payload = {
+        orgId: localData?.OrganizationId,
+        branchId: localData?.defaultCentre,
+        teacherId: localData?.UserId,
+        month,
+        year,
+      };
 
-  //   dispatch(
-  //     getBindPanelList({
-  //       PanelGroup: "ALL",
-  //     })
-  //   );
-  // }, []);
+      const res = await GetAttendance(payload);
 
-//   const handleLogin=()=>{
+      if (res?.success && Array.isArray(res?.data)) {
 
-//     const payload ={
-//   "teacherId": userData?.UserId,
-//   "teacherName": userData?.sub,
-//   "attendanceDate": "2026-01-18T06:46:15.362Z",
-//   "status": 1,
-//   "loginDateTime": "2026-01-18T06:46:15.362Z",
-//   "loginLatitude": 0,
-//   "loginLongitude": 0,
-//   "isSelfMarked": true,
-//   "deviceInfo": "string",
-//   "remarks": "string",
-//   "orgId": userData?.OrganizationId,
-//   "branchId": userData?.defaultCentre
-// }
-//       try {
-//         const response = CreateTeacherAttendance(payload);
-//         if(response?.success){
-//           notify(response?.message, "success");
-//         }
-//         else{
-//           notify(response?.message || response?.data?.message, "error");
-//         }
-//       } catch (error) {
-//         console.log(" error ", error)
-//       }
-//   }
+        // const today = new Date().toISOString() // YYYY-MM-DD
+        const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-const handleLogin = async () => {
-  const now = new Date().toISOString();
-debugger
-  const payload = {
-    teacherId: localData?.UserId,
-    teacherName: localData?.sub,
-    attendanceDate: now,
-    status: 1, // 1 = Present / Login
-    loginDateTime: now,
-   loginLatitude: location?.latitude,
-  loginLongitude: location?.longitude,
-    isSelfMarked: true,
-    deviceInfo: navigator.userAgent,
-    remarks: "Self Login",
-    orgId: localData?.OrganizationId,
-    branchId: localData?.defaultCentre,
+        const todayRecord = res.data.find(item =>
+          item.attendanceDate?.split("T")[0] === today
+        );
+
+        if (todayRecord) {
+          setTodayAttendance(todayRecord);
+
+          // ✅ logoutDateTime null hai ya nahi
+          setIsLoggedIn(todayRecord.logoutDateTime === null);
+        } else {
+          setTodayAttendance(null);
+          setIsLoggedIn(false);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  try {
-    const response = await CreateTeacherAttendance(payload);
-
-    if (response?.success) {
-      notify(response?.message || "Login Successful", "success");
-    } else {
-      notify(response?.message || response?.data?.message, "error");
-    }
-  } catch (error) {
-    console.error("Login Error:", error);
-    notify("Something went wrong", "error");
-  }
-};
-
-useEffect(() => {
-  getCurrentLocation();
-}, []);
+  useEffect(() => {
+    getCurrentLocation();
+    fetchAttendance(new Date().getMonth() + 1, new Date().getFullYear());
+  }, []);
 
   return (
     <header className="md-header" style={{ backgroundColor: currentTheme.headerBg }}>
@@ -906,16 +881,30 @@ useEffect(() => {
         >
           Login
         </button> */}
-        <button
-  className="md-icon-btn"
-  onClick={handleLogin}
-  title="Login"
-  style={{
-    color: isDarkMode ? currentTheme.primary : "#64748b",
-  }}
->
-  Login
-</button>
+        {
+          isLoggedIn ? (
+            <button
+              className="md-icon-btn"
+              // onClick={handleLogout}
+              title="Logout"
+              style={{
+                color: isDarkMode ? currentTheme.primary : "#2cd46d",
+              }}
+            >
+              Logout
+            </button>
+          ) : <button
+            className="md-icon-btn"
+            onClick={handleLogin}
+            title="Login"
+            style={{
+              color: isDarkMode ? currentTheme.primary : "#64748b",
+            }}
+          >
+            Login
+          </button>
+        }
+
 
         {/* <button
           className="md-icon-btn"

@@ -23,6 +23,19 @@ export const notify = (message, type = "success") => {
   }
 };
 
+const groupByClass = (data) => {
+  return data.reduce((acc, item) => {
+    const classId = item.classId;
+    const periodId = item.periodId;
+
+    if (!acc[classId]) acc[classId] = {};
+    if (!acc[classId][periodId]) acc[classId][periodId] = [];
+
+    acc[classId][periodId].push(item);
+    return acc;
+  }, {});
+};
+
 export const filterByType = (state, type, filterKey, labelKey, valueKey) => {
   if (state?.length)
     return state

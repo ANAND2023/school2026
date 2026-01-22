@@ -4,6 +4,7 @@ const feeUrl = "fee/api/v1/";
 const studentUrl = "student/api/v1/";
 const fileStorage = `fileStorage/api/v1/`;
 // student/api/v1/Enquiry/createenquiry
+
 export const apiUrls = {
   // Auth
 
@@ -216,15 +217,14 @@ GetClassMonthFeeDetails:`${feeUrl}ClassWiseFee/GetClassMonthFeeDetails`,
   //Exam End
 
   // Users Start ....
+  //Attandance
+  GetTeacherAttendance: `${baseUrlMaster}AttendanceAndClassManagement/GetTeacherAttendance`,
 
   // identity/api/v1/Users/createusers
   UsersCreateUser: `${mainUrl}Users/createusers`,
   UsersGetAllUsers: `${mainUrl}Users/getallusers`,
-  // UsersGetAllUsers:`${mainUrl}Users/getallusers`,
-  // Usersgetallusers:`${mainUrl}Users/getallusers`,
-  // Usersgetuserbyid:`${mainUrl}Users/getuserbyid`,
-  // Usersupdateuser:`${mainUrl}Users/updateuser`,
-  // Usersdeleteuser:`${mainUrl}Users/deleteuser`,
+  RolesCreateRole: `${mainUrl}Roles/createrole`,
+
   // Users end ....
   
 

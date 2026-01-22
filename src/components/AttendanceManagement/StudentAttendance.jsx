@@ -9,22 +9,29 @@ import { handleReactSelectDropDownOptions, notify } from "../../utils/utils";
 import Tables from "../UI/customTable";
 import Heading from "../UI/Heading";
 import ReactSelect from "../formComponent/ReactSelect";
+import DatePicker from "../formComponent/DatePicker";
 
 const StudentAttendance = () => {
   const userData = useLocalStorage("userData", "get");
-
+   const { VITE_DATE_FORMAT } = import.meta.env;
   const [classes, setClasses] = useState([]);
   const [periods, setPeriods] = useState([]);
   const [allStudents, setAllStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [attendance, setAttendance] = useState({});
-  const [values, setValues] = useState({ class: null, periodId: null });
+  const [values, setValues] = useState({ class: null, periodId: null,
+    date: new Date()
+   });
 
   /* ───────────────────────── HANDLERS ───────────────────────── */
 
   const handleSelect = (name, option) => {
     setValues((prev) => ({ ...prev, [name]: option }));
   };
+     const handleChange = (e) => {
+        const { name, value } = e.target;
+        setValues((prev) => ({ ...prev, [name]: value }));
+    };
 
   const initAttendance = (students) => {
     const obj = {};
@@ -116,7 +123,8 @@ const StudentAttendance = () => {
       roleNo: stu.rollNo || "",
       classId: values.class?.value,
       periodId: values.periodId?.value,
-      attendanceDate: new Date().toISOString(),
+      attendanceDate: values?.date.toISOString(),
+    //   attendanceDate: new Date().toISOString(),
       status: attendance?.[stu.code]?.status ?? 2,
       remarks: attendance?.[stu.code]?.remarks || "",
       orgId: userData?.OrganizationId,
@@ -130,10 +138,10 @@ const StudentAttendance = () => {
     try {
       const res = await CreateStudentAttendance(payload);
       if (res?.success) notify(res.message, "success");
-      else notify(res?.message || "Error saving attendance", "error");
+      else notify(res?.message || res?.data?.message, "error");
     } catch (err) {
       console.log(err);
-      notify("Something went wrong", "error");
+    //   notify("Something went wrong", "error");
     }
   };
 
@@ -183,7 +191,7 @@ const StudentAttendance = () => {
             <ReactSelect
                 name="periodId"
                 placeholderName="Select Period"
-                dynamicOptions={handleReactSelectDropDownOptions(periods, "periodNo", "id")}
+                dynamicOptions={handleReactSelectDropDownOptions(periods, "periodNo", "periodNo")}
                 value={values.periodId}
                 handleChange={handleSelect}
                   respclass="col-xl-2 col-md-4 col-sm-6 col-12"
@@ -196,7 +204,18 @@ const StudentAttendance = () => {
                 value={values.class}
                   respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               />
-          
+          <DatePicker
+                        id="date"
+                        name="date"
+                        placeholder={VITE_DATE_FORMAT}
+                        lable={t("From cDate")}
+                        className="custom-calendar"
+                        value={values?.date}
+                        handleChange={handleChange}
+                        respclass="col-xl-2 col-md-4 col-sm-4 col-12"
+                        disable={true}
+                        // maxDate={values?.toDate}
+                    />
 
           
              

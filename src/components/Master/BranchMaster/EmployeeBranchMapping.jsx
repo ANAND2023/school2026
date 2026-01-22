@@ -143,7 +143,7 @@ const getAllUsers = async () => {
 
   return (
     <>
-      <div className="card p-2">
+      <div className="card ">
         <Heading title="Employee Branch Mapping" isBreadcrumb={false} />
 
         {/* ================= FORM ================= */}

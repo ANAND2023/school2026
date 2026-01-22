@@ -20,22 +20,21 @@ import {
   GetClassMonthFeeDetails,
   StudentBillingsave,
 } from "../../../networkServices/School/billing";
-import { notify } from "../../../utils/ustil2";
+// import { notify } from "../../../utils/ustil2";
 import { MasterGetAllPaymentModes } from "../../../networkServices/Admin";
 import PaymentEntry from "../../commonComponents/PaymentEntry";
+import { notify } from "../../../utils/utils";
 
 const FeeCollection = () => {
   const thead = [
     { name: "S.No", width: "1%" },
     { name: "Mandatory", width: "1%" },
+    { name: "Month", width: "5%" },
     { name: "Item Name", width: "15%" },
-    { name: "Item Description", width: "10%" },
     { name: "Rate", width: "8%" },
-    { name: "Quantity", width: "5%" },
-    { name: "Unit", width: "5%" },
     { name: "Disc (Amt)", width: "8%" },
     { name: "Disc (%)", width: "8%" },
-    { name: "Total", width: "8%" },
+    { name: "Net Amount", width: "8%" },
     { name: "Action", width: "1%" },
   ];
 
@@ -82,11 +81,85 @@ const FeeCollection = () => {
     setValues((prev) => ({ ...prev, [name]: selectedOption }));
   };
 
+  // --- NEW FUNCTION: Handles Sequential Month Validation ---
+  const handleMonthChange = (name, selectedOptions) => {
+    // If clearing, allow it
+    if (!selectedOptions || selectedOptions.length === 0) {
+      setValues((prev) => ({ ...prev, [name]: [] }));
+      return;
+    }
+
+    // Sort selected options based on their index in the master monthlist
+    const sortedSelection = [...selectedOptions].sort((a, b) => {
+      const indexA = monthlist.findIndex((m) => m.id === a.code);
+      const indexB = monthlist.findIndex((m) => m.id === b.code);
+      return indexA - indexB;
+    });
+
+    // Validate sequential order
+    // The logic: The selected items must match the first N items of the master list exactly.
+    // Loop through the sorted selection and check if it matches the master list index for index.
+    let isSequential = true;
+    for (let i = 0; i < sortedSelection.length; i++) {
+      if (monthlist[i].id !== sortedSelection[i].code) {
+        isSequential = false;
+        break;
+      }
+    }
+
+    if (!isSequential) {
+      notify(
+        "Please select months sequentially (e.g., 1st month, then 2nd). You cannot skip months.",
+        "error",
+      );
+      return;
+    }
+
+    setValues((prev) => ({ ...prev, [name]: sortedSelection }));
+  };
+
+  // --- NEW FUNCTION: Centralized Item Adding with Duplicate Check ---
+  const addItemToBill = (itemsToAdd) => {
+    debugger;
+    const itemsArray = Array.isArray(itemsToAdd) ? itemsToAdd : [itemsToAdd];
+    const uniqueItems = [];
+    let duplicateFound = false;
+
+    // Check against existing itemlist
+    itemsArray.forEach((newItem) => {
+      const exists = itemlist.some(
+        (existing) => existing.itemId === newItem.itemId,
+      );
+      if (exists) {
+        duplicateFound = true;
+      } else {
+        // Standardize item structure
+        uniqueItems.push({
+          ...newItem,
+          uniqueId: Date.now() + Math.random(), // Ensure unique key for React
+          qty: 1,
+          rate: newItem.rate || 0,
+          isMandatory: true,
+          discountAmount: 0,
+          discountPercent: 0,
+        });
+      }
+    });
+
+    if (duplicateFound) {
+      notify("One or more items already exist in the list.", "error");
+    }
+
+    if (uniqueItems.length > 0) {
+      setItemList((prev) => [...prev, ...uniqueItems]);
+    }
+  };
+
   const AllMonthType = async () => {
     try {
       const res = await GetAllMonthType(
         localData?.OrganizationId,
-        localData?.defaultCentre
+        localData?.defaultCentre,
       );
       if (res?.success) {
         setMonthList(res?.data);
@@ -100,7 +173,7 @@ const FeeCollection = () => {
     try {
       const res = await GetAllCategory(
         localData?.OrganizationId,
-        localData?.defaultCentre
+        localData?.defaultCentre,
       );
       if (res?.success) {
         setCategoryList(res?.data);
@@ -114,7 +187,7 @@ const FeeCollection = () => {
     try {
       const res = await GetAllSubCategory(
         localData?.OrganizationId,
-        localData?.defaultCentre
+        localData?.defaultCentre,
       );
       if (res?.success) {
         setSubCategoryList(res?.data);
@@ -129,18 +202,11 @@ const FeeCollection = () => {
     try {
       const res = await GetClassMonthFeeDetails(
         studentData?.academic?.classId,
-        values?.months[values.months.length - 1]?.code
+        values?.months[values.months.length - 1]?.code,
       );
       if (res?.success) {
-        const newItems = res.data.map((i) => ({
-          ...i,
-          uniqueId: Date.now() + Math.random(),
-          qty: 1,
-          isMandatory: true,
-          discountAmount: 0,
-          discountPercent: 0,
-        }));
-        setItemList((prev) => [...prev, ...newItems]);
+        // Use the new centralized function
+        addItemToBill(res.data);
       }
     } catch (error) {
       console.log(error, "error");
@@ -159,7 +225,7 @@ const FeeCollection = () => {
           "2",
           localData?.OrganizationId,
           localData?.defaultCentre,
-          event.query
+          event.query,
         );
 
         if (Array.isArray(res)) {
@@ -178,41 +244,31 @@ const FeeCollection = () => {
   const handleAddItem = (e) => {
     const item = e.value;
     setSelectedItem(null);
-
-    if (itemlist.some((i) => i.itemId === item.itemId)) {
-      notify("Item already added", "warning");
-      return;
-    }
-
-    const newItem = {
-      ...item,
-      uniqueId: Date.now(),
-      qty: 1,
-      rate: item.rate || 0,
-      isMandatory: true,
-      discountAmount: 0,
-      discountPercent: 0,
-    };
-    setItemList([...itemlist, newItem]);
+    // Use the new centralized function
+    addItemToBill(item);
   };
 
   const handleTableChange = (uniqueId, field, value) => {
     const updatedList = itemlist.map((item) => {
       if (item.uniqueId === uniqueId) {
         let updates = { [field]: value };
-        
+
         if (field === "rate") {
-            updates.rate = parseFloat(value) || 0;
+          updates.rate = parseFloat(value) || 0;
         }
 
-        const currentRate = field === "rate" ? parseFloat(value) || 0 : parseFloat(item.rate) || 0;
+        const currentRate =
+          field === "rate"
+            ? parseFloat(value) || 0
+            : parseFloat(item.rate) || 0;
         const currentQty = parseFloat(item.qty) || 1;
         const baseTotal = currentRate * currentQty;
 
         if (field === "discountAmount") {
           const amt = parseFloat(value) || 0;
           updates.discountAmount = amt;
-          updates.discountPercent = baseTotal > 0 ? ((amt / baseTotal) * 100).toFixed(2) : 0;
+          updates.discountPercent =
+            baseTotal > 0 ? ((amt / baseTotal) * 100).toFixed(2) : 0;
         }
 
         if (field === "discountPercent") {
@@ -254,11 +310,11 @@ const FeeCollection = () => {
         acc +
         (parseFloat(item.rate) * parseFloat(item.qty || 1) -
           (parseFloat(item.discountAmount) || 0)),
-      0
+      0,
     );
     const paid = addedPayments.reduce(
       (acc, pay) => acc + parseFloat(pay.amount),
-      0
+      0,
     );
 
     let globalDiscAmt = parseFloat(summary.discountAmount) || 0;
@@ -294,18 +350,14 @@ const FeeCollection = () => {
   };
 
   const handleSave = async () => {
-    debugger
-    if (itemlist.length === 0)
-      return notify("Please add items first", "warning");
+    if (itemlist.length === 0) return notify("Please add items first", "error");
 
     try {
-
       const filteredItems = itemlist.filter(
-        (item) => item.isMandatory === true
-      )
+        (item) => item.isMandatory === true,
+      );
       const payload = {
         studentId: studentData?.student?.studentMasterId,
-        // studentId: studentData?.student?.studentId,
         admissionId: studentData?.admission?.admissionId || "0",
         orgId: localData?.OrganizationId,
         branchId: localData?.defaultCentre,
@@ -314,25 +366,17 @@ const FeeCollection = () => {
           itemId: i.itemId,
           itemName: i.itemName,
           amount: i.rate,
-          // quantity: i.qty,
           discountPercent: i.discountPercent,
           taxPercent: 0,
-          // discountAmount: i.discountAmount,
           monthId: 0,
-          // isMandatory: i.isMandatory ? 1 : 0
         })),
         payments: addedPayments.map((p) => ({
-          // paymentModeId: "1",
           paymentModeId: p.mode.value,
           paymentModeName: p.mode.label,
           amount: p.amount,
           referenceNo: p.refNo,
           bankName: p.bankName,
         })),
-        // grossAmount: summary.grossAmount,
-        // discountAmount: summary.discountAmount,
-        // netAmount: summary.netAmount,
-        // remarks: summary.remarks,
       };
 
       const response = await StudentBillingsave(payload);
@@ -423,14 +467,6 @@ const FeeCollection = () => {
               respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               disabled={true}
             />
-            {/* <Input
-              type="text"
-              className="form-control"
-              lable={t("Student Last Name")}
-              value={studentData?.student?.lastName}
-              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-              disabled={true}
-            /> */}
             <Input
               type="text"
               className="form-control"
@@ -447,16 +483,6 @@ const FeeCollection = () => {
               respclass="col-xl-2 col-md-4 col-sm-6 col-12"
               disabled={true}
             />
-            {/* <Input
-              type="text"
-              className="form-control"
-              lable={t("Admission Date")}
-              value={moment(studentData?.academic?.admissionDate).format(
-                "DD-MM-YYYY"
-              )}
-              respclass="col-xl-2 col-md-4 col-sm-6 col-12"
-              disabled={true}
-            /> */}
             <Input
               type="text"
               className="form-control"
@@ -482,12 +508,11 @@ const FeeCollection = () => {
                 name: ele?.name,
                 code: ele?.id,
               }))}
-              handleChange={handleSelectChange}
+              handleChange={handleMonthChange} // Updated to use the new handler
               value={values.months}
             />
           </div>
 
-          {/* <Heading title={t("Search Item")} /> */}
           <div className="row  align-items-end  p-2">
             <ReactSelect
               placeholderName={t("Type")}
@@ -540,7 +565,7 @@ const FeeCollection = () => {
                 className="w-100"
                 minLength={1}
                 delay={100}
-                panelStyle={{ zIndex: 100000, width: "100%" }}
+                panelStyle={{ zIndex: 100000 }}
               />
             </div>
           </div>
@@ -560,31 +585,42 @@ const FeeCollection = () => {
                       <Checkbox
                         checked={item.isMandatory}
                         onChange={(e) =>
-                          handleTableChange(item.uniqueId, "isMandatory", e.checked)
+                          handleTableChange(
+                            item.uniqueId,
+                            "isMandatory",
+                            e.checked,
+                          )
                         }
+                        disabled={true}
                       />
                     ),
+                    month: item?.monthName,
                     item_name: item?.itemName,
-                    description: item?.description,
                     rate: (
                       <input
                         type="number"
                         className="form-control form-control-sm"
                         value={item.rate}
                         onChange={(e) =>
-                          handleTableChange(item.uniqueId, "rate", e.target.value)
+                          handleTableChange(
+                            item.uniqueId,
+                            "rate",
+                            e.target.value,
+                          )
                         }
                       />
                     ),
-                    qty: item?.qty,
-                    unit: item?.unit,
                     disc: (
                       <input
                         type="number"
                         className="form-control form-control-sm"
                         value={item.discountAmount}
                         onChange={(e) =>
-                          handleTableChange(item.uniqueId, "discountAmount", e.target.value)
+                          handleTableChange(
+                            item.uniqueId,
+                            "discountAmount",
+                            e.target.value,
+                          )
                         }
                       />
                     ),
@@ -594,22 +630,28 @@ const FeeCollection = () => {
                         className="form-control form-control-sm"
                         value={item.discountPercent}
                         onChange={(e) =>
-                          handleTableChange(item.uniqueId, "discountPercent", e.target.value)
+                          handleTableChange(
+                            item.uniqueId,
+                            "discountPercent",
+                            e.target.value,
+                          )
                         }
                       />
                     ),
                     total: (
-                      (parseFloat(item.rate) * parseFloat(item.qty)) -
+                      parseFloat(item.rate) * parseFloat(item.qty) -
                       (parseFloat(item.discountAmount) || 0)
                     ).toFixed(2),
                     action: (
                       <i
-                        className="fa fa-trash text-danger pointer"
+                        className={`fa fa-trash text-danger pointer   ${item?.isMandatory === 1 ? "disable-reject " : "disable-reject"}`}
                         onClick={() => handleDeleteItem(item.uniqueId)}
                       ></i>
                     ),
                   };
                 })}
+                style={{ maxHeight: "35vh" }}
+                tableHeight={"scrollView"}
               />
             </div>
             <PaymentEntry

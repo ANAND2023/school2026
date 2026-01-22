@@ -91,6 +91,7 @@ function DatePicker({
   disable,
   viewDate,
   handleSelect,
+  dateFormat
 }) {
   // PrimeReact expects this format for display
   const primeDateFormat = "dd/M/yy";
@@ -119,7 +120,7 @@ function DatePicker({
           showIcon
           placeholder={placeholder || "DD/MM/YYYY"}
           className={className}
-          dateFormat={primeDateFormat} // PrimeReact format (not moment)
+          dateFormat={dateFormat ? dateFormat: primeDateFormat} // PrimeReact format (not moment)
           view={viewDate || "date"}
           value={value && String(value) !== "Invalid Date" ? value : null}
           name={name}

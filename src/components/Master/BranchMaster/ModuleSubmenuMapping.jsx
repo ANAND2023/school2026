@@ -193,7 +193,7 @@ const ModuleSubmenuMapping = () => {
         <Heading title="Module SubMenu Mapping" isBreadcrumb={false} />
 
         {/* ================= FORM ================= */}
-        <div className="row p-2">
+        <div className="row ">
           <ReactSelect
             name="branch"
             placeholderName="Select Branch"

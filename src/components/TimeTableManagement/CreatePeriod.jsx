@@ -79,12 +79,12 @@ function CreatePeriod() {
             branchId: values.branchId,
         };
 
-        console.log("Create Period Payload =>", payload);
 
         try {
             const response = await CreatePeriods(payload)
             if (response.success) {
                 notify(response.message, "success");
+                GetPeriodsList()
             }
             else {
                 notify(response.message, "error");

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import ReactSelect from "../formComponent/ReactSelect";
 import Input from "../formComponent/Input";
-import { notify } from "../../utils/ustil2";
+import { notify } from "../../utils/utils";
+// import { notify } from "../../utils/ustil2";
+// import { notify } from "../../utils/ustil2";
 
 const PaymentEntry = ({
   paymentModes,
@@ -30,6 +32,8 @@ const PaymentEntry = ({
 
   // 🟢 Mode select hote hi auto amount + row bind
   const handleSelectChange = (name, option) => {
+    debugger
+    if(remainingAmount===0) return notify("No Remaining Amount", "error")
     if (!option) return;
 
     const newPayment = {

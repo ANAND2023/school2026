@@ -144,7 +144,7 @@ debugger
 
   return (
     <>
-      <div className="card p-2">
+      <div className="card ">
         <Heading title="Employee Module Branch Mapping" isBreadcrumb={false} />
 
         {/* ================= FORM ================= */}
