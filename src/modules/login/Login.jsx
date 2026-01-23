@@ -55,7 +55,7 @@ const Login = () => {
           useLocalStorage("theme", "set", "default_theme");
           // useLocalStorage("appTheme", "set", "light_theme");
         }
-        debugger
+        
         if (loginData?.payload?.success) {
           speakMessage(`Welcome ${loginData?.payload?.userData?.sub || ""}`);
           navigate("/dashboard");

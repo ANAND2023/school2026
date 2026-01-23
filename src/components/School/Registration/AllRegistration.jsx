@@ -67,6 +67,7 @@ function AllRegistration() {
       "toDate": values.toDate ? moment(values.toDate).format("YYYY-MM-DD") : null
     }
 
+    
 
     try {
       const response = await getRegistrationlist(payload);
@@ -448,6 +449,7 @@ function AllRegistration() {
         } />
         {tableData?.length > 0 && <>
           <Tables
+          scrollView="scrollView"
             thead={thead}
             tbody={tableData?.map((ele, index) => ({
               SrNo: index + 1,

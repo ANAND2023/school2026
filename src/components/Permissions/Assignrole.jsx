@@ -8,7 +8,7 @@ import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 import Input from "../formComponent/Input";
 import { RolesCreateRole } from "../../networkServices/Admin";
 
-const CreateRole = () => {
+const Assignrole = () => {
 
   const localData = useLocalStorage("userData", "get");
   const initialData = {
@@ -152,4 +152,4 @@ const CreateRole = () => {
   );
 };
 
-export default CreateRole;
+export default Assignrole;

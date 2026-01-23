@@ -74,20 +74,14 @@ const Users = () => {
   };
   const getAllUsers = async () => {
 
-
     const payload = {
       "pageNumber": 1,
       "pageSize": 30,
       "search": null,
       "lockedOnly": false
     }
-
     try {
       const res = await GetAllUsers(payload);
-
-      // 🔴 demo purpose (remove this block when API ready)
-      //   const res = { success: true };
-
       if (res?.success) {
         notify(res?.message, "success");
         setTableData(res?.data?.items || []);
@@ -199,8 +193,8 @@ const Users = () => {
             action: <>
 
               <div
-                // className="d-flex align-items-center justify-content-center gap-2"
-                className="row gap-2"
+                className="d-flex align-items-center justify-content-center gap-2"
+                // className="row gap-2"
               >
                 <button
                   id="editBtn"

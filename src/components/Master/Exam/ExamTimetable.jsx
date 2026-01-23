@@ -632,7 +632,7 @@ import MultiSelectComp from "../../formComponent/MultiSelectComp";
 import DatePicker from "../../formComponent/DatePicker";
 import { notify } from "../../../utils/ustil2";
 import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
-import { GetAllClasses, GetAllSubjects } from "../../../networkServices/AcademicYear";
+import { GetAllClasses, GetAllSubjectClassMappings, GetAllSubjects } from "../../../networkServices/AcademicYear";
 import { AcademicMasterget_all_term, create_exam, create_exam_timetable, get_created_exam } from "../../../networkServices/School/exam";
 import { handleReactSelectDropDownOptions } from "../../../utils/utils";
 import moment from "moment";
@@ -741,9 +741,9 @@ const ExamTimetable = () => {
     const GetSubject = async () => {
 
         try {
-            const response = await GetAllSubjects();
+            const response = await GetAllSubjectClassMappings();
             if (response?.success) {
-                setAllSubject(response?.data)
+                setAllSubject(response)
             } else {
                 notify(response?.message, "error");
                 setAllSubject([])
@@ -864,7 +864,7 @@ const ExamTimetable = () => {
                             respclass="col-md-4"
                             name="Subject"
                             placeholderName={t("Subject")}
-                            dynamicOptions={allSubject.map((s) => ({
+                            dynamicOptions={allSubject?.data?.filter((item) => item?.classId === values?.class_Name?.value).map((s) => ({
                                 name: s.subjectName,
                                 code: s.id
                             }))}

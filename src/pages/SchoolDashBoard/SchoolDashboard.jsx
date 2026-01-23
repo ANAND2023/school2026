@@ -11,8 +11,10 @@ import AccountantDashboard from "./AccountantDashboard";
 import { getadmissionlist } from "../../networkServices/School/RegistrationApi";
 import { useEffect, useState } from "react";
 import { GetAllUsers } from "../../networkServices/Admin";
+import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 
 const SchoolDashboard = () => {
+    const localData = useLocalStorage("userData", "get");
   const [studentList,setStudentList]=useState(0)
   const [userList,setUserList]=useState(0)
  const handleSearch = async () => {
@@ -29,7 +31,7 @@ const SchoolDashboard = () => {
 
         {
             "sessionId": null,
-            "branchId": null,
+            "branchId": localData?.defaultCentre,
             //   "classId": "",
             //   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             //   "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -101,9 +103,13 @@ const SchoolDashboard = () => {
           notify("Something went wrong", "error");
         }
       };
+      useEffect(()=>{
+        handleSearch();
+        // getAllUsers();
+      },[localData?.defaultCentre])
 
 useEffect(() => {
-    handleSearch();
+    // handleSearch();
     getAllUsers();
 }, [])
   return (

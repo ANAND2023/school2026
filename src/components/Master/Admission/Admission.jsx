@@ -5,7 +5,7 @@ import moment from "moment";
 import Heading from "../../UI/Heading";
 import DatePicker from "../../formComponent/DatePicker";
 import Tables from "../../UI/customTable";
-import { notify } from "../../../utils/utils";
+import { handleReactSelectDropDownOptions, notify } from "../../../utils/utils";
 import Modal from "../../modalComponent/Modal";
 import { getadmissionlist, getRegistrationlist } from "../../../networkServices/School/RegistrationApi";
 
@@ -14,6 +14,8 @@ import { useLocalStorage } from "../../../utils/hooks/useLocalStorage";
 import ColorCodingSearch from "../../commonComponents/ColorCodingSearch";
 import StudentProfile from "../../Student/StudentProfile";
 import { exportToExcel } from "../../../utils/exportLibrary";
+import { GetAllClasses } from "../../../networkServices/AcademicYear";
+import ReactSelect from "../../formComponent/ReactSelect";
 
 function Admission() {
     const localData = useLocalStorage("userData", "get");
@@ -38,9 +40,11 @@ function Admission() {
         isInterested: true,
         fromDate: new Date(),
         toDate: new Date(),
+        class: null,
 
     }
     const [values, setValues] = useState(initialData);
+     const [classes, setClasses] = useState([]);
     const [handleModelData, setHandleModelData] = useState({});
     const [modalData, setModalData] = useState({});
     const handleSelect = (name, value) => {
@@ -72,17 +76,17 @@ function Admission() {
 
         {
             "sessionId": null,
-            "branchId": null,
+            "branchId":  localData?.defaultCentre,
             //   "classId": "",
             //   "sessionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             //   "branchId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "classId": null,
-            "fromDate": null,
-            "toDate": null,
-            "studentId": null,
+            "classId": values?.class?.value ?? null,
+            "fromDate": values?.fromDate ? moment(values.fromDate).format("YYYY-MM-DD") : null,
+            "toDate": values?.toDate ? moment(values.toDate).format("YYYY-MM-DD") : null,
+            "studentId": values?.StudentID ?? null,
             "admissionNo": null,
-            "rollNumber": null,
-            "firstName": null,
+            "rollNumber":  null,
+            "firstName":values?.firstName ?? null,
             "page": 1,
             "pageSize": 100
         }
@@ -159,7 +163,7 @@ function Admission() {
     const thead = [
         { name: t("SNo"), width: "1%" },
         // { name: t("#"), width: "1%" },
-        { name: t("Student ID") },
+        { name: t("Student No.") },
         { name: t("name") },
         { name: t("gender") },
         { name: t("dob") },
@@ -172,6 +176,7 @@ function Admission() {
 
     useEffect(() => {
         handleSearch()
+          GetAllClasses().then((r) => r?.success && setClasses(r.data || []));
     }, [])
     const getRowClass = (row) => {
         console.log("row data =>", row);
@@ -317,6 +322,14 @@ function Admission() {
                         onChange={handleChange}
                         respclass="col-xl-2 col-md-4 col-sm-4 col-12"
                     />
+                     <ReactSelect
+                                    name="class"
+                                    placeholderName="Select Class"
+                                    dynamicOptions={handleReactSelectDropDownOptions(classes, "className", "id")}
+                                    handleChange={handleSelect}
+                                    value={values.class}
+                                      respclass="col-xl-2 col-md-4 col-sm-6 col-12"
+                                  />
                     <DatePicker
                         id="fromDate"
                         name="fromDate"
@@ -411,7 +424,7 @@ function Admission() {
                         tbody={sortedTableData?.map((ele, index) => ({
                             SrNo: index + 1,
                             // checked: <input type="checkbox" name="isChecked" checked={ele?.isChecked} onChange={handleChange} />,
-                            admissionNo: `${ele?.admission?.admissionNo} `,
+                            studentId: `${ele?.student?.studentId} `,
                             name: `${ele?.student?.title} ${ele?.student?.firstName} ${ele?.student?.lastName} `,
                             gender: `${ele?.student?.gender}  `,
                             dateOfBirth: `${moment(ele?.student?.dateOfBirth).format("DD-MM-YYYY")}  `,

@@ -1,69 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 
 export default function StudentProfile({ modalData, setModalData }) {
-  const [activeTab, setActiveTab] = useState("overview");
-
   if (!modalData) return null;
 
-  /* =========================
-     STUDENT BASIC INFO
-  ========================== */
-  const student = {
-    name: modalData.fullName,
-    rollNo: modalData.studentId,
-    class: modalData.academics?.[0]
-      ? `${modalData.academics[0].class} Class`
-      : "-",
-    dob: modalData.dateOfBirth
-      ? new Date(modalData.dateOfBirth).toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })
-      : "-",
-    gender: modalData.gender === "1" ? "Male" : "Female",
-    bloodGroup: modalData.bloodGroup,
-    email: modalData.email,
-    phone: modalData.phone,
-    address: `${modalData.village}, ${modalData.city}, ${modalData.district}, ${modalData.state} - ${modalData.pincode}`,
-    admissionDate: modalData.createdOn
-      ? new Date(modalData.createdOn).toLocaleDateString("en-IN")
-      : "-",
-    photo: modalData.studentPhoto
-      ? `data:image/png;base64,${modalData.studentPhoto}`
-      : "https://via.placeholder.com/150",
+  // --- Helpers for Data Formatting ---
+
+  // 1. Photo URL Handler (Assuming UUID implies a backend URL, else placeholder)
+  const getPhotoUrl = (photoId, name) => {
+    if (!photoId)
+      return `https://ui-avatars.com/api/?name=${name}&background=random&size=200`;
+    // Agar aapke paas actual image base URL hai to yahan lagayein. 
+    // Example: return `https://api.school.com/uploads/${photoId}`;
+    return `https://ui-avatars.com/api/?name=${name}&background=0D6EFD&color=fff&size=200`; 
   };
 
-  /* =========================
-     PARENTS
-  ========================== */
+  // 2. Date Formatter
+  const formatDate = (dateString) => {
+    if (!dateString || dateString.startsWith("0001")) return "-";
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  // 3. Address Builder
+  const getAddress = () => {
+    const parts = [
+      modalData.village,
+      modalData.city,
+      modalData.district,
+      modalData.state,
+      modalData.pincode ? `Pin: ${modalData.pincode}` : "",
+    ];
+    return parts.filter((p) => p).join(", ") || "Address not available";
+  };
+
+  // 4. Extract Parents
   const father = modalData.parents?.find((p) => p.parentType === 1);
   const mother = modalData.parents?.find((p) => p.parentType === 2);
-
-  /* =========================
-     ACADEMICS
-  ========================== */
-  const academics = {
-    percentage: modalData.academics?.[0]?.percentage || 0,
-    board: modalData.academics?.[0]?.boardName || "-",
-    medium: modalData.academics?.[0]?.medium || "-",
-    school: modalData.academics?.[0]?.schoolName || "-",
-    description: modalData.academics?.[0]?.description || "-",
-  };
-
-  /* =========================
-     SIBLINGS
-  ========================== */
-  const siblings = modalData.isSibling
-    ? [
-        {
-          rollNo: modalData.siblingId,
-        },
-      ]
-    : [];
+  const currentAcademic = modalData.academics?.[0] || {};
 
   return (
     <>
+      {/* CDN Links for Bootstrap & Icons (Ensure these are in your index.html usually) */}
       <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -73,144 +53,502 @@ export default function StudentProfile({ modalData, setModalData }) {
         rel="stylesheet"
       />
 
-      <div className="container mt-3">
-        {/* HEADER */}
-        <div className="card shadow">
-          <div className="card-body">
-            <div className="row align-items-center">
-              <div className="col-md-3 text-center">
+      {/* Custom Styles for this Page */}
+      <style>
+        {`
+          .profile-header-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: none;
+          }
+          .info-label {
+            color: #6c757d;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .info-value {
+            font-weight: 500;
+            color: #212529;
+            font-size: 1rem;
+          }
+          .section-title {
+            border-left: 4px solid #0d6efd;
+            padding-left: 10px;
+            font-weight: 700;
+            color: #0d6efd;
+            margin-bottom: 20px;
+          }
+          .card-custom {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+            transition: transform 0.2s;
+          }
+          .card-custom:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+          }
+          .badge-custom {
+            padding: 8px 12px;
+            font-weight: 500;
+            border-radius: 6px;
+          }
+        `}
+      </style>
+
+      <div className="container py-4" 
+      style={{ 
+        // backgroundColor: "#f4f6f9", 
+        minHeight: "100vh" }}>
+        
+        {/* Top Navigation / Close Button Area */}
+        {/* <div className="d-flex justify-content-between align-items-center mb-4">
+          <h4 className="fw-bold text-dark m-0">Student Profile</h4>
+          <button className="btn btn-sm btn-outline-secondary" onClick={() => setModalData(null)}>
+            <i className="bi bi-x-lg me-1"></i> Close
+          </button>
+        </div> */}
+
+        <div className="row g-4">
+          
+          {/* LEFT COLUMN: Profile & Personal Basic Info */}
+          <div className="col-lg-4">
+            
+            {/* 1. Main Profile Card */}
+            <div className="card card-custom profile-header-card text-center p-4">
+              <div className="mb-3 position-relative d-inline-block mx-auto">
                 <img
-                  src={student.photo}
-                  alt="student"
-                  className="rounded-circle"
-                  style={{ width: 140, height: 140 }}
+                  src={getPhotoUrl(modalData.studentPhoto, modalData.fullName)}
+                  alt="Student"
+                  className="rounded-circle border border-4 border-white shadow-sm"
+                  style={{ width: "140px", height: "140px", objectFit: "cover" }}
                 />
-              </div>
-
-              <div className="col-md-6">
-                <h3>{student.name}</h3>
-                <p className="mb-1">Student ID: {student.rollNo}</p>
-                <p className="mb-1">Class: {student.class}</p>
-                <span className="badge bg-success me-2">
-                  {academics.percentage}% Marks
-                </span>
-                <span className="badge bg-primary">
-                  Blood Group: {student.bloodGroup}
+                <span className={`position-absolute bottom-0 end-0 badge rounded-pill ${modalData.status === "0" ? 'bg-warning text-dark' : 'bg-success'}`}>
+                   {modalData.status === "0" ? "Pending" : "Active"}
                 </span>
               </div>
-
-              {/* <div className="col-md-3 text-end">
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={() => setModalData(null)}
-                >
-                  Close
-                </button>
-              </div> */}
+              <h3 className="fw-bold mb-1">{modalData.fullName}</h3>
+              <p className="text-muted mb-2">{modalData.studentId}</p>
+              
+              <div className="d-flex justify-content-center gap-2 mt-2">
+                <span className="badge bg-white text-primary border shadow-sm">
+                   {currentAcademic.medium || "Medium N/A"}
+                </span>
+                <span className="badge bg-white text-danger border shadow-sm">
+                   {modalData.gender === "1" ? "Male" : "Female"}
+                </span>
+              </div>
             </div>
+
+            {/* 2. Contact & Personal Details */}
+            <div className="card card-custom p-4">
+              <h5 className="section-title">Personal Details</h5>
+              
+              <div className="mb-3">
+                <div className="info-label"><i className="bi bi-calendar-event me-2"></i>Date of Birth</div>
+                <div className="info-value">{formatDate(modalData.dateOfBirth)}</div>
+              </div>
+
+              <div className="mb-3">
+                <div className="info-label"><i className="bi bi-telephone me-2"></i>Phone</div>
+                <div className="info-value">{modalData.phone || modalData.parents?.[0]?.mobile || "N/A"}</div>
+              </div>
+
+              <div className="mb-3">
+                <div className="info-label"><i className="bi bi-envelope me-2"></i>Email</div>
+                <div className="info-value">{modalData.email || "N/A"}</div>
+              </div>
+
+              <div className="mb-3">
+                <div className="info-label"><i className="bi bi-droplet me-2"></i>Blood Group</div>
+                <div className="info-value">{modalData.bloodGroup || "-"}</div>
+              </div>
+
+              <div className="mb-3">
+                <div className="info-label"><i className="bi bi-geo-alt me-2"></i>Address</div>
+                <div className="info-value">{getAddress()}</div>
+              </div>
+              
+              <hr className="text-muted" />
+              
+              <div className="row">
+                 <div className="col-6 mb-2">
+                    <div className="info-label">Religion</div>
+                    <div>{modalData.religion || "-"}</div>
+                 </div>
+                 <div className="col-6 mb-2">
+                    <div className="info-label">Category</div>
+                    <div>{modalData.category || "-"}</div>
+                 </div>
+                 <div className="col-12">
+                    <div className="info-label">Adhar No.</div>
+                    <div>{modalData.adharNumber || "-"}</div>
+                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Academics, Family, Documents */}
+          <div className="col-lg-8">
+            
+            {/* 1. Academic Information */}
+            <div className="card card-custom p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                 <h5 className="section-title mb-0">Academic Information</h5>
+                 <span className="badge bg-light text-dark border">
+                    <i className="bi bi-calendar-check me-1"></i> 
+                    Admitted: {formatDate(modalData.createdOn)}
+                 </span>
+              </div>
+
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <div className="p-3 border rounded bg-light h-100">
+                    <small className="text-muted d-block mb-1">Current Class ID</small>
+                    <h5 className="mb-0 text-primary">
+                        {/* Note: JSON has GUID for class, ideally map this to name */}
+                        {currentAcademic.class ? "Class Available" : "Not Assigned"}
+                    </h5>
+                    <small className="text-muted" style={{fontSize: '0.7rem'}}>{currentAcademic.class}</small>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="p-3 border rounded bg-light h-100">
+                     <small className="text-muted d-block mb-1">Medium</small>
+                     <h5 className="mb-0">{currentAcademic.medium}</h5>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                    <div className="info-label">Roll Number</div>
+                    <div className="info-value">{currentAcademic.rollNumber || "-"}</div>
+                </div>
+                <div className="col-md-4">
+                    <div className="info-label">Board</div>
+                    <div className="info-value">{currentAcademic.boardName || "-"}</div>
+                </div>
+                <div className="col-md-4">
+                    <div className="info-label">Previous %</div>
+                    <div className="info-value">{currentAcademic.percentage}%</div>
+                </div>
+                <div className="col-12">
+                    <div className="info-label">School Name</div>
+                    <div className="info-value">{currentAcademic.schoolName || "-"}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Family Details */}
+            <div className="card card-custom p-4">
+              <h5 className="section-title">Family Details</h5>
+              <div className="row g-3">
+                
+                {/* Father */}
+                <div className="col-md-6">
+                  <div className="d-flex align-items-start border rounded p-3 h-100">
+                    <div className="me-3">
+                        <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{width: 45, height: 45}}>
+                            <i className="bi bi-person-standing fs-4"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 className="fw-bold mb-1">Father</h6>
+                        {father ? (
+                           <>
+                             <p className="mb-1 fw-medium">{father.name}</p>
+                             <small className="d-block text-muted"><i className="bi bi-phone me-1"></i>{father.mobile}</small>
+                             <small className="d-block text-muted"><i className="bi bi-briefcase me-1"></i>{father.occupation || "Occupation N/A"}</small>
+                           </>
+                        ) : <span className="text-muted fst-italic">Not Added</span>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mother */}
+                <div className="col-md-6">
+                  <div className="d-flex align-items-start border rounded p-3 h-100">
+                    <div className="me-3">
+                        <div className="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" style={{width: 45, height: 45}}>
+                            <i className="bi bi-person-standing-dress fs-4"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 className="fw-bold mb-1">Mother</h6>
+                        {mother ? (
+                           <>
+                             <p className="mb-1 fw-medium">{mother.name}</p>
+                             <small className="d-block text-muted"><i className="bi bi-phone me-1"></i>{mother.mobile}</small>
+                             <small className="d-block text-muted"><i className="bi bi-briefcase me-1"></i>{mother.occupation || "Occupation N/A"}</small>
+                           </>
+                        ) : <span className="text-muted fst-italic">Not Added</span>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sibling Info */}
+                {modalData.isSibling && (
+                   <div className="col-12 mt-3">
+                      <div className="alert alert-warning mb-0 py-2">
+                        <i className="bi bi-people me-2"></i>
+                        Sibling Enrolled (ID: {modalData.siblingId || "N/A"})
+                      </div>
+                   </div>
+                )}
+              </div>
+            </div>
+
+            {/* 3. Documents & System Info */}
+            <div className="card card-custom p-4">
+               <h5 className="section-title">Documents & System</h5>
+               <div className="row">
+                  <div className="col-md-6">
+                     <h6 className="text-muted mb-3" style={{fontSize: '0.8rem'}}>UPLOADED DOCUMENTS</h6>
+                     {modalData.studentDocuments?.length > 0 ? (
+                        <div className="d-flex gap-2 flex-wrap">
+                           {modalData.studentDocuments.map((doc, idx) => (
+                              <div key={idx} className="badge bg-secondary p-2 fw-normal">
+                                 <i className="bi bi-file-earmark-text me-1"></i>
+                                 Doc Type {doc.documentType}
+                              </div>
+                           ))}
+                        </div>
+                     ) : (
+                        <p className="text-muted small">No documents uploaded.</p>
+                     )}
+                  </div>
+                  <div className="col-md-6 border-start">
+                      <div className="ps-3">
+                         <div className="info-label">Created By</div>
+                         <div className="mb-2">{modalData.createdBy}</div>
+                         <div className="info-label">Last Updated</div>
+                         <div>{formatDate(modalData.createdOn)}</div>
+                      </div>
+                  </div>
+               </div>
+            </div>
+
           </div>
         </div>
-
-        {/* TABS */}
-        <ul className="nav nav-pills mt-4 justify-content-center">
-          {["overview", "academics", "family"].map((tab) => (
-            <li className="nav-item" key={tab}>
-              <button
-                className={`nav-link ${
-                  activeTab === tab ? "active" : ""
-                }`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab.toUpperCase()}
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        {/* OVERVIEW */}
-        {activeTab === "overview" && (
-          <div className="card mt-4 shadow">
-            <div className="card-header bg-primary text-white">
-              Personal Information
-            </div>
-            <div className="card-body">
-              <p><strong>DOB:</strong> {student.dob}</p>
-              <p><strong>Gender:</strong> {student.gender}</p>
-              <p><strong>Email:</strong> {student.email}</p>
-              <p><strong>Phone:</strong> {student.phone}</p>
-              <p><strong>Address:</strong> {student.address}</p>
-              <p><strong>Admission Date:</strong> {student.admissionDate}</p>
-              <p><strong>Identification Mark:</strong> {modalData.identificationMark}</p>
-              <p><strong>Religion:</strong> {modalData.religion}</p>
-              <p><strong>Category:</strong> {modalData.category}</p>
-              <p><strong>Nationality:</strong> {modalData.nationality}</p>
-            </div>
-          </div>
-        )}
-
-        {/* ACADEMICS */}
-        {activeTab === "academics" && (
-          <div className="card mt-4 shadow">
-            <div className="card-header bg-success text-white">
-              Academic Details
-            </div>
-            <div className="card-body">
-              <p><strong>Percentage:</strong> {academics.percentage}%</p>
-              <p><strong>Board:</strong> {academics.board}</p>
-              <p><strong>Medium:</strong> {academics.medium}</p>
-              <p><strong>School:</strong> {academics.school}</p>
-              <p><strong>Remarks:</strong> {academics.description}</p>
-            </div>
-          </div>
-        )}
-
-        {/* FAMILY */}
-        {activeTab === "family" && (
-          <>
-            <div className="card mt-4 shadow">
-              <div className="card-header bg-info text-white">
-                Parent Details
-              </div>
-              <div className="card-body">
-                {father && (
-                  <>
-                    <h6>Father</h6>
-                    <p>Name: {father.name}</p>
-                    <p>Mobile: {father.mobile}</p>
-                    <p>Email: {father.email}</p>
-                    <p>Occupation: {father.occupation}</p>
-                  </>
-                )}
-
-                {mother && (
-                  <>
-                    <hr />
-                    <h6>Mother</h6>
-                    <p>Name: {mother.name}</p>
-                    <p>Mobile: {mother.mobile}</p>
-                    <p>Email: {mother.email}</p>
-                    <p>Occupation: {mother.occupation}</p>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {siblings.length > 0 && (
-              <div className="card mt-3 shadow">
-                <div className="card-header bg-warning">
-                  Sibling Information
-                </div>
-                <div className="card-body">
-                  <p>Sibling Student ID: {modalData.siblingId}</p>
-                </div>
-              </div>
-            )}
-          </>
-        )}
       </div>
     </>
   );
 }
+
+
+
+// import React, { useState } from "react";
+
+// export default function StudentProfile({ modalData, setModalData }) {
+//   const [activeTab, setActiveTab] = useState("overview");
+
+//   if (!modalData) return null;
+
+//   /* =========================
+//      STUDENT BASIC INFO
+//   ========================== */
+//   const student = {
+//     name: modalData.fullName,
+//     rollNo: modalData.studentId,
+//     class: modalData.academics?.[0]
+//       ? `${modalData.academics[0].class} Class`
+//       : "-",
+//     dob: modalData.dateOfBirth
+//       ? new Date(modalData.dateOfBirth).toLocaleDateString("en-IN", {
+//           day: "2-digit",
+//           month: "long",
+//           year: "numeric",
+//         })
+//       : "-",
+//     gender: modalData.gender === "1" ? "Male" : "Female",
+//     bloodGroup: modalData.bloodGroup,
+//     email: modalData.email,
+//     phone: modalData.phone,
+//     address: `${modalData.village}, ${modalData.city}, ${modalData.district}, ${modalData.state} - ${modalData.pincode}`,
+//     admissionDate: modalData.createdOn
+//       ? new Date(modalData.createdOn).toLocaleDateString("en-IN")
+//       : "-",
+//     photo: modalData.studentPhoto
+//       ? `data:image/png;base64,${modalData.studentPhoto}`
+//       : "https://via.placeholder.com/150",
+//   };
+
+//   /* =========================
+//      PARENTS
+//   ========================== */
+//   const father = modalData.parents?.find((p) => p.parentType === 1);
+//   const mother = modalData.parents?.find((p) => p.parentType === 2);
+
+//   /* =========================
+//      ACADEMICS
+//   ========================== */
+//   const academics = {
+//     percentage: modalData.academics?.[0]?.percentage || 0,
+//     board: modalData.academics?.[0]?.boardName || "-",
+//     medium: modalData.academics?.[0]?.medium || "-",
+//     school: modalData.academics?.[0]?.schoolName || "-",
+//     description: modalData.academics?.[0]?.description || "-",
+//   };
+
+//   /* =========================
+//      SIBLINGS
+//   ========================== */
+//   const siblings = modalData.isSibling
+//     ? [
+//         {
+//           rollNo: modalData.siblingId,
+//         },
+//       ]
+//     : [];
+
+//   return (
+//     <>
+//       <link
+//         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+//         rel="stylesheet"
+//       />
+//       <link
+//         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+//         rel="stylesheet"
+//       />
+
+//       <div className="container mt-3">
+//         {/* HEADER */}
+//         <div className="card shadow">
+//           <div className="card-body">
+//             <div className="row align-items-center">
+//               <div className="col-md-3 text-center">
+//                 <img
+//                   src={student.photo}
+//                   alt="student"
+//                   className="rounded-circle"
+//                   style={{ width: 140, height: 140 }}
+//                 />
+//               </div>
+
+//               <div className="col-md-6">
+//                 <h3>{student.name}</h3>
+//                 <p className="mb-1">Student ID: {student.rollNo}</p>
+//                 <p className="mb-1">Class: {student.class}</p>
+//                 <span className="badge bg-success me-2">
+//                   {academics.percentage}% Marks
+//                 </span>
+//                 <span className="badge bg-primary">
+//                   Blood Group: {student.bloodGroup}
+//                 </span>
+//               </div>
+
+//               {/* <div className="col-md-3 text-end">
+//                 <button
+//                   className="btn btn-outline-danger"
+//                   onClick={() => setModalData(null)}
+//                 >
+//                   Close
+//                 </button>
+//               </div> */}
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* TABS */}
+//         <ul className="nav nav-pills mt-4 justify-content-center">
+//           {["overview", "academics", "family"].map((tab) => (
+//             <li className="nav-item" key={tab}>
+//               <button
+//                 className={`nav-link ${
+//                   activeTab === tab ? "active" : ""
+//                 }`}
+//                 onClick={() => setActiveTab(tab)}
+//               >
+//                 {tab.toUpperCase()}
+//               </button>
+//             </li>
+//           ))}
+//         </ul>
+
+//         {/* OVERVIEW */}
+//         {activeTab === "overview" && (
+//           <div className="card mt-4 shadow">
+//             <div className="card-header bg-primary text-white">
+//               Personal Information
+//             </div>
+//             <div className="card-body">
+//               <p><strong>DOB:</strong> {student.dob}</p>
+//               <p><strong>Gender:</strong> {student.gender}</p>
+//               <p><strong>Email:</strong> {student.email}</p>
+//               <p><strong>Phone:</strong> {student.phone}</p>
+//               <p><strong>Address:</strong> {student.address}</p>
+//               <p><strong>Admission Date:</strong> {student.admissionDate}</p>
+//               <p><strong>Identification Mark:</strong> {modalData.identificationMark}</p>
+//               <p><strong>Religion:</strong> {modalData.religion}</p>
+//               <p><strong>Category:</strong> {modalData.category}</p>
+//               <p><strong>Nationality:</strong> {modalData.nationality}</p>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* ACADEMICS */}
+//         {activeTab === "academics" && (
+//           <div className="card mt-4 shadow">
+//             <div className="card-header bg-success text-white">
+//               Academic Details
+//             </div>
+//             <div className="card-body">
+//               <p><strong>Percentage:</strong> {academics.percentage}%</p>
+//               <p><strong>Board:</strong> {academics.board}</p>
+//               <p><strong>Medium:</strong> {academics.medium}</p>
+//               <p><strong>School:</strong> {academics.school}</p>
+//               <p><strong>Remarks:</strong> {academics.description}</p>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* FAMILY */}
+//         {activeTab === "family" && (
+//           <>
+//             <div className="card mt-4 shadow">
+//               <div className="card-header bg-info text-white">
+//                 Parent Details
+//               </div>
+//               <div className="card-body">
+//                 {father && (
+//                   <>
+//                     <h6>Father</h6>
+//                     <p>Name: {father.name}</p>
+//                     <p>Mobile: {father.mobile}</p>
+//                     <p>Email: {father.email}</p>
+//                     <p>Occupation: {father.occupation}</p>
+//                   </>
+//                 )}
+
+//                 {mother && (
+//                   <>
+//                     <hr />
+//                     <h6>Mother</h6>
+//                     <p>Name: {mother.name}</p>
+//                     <p>Mobile: {mother.mobile}</p>
+//                     <p>Email: {mother.email}</p>
+//                     <p>Occupation: {mother.occupation}</p>
+//                   </>
+//                 )}
+//               </div>
+//             </div>
+
+//             {siblings.length > 0 && (
+//               <div className="card mt-3 shadow">
+//                 <div className="card-header bg-warning">
+//                   Sibling Information
+//                 </div>
+//                 <div className="card-body">
+//                   <p>Sibling Student ID: {modalData.siblingId}</p>
+//                 </div>
+//               </div>
+//             )}
+//           </>
+//         )}
+//       </div>
+//     </>
+//   );
+// }
 
 
 

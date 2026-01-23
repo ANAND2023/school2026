@@ -16,6 +16,7 @@ import {
   GetClassTimetable,
   GetPeriods,
 } from "../../networkServices/School/Attendance";
+import TeachersTimeTable from "./TeachersTimeTable";
 
 /* ================= HELPER ================= */
 const groupByPeriod = (data = []) => {
@@ -293,6 +294,7 @@ const TimeTable = () => {
           </div>
         </div>
       )}
+      <TeachersTimeTable/>
     </div>
   );
 };

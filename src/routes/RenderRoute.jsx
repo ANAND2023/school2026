@@ -167,6 +167,8 @@ function RenderRoute() {
   getAllUrls.push("/teacher-attendance");
   getAllUrls.push("/time-table");
   getAllUrls.push("/create-role");
+  getAllUrls.push("/teacher-time-table");
+  getAllUrls.push("/assign-role");
   // Add dynamic routes from Menu
   if (GetMenuList?.length > 0) {
     GetMenuList.forEach((menu) => {
@@ -813,6 +815,15 @@ const allRoutes = {
     {
       Guard: Authenticated,
       layout: Layout,
+      path: "/teacher-time-table",
+      component: lazy(
+        () => import("@app/components/TimeTableManagement/TeachersTimeTable.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
       path: "/student-attendance",
       component: lazy(
         () => import("@app/components/AttendanceManagement/StudentAttendance.jsx")
@@ -843,6 +854,15 @@ const allRoutes = {
       path: "/create-role",
       component: lazy(
         () => import("@app/components/Permissions/CreateRole.jsx")
+      ),exact: true,
+
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/assign-role",
+      component: lazy(
+        () => import("@app/components/Permissions/Assignrole.jsx")
       ),exact: true,
 
     },

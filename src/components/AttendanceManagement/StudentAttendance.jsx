@@ -137,7 +137,7 @@ const StudentAttendance = () => {
 
     try {
       const res = await CreateStudentAttendance(payload);
-      if (res?.success) notify(res.message, "success");
+      if (res?.success) notify(res.message, "success"),handleDeselectAll()
       else notify(res?.message || res?.data?.message, "error");
     } catch (err) {
       console.log(err);

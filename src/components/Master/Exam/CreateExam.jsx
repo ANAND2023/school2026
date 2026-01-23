@@ -245,19 +245,19 @@ const CreateExam = () => {
                 <Tables
                     thead={[
                         { name: t("S.No"), width: "5%" },
-                        { name: t("orgName"), width: "35%" },
-                        { name: t("branchName"), width: "35%" },
-                        { name: t("examTypeName"), width: "35%" },
-                        { name: t("examName"), width: "35%" },
-                        { name: t("startDate"), width: "35%" },
-                        { name: t("endDate"), width: "35%" },
-                        { name: t("resultPublishDate"), width: "35%" },
+                        // { name: t("orgName"), width: "35%" },
+                        // { name: t("branchName"), width: "35%" },
+                        { name: t("Exam Type Name"), width: "35%" },
+                        { name: t("Exam Name"), width: "35%" },
+                        { name: t("Start Date"), width: "35%" },
+                        { name: t("End Date"), width: "35%" },
+                        { name: t("Result Publish Date"), width: "35%" },
                         { name: t("Action"), width: "10%", className: "text-center" }
                     ]}
                     tbody={tableData.map((item, index) => ({
                         "S.No": index + 1,
-                        "orgName": item.orgName,
-                        "branchName": item.branchName,
+                        // "orgName": item.orgName,
+                        // "branchName": item.branchName,
                         "examTypeName": item.examTypeName,
                         "examName": item.examName,
                         "startDate": moment(item.startDate).format("DD-MM-YYYY"),

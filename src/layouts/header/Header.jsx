@@ -755,7 +755,7 @@ const Header = React.memo(() => {
 
   const fetchAttendance = async (month, year) => {
     try {
-      debugger
+      
       const payload = {
         orgId: localData?.OrganizationId,
         branchId: localData?.defaultCentre,
