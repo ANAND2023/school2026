@@ -340,7 +340,6 @@ function AllRegistration() {
             </button>
           </div>}
         />
-        <img src="blob:http://175.176.185.254:2005/3c046a91-e290-4dd2-83b1-619301c4b4ad" alt="photo" />
         <div className="row  p-2">
           <Input
             className="form-control"

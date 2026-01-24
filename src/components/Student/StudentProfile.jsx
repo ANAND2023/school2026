@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Imagesgetphoto } from "../../networkServices/School/RegistrationApi";
 
 export default function StudentProfile({ modalData, setModalData }) {
   if (!modalData) return null;
-
+const [photoUrl, setPhotoUrl] = useState("");
+console.log("photoUrl",photoUrl)
   // --- Helpers for Data Formatting ---
 
   // 1. Photo URL Handler (Assuming UUID implies a backend URL, else placeholder)
-  const getPhotoUrl = (photoId, name) => {
-    if (!photoId)
-      return `https://ui-avatars.com/api/?name=${name}&background=random&size=200`;
-    // Agar aapke paas actual image base URL hai to yahan lagayein. 
-    // Example: return `https://api.school.com/uploads/${photoId}`;
-    return `https://ui-avatars.com/api/?name=${name}&background=0D6EFD&color=fff&size=200`; 
-  };
+ const getPhotoUrl = async (photoId, name) => {
+  if (!photoId) {
+    return `https://ui-avatars.com/api/?name=${name}&background=random&size=200`;
+  }
+
+  try {
+    const res = await Imagesgetphoto(photoId); 
+    // ⚠️ res should be Blob / ArrayBuffer
+
+    const blob = new Blob([res], { type: "image/jpeg" });
+    const imageUrl = URL.createObjectURL(blob);
+
+    return imageUrl;
+  } catch (error) {
+    console.log("error", error);
+    return `https://ui-avatars.com/api/?name=${name}&background=random&size=200`;
+  }
+};
+
+  // const getPhotoUrl = (photoId, name) => {
+  //   if (!photoId)
+  //     return `https://ui-avatars.com/api/?name=${name}&background=random&size=200`;
+  //   // Agar aapke paas actual image base URL hai to yahan lagayein. 
+  //   // Example: return `https://api.school.com/uploads/${photoId}`;
+  //   return `https://ui-avatars.com/api/?name=${name}&background=0D6EFD&color=fff&size=200`; 
+  // };
 
   // 2. Date Formatter
   const formatDate = (dateString) => {
@@ -40,6 +61,18 @@ export default function StudentProfile({ modalData, setModalData }) {
   const father = modalData.parents?.find((p) => p.parentType === 1);
   const mother = modalData.parents?.find((p) => p.parentType === 2);
   const currentAcademic = modalData.academics?.[0] || {};
+useEffect(() => {
+  debugger
+  const loadImage = async () => {
+    const url = await getPhotoUrl(
+      modalData?.studentPhoto,
+      modalData?.fullName
+    );
+    setPhotoUrl(url);
+  };
+
+  loadImage();
+}, [modalData]);
 
   return (
     <>
@@ -97,15 +130,10 @@ export default function StudentProfile({ modalData, setModalData }) {
         `}
       </style>
 
-      <div className="container py-4" style={{ backgroundColor: "#f4f6f9", minHeight: "100vh" }}>
-        
-        {/* Top Navigation / Close Button Area */}
-        {/* <div className="d-flex justify-content-between align-items-center mb-4">
-          <h4 className="fw-bold text-dark m-0">Student Profile</h4>
-          <button className="btn btn-sm btn-outline-secondary" onClick={() => setModalData(null)}>
-            <i className="bi bi-x-lg me-1"></i> Close
-          </button>
-        </div> */}
+      <div className="container py-4" 
+      style={{ 
+        // backgroundColor: "#f4f6f9", 
+        minHeight: "100vh" }}>
 
         <div className="row g-4">
           
@@ -115,12 +143,14 @@ export default function StudentProfile({ modalData, setModalData }) {
             {/* 1. Main Profile Card */}
             <div className="card card-custom profile-header-card text-center p-4">
               <div className="mb-3 position-relative d-inline-block mx-auto">
+                
                 <img
-                  src={getPhotoUrl(modalData.studentPhoto, modalData.fullName)}
-                  alt="Student"
-                  className="rounded-circle border border-4 border-white shadow-sm"
-                  style={{ width: "140px", height: "140px", objectFit: "cover" }}
-                />
+  src={photoUrl}
+  alt="Student"
+  className="rounded-circle border border-4 border-white shadow-sm"
+  style={{ width: "140px", height: "140px", objectFit: "cover" }}
+/>
+
                 <span className={`position-absolute bottom-0 end-0 badge rounded-pill ${modalData.status === "0" ? 'bg-warning text-dark' : 'bg-success'}`}>
                    {modalData.status === "0" ? "Pending" : "Active"}
                 </span>

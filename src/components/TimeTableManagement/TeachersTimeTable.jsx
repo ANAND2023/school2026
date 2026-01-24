@@ -195,14 +195,14 @@ const TeachersTimeTable = () => {
             />
 
            
-            <div className="col-xl-2 col-md-4 col-sm-6 col-12 d-flex align-items-end">
+            {/* <div className="col-xl-2 col-md-4 col-sm-6 col-12 d-flex align-items-end">
               <button
                 className="btn btn-success w-100"
                 onClick={handleSave}
               >
                 Save Time Table
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

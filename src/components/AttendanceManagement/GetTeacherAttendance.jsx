@@ -14,7 +14,7 @@ const GetTeacherAttendance = () => {
 
 
   const fetchAttendance = async (month, year) => {
-    debugger;
+    ;
     try {
       const payload = {
         orgId: userData?.OrganizationId,
