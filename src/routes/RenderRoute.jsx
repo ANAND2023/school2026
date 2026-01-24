@@ -10,6 +10,7 @@ import { useLocalStorage } from "../utils/hooks/useLocalStorage";
 import {
   GetBindMenu,
   getEmployeeWise,
+  GetMapAcadmicYearWithEmployee,
   GetRoleListByEmployeeIDAndCentreID,
 } from "../store/reducers/common/CommonExportFunction";
 import { Toaster } from "react-hot-toast";
@@ -84,6 +85,14 @@ function RenderRoute() {
           roleId: currentRoleId,
           branchId: currentBranchId,
           organizationId: localData?.OrganizationId
+        })
+      );
+
+      await dispatch(
+        GetMapAcadmicYearWithEmployee({
+          employeeId: localData?.UserId,
+          OrganizationId: localData?.OrganizationId,
+          branchId: currentBranchId,
         })
       );
 
@@ -576,6 +585,16 @@ const allRoutes = {
       path: "/academic-year",
       component: lazy(
         () => import("@app/components/Master/CreateAcademicYear.jsx")
+      ),
+    
+      exact: true,
+    },
+    {
+      Guard: Authenticated,
+      layout: Layout,
+      path: "/academic-year-map",
+      component: lazy(
+        () => import("@app/components/Master/AcademicYearMapping.jsx")
       ),
     
       exact: true,

@@ -17,14 +17,14 @@ export const CentreWiseCacheByCenterID = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.CentreWiseCacheByCenterID}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const CentreWisePanelControlCache = createAsyncThunk(
@@ -37,14 +37,14 @@ export const CentreWisePanelControlCache = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.CentreWisePanelControlCache}?CentreID=${centreID}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 // export const getEmployeeWise = createAsyncThunk(
@@ -67,7 +67,6 @@ export const CentreWisePanelControlCache = createAsyncThunk(
 //   }
 // );
 
-
 // export const GetBindMenu = createAsyncThunk(
 //   "BindMenu",
 //   async ({ RoleID }, { dispatch }) => {
@@ -89,8 +88,6 @@ export const CentreWisePanelControlCache = createAsyncThunk(
 //   }
 // );
 
-
-
 export const getNotification = createAsyncThunk(
   "GetNotify",
   async ({ RoleID, EmployeeID, CentreID }, { dispatch }) => {
@@ -101,14 +98,14 @@ export const getNotification = createAsyncThunk(
       dispatch(setLoading(true));
       const data = await makeApiRequest(
         `${apiUrls.getNotificationDetail}?RoleID=${RoleID}&EmployeeID=${EmployeeID}&CentreID=${CentreID}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 export const BindFrameMenuByRoleID = createAsyncThunk(
   "BindFrameMenu",
@@ -123,16 +120,15 @@ export const BindFrameMenuByRoleID = createAsyncThunk(
       dispatch(setLoading(true));
       const data = await makeApiRequest(
         `${apiUrls.BindFrameMenuByRoleID}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
-
 
 // export const getEmployeeWise = createAsyncThunk(
 //   "centre",
@@ -194,7 +190,6 @@ export const BindFrameMenuByRoleID = createAsyncThunk(
 //   }
 // );
 
-
 export const GetBindReferDoctor = createAsyncThunk(
   "GetBindDoctorList",
   async (data, { dispatch }) => {
@@ -210,7 +205,7 @@ export const GetBindReferDoctor = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const GetBindReferalType = createAsyncThunk(
@@ -228,7 +223,7 @@ export const GetBindReferalType = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const GetBindDepartment = createAsyncThunk(
@@ -243,16 +238,13 @@ export const GetBindDepartment = createAsyncThunk(
     };
     dispatch(setLoading(true));
     try {
-      const data = await makeApiRequest(
-        `${apiUrls.BindDepartment}`,
-        options
-      );
+      const data = await makeApiRequest(`${apiUrls.BindDepartment}`, options);
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 export const BindSeeMoreList = createAsyncThunk(
   "BindSeeMoreList",
@@ -272,7 +264,7 @@ export const BindSeeMoreList = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const GetPanelDocument = createAsyncThunk(
@@ -285,7 +277,7 @@ export const GetPanelDocument = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.GetPanelDocument}?PanelID=${PanelID}`,
-        options
+        options,
       );
 
       dispatch(setLoading(false));
@@ -293,7 +285,7 @@ export const GetPanelDocument = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 // export const GetPatientUploadDocument = createAsyncThunk(
@@ -316,8 +308,6 @@ export const GetPanelDocument = createAsyncThunk(
 //   }
 // );
 
-
-
 export const GetPatientUploadDocument = createAsyncThunk(
   "getPatientUploadDocument",
   async ({ patientID }, { dispatch }) => {
@@ -328,19 +318,17 @@ export const GetPatientUploadDocument = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.GetPatientUploadDocument}?panelId=${patientID}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
-
 // GetPatientDocument PID
-
 
 export const GetPatientDocument = async (PID) => {
   // store.dispatch(setLoading(true));
@@ -349,7 +337,7 @@ export const GetPatientDocument = async (PID) => {
       `${apiUrls.GetPatientDocument}?PID=${PID}`,
       {
         method: "get",
-      }
+      },
     );
     // store.dispatch(setLoading(false));
     return data;
@@ -358,8 +346,6 @@ export const GetPatientDocument = async (PID) => {
     throw error;
   }
 };
-
-
 
 export const ReferenceTypeInsert = createAsyncThunk(
   "REFERENCETYPE",
@@ -382,7 +368,7 @@ export const ReferenceTypeInsert = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 export const GetAdvanceReason = createAsyncThunk(
@@ -399,7 +385,7 @@ export const GetAdvanceReason = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const CreateAdvanceReason = createAsyncThunk(
@@ -424,7 +410,7 @@ export const CreateAdvanceReason = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 export const GetBindResourceList = createAsyncThunk(
@@ -442,7 +428,7 @@ export const GetBindResourceList = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 export const GetAllDoctor = createAsyncThunk(
@@ -455,7 +441,7 @@ export const GetAllDoctor = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.BindDoctorDept}?Department=ALL&CentreID=1`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return {
@@ -465,7 +451,7 @@ export const GetAllDoctor = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 export const GetBindAllDoctorConfirmation = createAsyncThunk(
@@ -478,7 +464,7 @@ export const GetBindAllDoctorConfirmation = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.BindDoctorDept}?Department=${Department}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
@@ -489,7 +475,7 @@ export const GetBindAllDoctorConfirmation = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 export const GetBindSubCatgeory = createAsyncThunk(
@@ -502,7 +488,7 @@ export const GetBindSubCatgeory = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.getBindSubCategory}?Type=${Type}&CategoryID=${CategoryID}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
@@ -513,7 +499,7 @@ export const GetBindSubCatgeory = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 // Token Management
@@ -532,7 +518,7 @@ export const getBindCentre = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 export const getBindSpeciality = createAsyncThunk(
   "getBindSpeciality",
@@ -549,7 +535,7 @@ export const getBindSpeciality = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 export const getBindPanelList = createAsyncThunk(
   "getBindPanelList",
@@ -561,7 +547,7 @@ export const getBindPanelList = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.GetPanelName}?PanelGroup=${PanelGroup}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
@@ -569,7 +555,7 @@ export const getBindPanelList = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 export const getLoadOPDDiagnosisItems = createAsyncThunk(
   "getLoadOPDDiagnosisItems",
@@ -581,7 +567,7 @@ export const getLoadOPDDiagnosisItems = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.LoadOPDDiagnosisItems}?Type=3&CategoryID=0&SubCategoryID=0`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
@@ -589,7 +575,7 @@ export const getLoadOPDDiagnosisItems = createAsyncThunk(
       dispatch(setLoading(false));
       notify(e?.message, "error");
     }
-  }
+  },
 );
 
 export const GetAuthorization = createAsyncThunk(
@@ -603,21 +589,17 @@ export const GetAuthorization = createAsyncThunk(
     try {
       const data = await makeApiRequest(
         `${apiUrls.GetAuthorization}?Type=${Type}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
-
-
-
-
-// ignore Above codes- 
+// ignore Above codes-
 
 // export const getEmployeeWise = createAsyncThunk(
 //   "centre",
@@ -642,7 +624,7 @@ export const GetAuthorization = createAsyncThunk(
 
 //       // Check if we have branches
 //       if(data?.data && data.data.length > 0) {
-//           // If defaultCentre exists in storage and is valid in this list, keep it. 
+//           // If defaultCentre exists in storage and is valid in this list, keep it.
 //           // Otherwise, set to the first branch [0].
 //           const currentCentreValid = data.data.find(b => b.id == prevData?.defaultCentre);
 //           const newDefaultCentre = currentCentreValid ? prevData.defaultCentre : data.data[0].id;
@@ -666,16 +648,16 @@ export const getEmployeeWise = createAsyncThunk(
     const options = {
       method: "POST",
       data: {
-        "employeeId": employeeId,
-        "organisationID": OrganizationId,
-        "isAll": 0
-      }
+        employeeId: employeeId,
+        organisationID: OrganizationId,
+        isAll: 0,
+      },
     };
     dispatch(setLoading(true));
     try {
       const data = await makeApiRequest(
         `${apiUrls?.BranchMastersGetBranch}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
 
@@ -683,10 +665,16 @@ export const getEmployeeWise = createAsyncThunk(
       const prevData = useLocalStorage("userData", "get");
       if (data?.data && data.data.length > 0) {
         // If current defaultCentre is invalid, set to 1st one
-        const isCurrentValid = data.data.find(b => b.id == prevData?.defaultCentre);
+        const isCurrentValid = data.data.find(
+          (b) => b.id == prevData?.defaultCentre,
+        );
 
         if (!isCurrentValid) {
-          const newData = { ...prevData, defaultCentre: data.data[0].id, defaultCenterName: data.data[0].name };
+          const newData = {
+            ...prevData,
+            defaultCentre: data.data[0].id,
+            defaultCenterName: data.data[0].name,
+          };
           useLocalStorage("userData", "set", newData);
         }
       }
@@ -695,7 +683,7 @@ export const getEmployeeWise = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
@@ -704,25 +692,26 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
     const options = {
       method: "POST",
       data: {
-        "employeeId": empID,
-        "moduleId": "",
-        "isActive": 1
-      }
+        employeeId: empID,
+        moduleId: "",
+        isActive: 1,
+      },
     };
     dispatch(setLoading(true));
     try {
-      const data = await makeApiRequest(
-        `${apiUrls.getModules}`,
-        options
-      );
+      const data = await makeApiRequest(`${apiUrls.getModules}`, options);
 
       // FIX: Handle Role Default Logic
       const prevData = useLocalStorage("userData", "get");
 
       if (data?.data && data.data.length > 0) {
         // If defaultRole exists and is valid, keep it, else take first [0]
-        const currentRoleValid = data.data.find(r => r.moduleId == prevData?.defaultRole);
-        const newDefaultRole = currentRoleValid ? prevData.defaultRole : data.data[0].moduleId;
+        const currentRoleValid = data.data.find(
+          (r) => r.moduleId == prevData?.defaultRole,
+        );
+        const newDefaultRole = currentRoleValid
+          ? prevData.defaultRole
+          : data.data[0].moduleId;
 
         const newData = { ...prevData, defaultRole: newDefaultRole };
         useLocalStorage("userData", "set", newData);
@@ -733,7 +722,52 @@ export const GetRoleListByEmployeeIDAndCentreID = createAsyncThunk(
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
+);
+
+export const GetMapAcadmicYearWithEmployee = createAsyncThunk(
+  "GetMapAcadmicYear",
+  async ({ employeeId, OrganizationId, branchId }, { dispatch }) => {
+    const options = {
+      method: "POST",
+      data: {
+        employeeId: employeeId,
+        academicYearId: "",
+        orgId: OrganizationId,
+        branchId: branchId,
+        pageNumber: 1,
+        pageSize: 20,
+      },
+    };
+    dispatch(setLoading(true));
+    try {
+      const data = await makeApiRequest(
+        `${apiUrls.GetMapAcadmicYearWithEmployee}`,
+        options,
+      );
+
+      // FIX: Handle Role Default Logic
+      const prevData = useLocalStorage("userData", "get");
+
+      if (data?.data && data.data.length > 0) {
+        
+        const current = data.data.find(
+          (r) => r.academicYearId == prevData?.academicYearId,
+        );
+        const newDefault = current
+          ? prevData.academicYearId
+          : data.data[0].academicYearId;
+
+        const newData = { ...prevData, academicYearId: newDefault };
+        useLocalStorage("userData", "set", newData);
+      }
+
+      dispatch(setLoading(false));
+      return data;
+    } catch {
+      dispatch(setLoading(false));
+    }
+  },
 );
 
 export const GetBindMenu = createAsyncThunk(
@@ -743,23 +777,22 @@ export const GetBindMenu = createAsyncThunk(
     const options = {
       method: "POST",
       data: {
-        "employeeId": employeeId,
-        "roleId": roleId,
-        "branchId": branchId,
-        "organizationId": organizationId
-      }
+        employeeId: employeeId,
+        roleId: roleId,
+        branchId: branchId,
+        organizationId: organizationId,
+      },
     };
     try {
       dispatch(setLoading(true));
       const data = await makeApiRequest(
         `${apiUrls.getMenuWithSubmenus}`,
-        options
+        options,
       );
       dispatch(setLoading(false));
       return data;
     } catch {
       dispatch(setLoading(false));
     }
-  }
+  },
 );
-

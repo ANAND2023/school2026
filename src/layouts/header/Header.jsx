@@ -501,7 +501,7 @@ const Header = React.memo(() => {
   const navbarVariant = useSelector((state) => state.ui.navbarVariant);
   const headerBorder = useSelector((state) => state.ui.headerBorder);
   const screenSize = useSelector((state) => state.ui.screenSize);
-  const { GetEmployeeWiseCenter, GetMenuList, GetRoleList } = useSelector(
+  const { GetEmployeeWiseCenter, GetMenuList, GetRoleList , GetMapAcadmicYear } = useSelector(
     (state) => state?.CommonSlice
   );
   const [location, setLocation] = useState({
@@ -561,6 +561,7 @@ const Header = React.memo(() => {
   const currentTheme = THEMES[theme];
   const activeCentre = GetEmployeeWiseCenter?.find(c => c.id == localData?.defaultCentre) || null;
   const activeRole = GetRoleList?.find(r => r.moduleId == localData?.defaultRole) || null;
+  const activeAcademicYear = GetMapAcadmicYear?.find(r => r.academicYearId == localData?.academicYearId) || null;
 
   useEffect(() => {
     // Load saved theme from localStorage
@@ -700,6 +701,25 @@ const Header = React.memo(() => {
       );
 
       // 4. Navigate
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
+  };
+
+  const handleAcademicYear = async (e) => {
+
+    const newRoleId = e.target.value;
+    try {
+      // 1. Update Claims
+      // const apiResp = await handleUpdateClaims(newRoleId, localData?.defaultCentre);
+
+      // 2. Update LocalStorage
+      useLocalStorage("userData", "set", {
+        ...localData,
+        academicYearId: newRoleId,
+      });
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Error occurred:", error);
@@ -913,6 +933,34 @@ const Header = React.memo(() => {
           >
             {GetRoleList?.map((ele) => (
               <option key={ele.moduleId} value={ele.moduleId}>{ele.moduleName}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="md-selector-wrapper d-none-mobile" style={{ position: 'relative' }}>
+          <button
+            className="md-selector-btn"
+            style={{ borderColor: currentTheme.primary + '30' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: currentTheme.primary,
+                display: 'inline-block'
+              }}></span>
+              <span>{activeAcademicYear?.yearName || "Select Session"}</span>
+            </div>
+            <ChevronDown size={14} style={{ color: '#94a3b8' }} />
+          </button>
+          <select
+            className="md-select-overlay"
+            value={localData?.academicYearId || ""}
+            onChange={(e) => handleAcademicYear(e)}
+          >
+            {GetMapAcadmicYear?.map((ele) => (
+              <option key={ele.academicYearId} value={ele.academicYearId}>{ele.yearName}</option>
             ))}
           </select>
         </div>
