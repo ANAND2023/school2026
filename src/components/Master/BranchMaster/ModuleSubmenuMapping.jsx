@@ -189,11 +189,11 @@ const ModuleSubmenuMapping = () => {
 
   return (
     <>
-      <div className="card p-2">
+      <div className="card">
         <Heading title="Module SubMenu Mapping" isBreadcrumb={false} />
 
         {/* ================= FORM ================= */}
-        <div className="row ">
+        <div className="row p-2 ">
           <ReactSelect
             name="branch"
             placeholderName="Select Branch"

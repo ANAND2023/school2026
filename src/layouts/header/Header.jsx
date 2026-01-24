@@ -474,7 +474,7 @@ import SpeechToTextWithSpeechOutput from "../../components/SpeechToTextWithSpeec
 import { GetLangaugeAPI } from "../../store/reducers/dashboardSlice/CommonFunction";
 import { Bell, Building2, ChevronDown, LogOut, Menu, Moon, Search, Sun, Palette } from "lucide-react";
 import { notify } from "../../utils/utils";
-import { CreateTeacherAttendance } from "../../networkServices/Admin";
+import { CreateTeacherAttendance, UpdateTeacherAttendance } from "../../networkServices/Admin";
 import { GetAttendance } from "../../networkServices/School/Attendance";
 
 // Theme configurations
@@ -753,6 +753,55 @@ const Header = React.memo(() => {
       notify("Something went wrong", "error");
     }
   };
+  const handleLogOut = async () => {
+    //  const now = new Date().toLocaleString("en-IN", {
+    //   timeZone: "Asia/Kolkata"
+    // });
+    const now = new Date().toISOString(); // ISO format
+
+    // const now = new Date().toISOString();
+
+    const payload =
+    //  {
+    //   teacherId: localData?.UserId,
+    //   teacherName: localData?.sub,
+    //   attendanceDate: now,
+    //   status: 1, // 1 = Present / Login
+    //   loginDateTime: now,
+    //   loginLatitude: location?.latitude,
+    //   loginLongitude: location?.longitude,
+    //   isSelfMarked: true,
+    //   deviceInfo: navigator.userAgent,
+    //   remarks: "Self Login",
+    //   orgId: localData?.OrganizationId,
+    //   branchId: localData?.defaultCentre,
+    // };
+
+    {
+  "teacherId":localData?.UserId,
+  "status": 2,
+  "logoutDateTime": now,
+  "logoutLatitude":location?.latitude,
+  "logoutLongitude": location?.longitude,
+  "remarks": "",
+   orgId: localData?.OrganizationId,
+      branchId: localData?.defaultCentre,
+}
+
+    try {
+      const response = await UpdateTeacherAttendance(payload);
+
+      if (response?.success) {
+         fetchAttendance(new Date().getMonth() + 1, new Date().getFullYear());
+        notify(response?.message || "Login Successful", "success");
+      } else {
+        notify(response?.message || response?.data?.message, "error");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      notify("Something went wrong", "error");
+    }
+  };
 
   const fetchAttendance = async (month, year) => {
     try {
@@ -886,7 +935,7 @@ const Header = React.memo(() => {
           isLoggedIn ? (
             <button
               className="md-icon-btn"
-              // onClick={handleLogout}
+              onClick={handleLogOut}
               title="Logout"
               style={{
                 color: isDarkMode ? currentTheme.primary : "#2cd46d",

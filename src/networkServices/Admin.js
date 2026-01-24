@@ -241,6 +241,24 @@ export const CreateTeacherAttendance = async (params) => {
     console.error("Error Found", error);
   }
 };
+export const UpdateTeacherAttendance = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.UpdateTeacherAttendance}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
 export const RolesCreateRole = async (params) => {
   store.dispatch(setLoading(true));
   try {

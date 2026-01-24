@@ -157,6 +157,9 @@ const AttendanceCalendar = ({
                 <div className="data-row">
                   <span>In:</span> {formatTime(record.loginDateTime)}
                 </div>
+                {
+                  console.log("record.logoutDateTime",record.logoutDateTime)
+                }
                 <div className="data-row">
                   <span>Out:</span> {formatTime(record.logoutDateTime)}
                 </div>
