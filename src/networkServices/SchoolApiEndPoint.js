@@ -60,6 +60,8 @@ export const apiUrls = {
   GetAllGradingSystems: `${baseUrlMaster}AcademicMaster/GetAllGradingSystems`,
   CreateSyllabus: `${baseUrlMaster}AcademicMaster/CreateSyllabus`,
   GetAllSyllabus: `${baseUrlMaster}AcademicMaster/GetAllSyllabus`,
+  MapAcadmicYearWithEmployee: `${baseUrlMaster}AcademicMaster/MapAcadmicYearWithEmployee`,
+  GetMapAcadmicYearWithEmployee: `${baseUrlMaster}AcademicMaster/GetMapAcadmicYearWithEmployee`,
 
   // class end ....
 

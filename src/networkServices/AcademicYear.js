@@ -387,6 +387,7 @@ export const ModuleEmployeeBranchMapping = async (params) => {
     console.error("Error Found", error);
   }
 };
+
 export const Createorganisation = async (params) => {
   store.dispatch(setLoading(true));
   try {
@@ -405,6 +406,7 @@ export const Createorganisation = async (params) => {
     console.error("Error Found", error);
   }
 };
+
 export const GetAllOrganisation = async (params) => {
   store.dispatch(setLoading(true));
   try {
@@ -414,6 +416,27 @@ export const GetAllOrganisation = async (params) => {
     };
     const data = await makeApiRequest(
       `${apiUrls.GetAllOrganisation}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};
+
+
+
+export const MapAcadmicYearWithEmployee = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "POST",
+      data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.MapAcadmicYearWithEmployee}`,
       options
     );
     store.dispatch(setLoading(false));

@@ -24,6 +24,7 @@ import {
   getBindPanelList,
   getLoadOPDDiagnosisItems,
   GetAuthorization,
+  GetMapAcadmicYearWithEmployee,
 } from "./CommonExportFunction";
 
 const initialState = {
@@ -33,6 +34,7 @@ const initialState = {
   GetEmployeeWiseCenter: [],
   GetMenuList: [],
   GetRoleList: [],
+  GetMapAcadmicYear: [],
   GetBindReferDoctorList: [],
   GetReferTypeList: [],
   GetDepartmentList: [],
@@ -197,6 +199,35 @@ export const CommonSlice = createSlice({
           notify(error.message, "error");
         }
       )
+      // get Academic year
+
+      .addCase(GetMapAcadmicYearWithEmployee.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+        state.success = false;
+      })
+      .addCase(
+        GetMapAcadmicYearWithEmployee.fulfilled,
+        (state, { payload }) => {
+          state.GetMapAcadmicYear = payload?.data;
+          state.loading = false;
+          state.success = true;
+          state.error = "";
+          state.message = payload?.Message;
+        }
+      )
+      .addCase(
+        GetMapAcadmicYearWithEmployee.rejected,
+        (state, { error }) => {
+          console.log(error.message);
+          state.loading = false;
+          state.error = error.message;
+          state.success = false;
+          state.message = error.message;
+          notify(error.message, "error");
+        }
+      )
+
 
       // CentreWisePanelControlCache
       .addCase(CentreWisePanelControlCache.pending, (state) => {
