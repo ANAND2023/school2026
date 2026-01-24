@@ -565,7 +565,7 @@ const StudentRegistration = () => {
         previousAcademics: [
           {
             rollNo: values?.previousAcademics[0]?.rollNo,
-            class: values?.class_Name?.value,
+            class: values?.class_Name?.label,
             percentage: values?.previousAcademics[0]?.percentage,
             yearOfPassing: values?.previousAcademics[0]?.yearOfPassing,
             board: values?.previousAcademics[0]?.board,
@@ -633,7 +633,13 @@ const StudentRegistration = () => {
       extrabutton: <></>, footer: <></>,
     });
   };
+    const handleCapitalLatter = (e) => {
 
+        let event = { ...e }
+        event.target.value = event.target.value.toUpperCase()
+        handleChange(e)
+
+    }
   return (
     <>
       {handleModelData?.isOpen && (
@@ -669,8 +675,8 @@ const StudentRegistration = () => {
               <div className="col-lg-10 col-md-9">
                 <div className="row g-3">
                   <ReactSelect placeholderName="title"  respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="title" dynamicOptions={[{ label: "Miss", value: "MISS" }, { label: "Mr", value: "MR" }, { label: "Ms", value: "MS" }]} handleChange={handleSelect} value={values.title?.value} />
-                  <Input className="form-control required-fields" name="firstName" lable="First Name" value={values.firstName} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
-                  <Input className="form-control required-fields" name="lastName" lable="Last Name" value={values.lastName} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
+                  <Input className="form-control required-fields" name="firstName" lable="First Name" value={values.firstName} onChange={handleCapitalLatter} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
+                  <Input className="form-control required-fields" name="lastName" lable="Last Name" value={values.lastName} onChange={handleCapitalLatter} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <DatePicker name="dateOfBirth" lable="Date of Birth" value={values.dateOfBirth} handleChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" className="required-fields" />
                   <ReactSelect placeholderName="Gender" respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="gender" dynamicOptions={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }, { label: "Other", value: "Other" }]} handleChange={handleSelect} value={values.gender?.value} requiredClassName="required-fields" />
                   <Input className="form-control" name="phone" lable="Mobile Number" value={values.phone} onChange={handleChange} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
@@ -773,8 +779,8 @@ const StudentRegistration = () => {
                 <div className="row align-items-start">
                   <div className="col-lg-10 col-md-9">
                     <div className="row g-3">
-                        <Input className="form-control required-fields" lable="Name" value={parent.name} onChange={(e) => handleArrayChange("parents", parentIndex, "name", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                         <ReactSelect respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="parentType" handleChange={(name, option) => handleFieldChange("parents", parentIndex, "parentType", option)} value={values.parents[parentIndex].parentType} dynamicOptions={[{ label: "Father", value: "1" }, { label: "Mother", value: "2" }, { label: "Guardian", value: "3" }]} requiredClassName=" required-fields" />
+                        <Input className="form-control required-fields" lable="Name" value={parent.name} onChange={(e) => handleArrayChange("parents", parentIndex, "name", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                         <Input className="form-control required-fields" lable="Mobile" value={parent.mobile} onChange={(e) => handleArrayChange("parents", parentIndex, "mobile", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                         <Input className="form-control" lable="Alt Mobile" value={parent.altMobile} onChange={(e) => handleArrayChange("parents", parentIndex, "altMobile", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                         <Input className="form-control" lable="Email" value={parent.email} onChange={(e) => handleArrayChange("parents", parentIndex, "email", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
@@ -789,8 +795,9 @@ const StudentRegistration = () => {
                         {parent.documents.map((doc, docIndex) => (
                             <div key={docIndex} className="border-start border-3 border-primary ps-3 mb-2">
                             <div className="row g-2 mt-2">
-                                <Input className="form-control required-fields" lable="Document Number" value={doc.documentNumber} onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentNumber", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                                 <ReactSelect respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="documentType" handleChange={(name, option) => handleParentDocChange(parentIndex, docIndex, "documentType", option.value)} value={values.parents[parentIndex].documents[docIndex].documentType ? { label: values.parents[parentIndex].documents[docIndex].documentType === "1" ? "PAN" : "Aadhaar", value: values.parents[parentIndex].documents[docIndex].documentType } : null} dynamicOptions={[{ label: "PAN", value: "1" }, { label: "Aadhaar", value: "2" }]} />
+                                
+                                <Input className="form-control required-fields" lable="Document Number" value={doc.documentNumber} onChange={(e) => handleParentDocChange(parentIndex, docIndex, "documentNumber", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                                 
                                 {/* REPLACED TEXT INPUT WITH UPLOADER */}
                                 <DocumentUploader
@@ -830,8 +837,8 @@ const StudentRegistration = () => {
                   {values.studentDocuments.length > 1 && (<i className="bi bi-trash me-1 text-danger" onClick={() => removeStudentDocument(index)} style={{ cursor: "pointer" }}></i>)}
                 </div>
                 <div className="row g-3">
-                  <Input className="form-control required-fields" lable="Document No." value={doc.documentNumber} onChange={(e) => handleArrayChange("studentDocuments", index, "documentNumber", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <ReactSelect placeholderName={"Document Type"} respclass="col-xl-3 col-md-4 col-sm-4 col-12" name="documentType" handleChange={(name, option) => handleArrayChange("studentDocuments", index, "documentType", option.value)} value={values.studentDocuments[index].documentType ? { label: values.studentDocuments[index].documentType === "1" ? "TC" : "Birth Cert", value: values.studentDocuments[index].documentType } : null} dynamicOptions={[{ label: "TC", value: "1" }, { label: "Birth Cert", value: "2" }]} />
+                  <Input className="form-control required-fields" lable="Document No." value={doc.documentNumber} onChange={(e) => handleArrayChange("studentDocuments", index, "documentNumber", e.target.value)} respclass="col-xl-3 col-md-4 col-sm-4 col-12" />
                   <Input className="form-control" lable="Session ID" value={doc.sessionId} onChange={(e) => handleArrayChange("studentDocuments", index, "sessionId", e.target.value)} respclass="col-md-2" />
                   <Input className="form-control" lable="Year ID" value={doc.yearId} onChange={(e) => handleArrayChange("studentDocuments", index, "yearId", e.target.value)} respclass="col-md-2" />
                   

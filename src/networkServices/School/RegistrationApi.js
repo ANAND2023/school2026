@@ -175,3 +175,22 @@ export const getadmissionlist = async (params) => {
     console.error("Error Found", error);
   }
 };
+
+export const Imagesgetphoto = async (params) => {
+  store.dispatch(setLoading(true));
+  try {
+    const options = {
+      method: "GET",
+      // data: params,
+    };
+    const data = await makeApiRequest(
+      `${apiUrls.Imagesgetphoto}/${params}`,
+      options
+    );
+    store.dispatch(setLoading(false));
+    return data;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error("Error Found", error);
+  }
+};

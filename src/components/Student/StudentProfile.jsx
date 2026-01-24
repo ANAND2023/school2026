@@ -97,10 +97,7 @@ export default function StudentProfile({ modalData, setModalData }) {
         `}
       </style>
 
-      <div className="container py-4" 
-      style={{ 
-        // backgroundColor: "#f4f6f9", 
-        minHeight: "100vh" }}>
+      <div className="container py-4" style={{ backgroundColor: "#f4f6f9", minHeight: "100vh" }}>
         
         {/* Top Navigation / Close Button Area */}
         {/* <div className="d-flex justify-content-between align-items-center mb-4">

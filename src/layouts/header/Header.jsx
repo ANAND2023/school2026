@@ -743,6 +743,7 @@ const Header = React.memo(() => {
       const response = await CreateTeacherAttendance(payload);
 
       if (response?.success) {
+         fetchAttendance(new Date().getMonth() + 1, new Date().getFullYear());
         notify(response?.message || "Login Successful", "success");
       } else {
         notify(response?.message || response?.data?.message, "error");

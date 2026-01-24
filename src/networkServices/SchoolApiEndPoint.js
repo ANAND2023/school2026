@@ -38,6 +38,7 @@ export const apiUrls = {
   //file storage
   Imagesupload: `${fileStorage}Images/upload`,
   documentsupload : `${fileStorage}documents/upload`,
+  Imagesgetphoto : `${fileStorage}Images/getphoto`,
 
   //
   // academicmaster End .....
