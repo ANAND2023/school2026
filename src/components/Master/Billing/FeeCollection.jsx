@@ -362,6 +362,10 @@ const FeeCollection = () => {
         orgId: localData?.OrganizationId,
         branchId: localData?.defaultCentre,
         billDate: moment().format(),
+        grossAmount: summary.grossAmount.toFixed(2),
+        discountAmount: (summary.grossAmount.toFixed(2) - summary.netAmount.toFixed(2)),
+        amount: summary.netAmount.toFixed(2),
+        billingRemark: summary.remarks || "",
         items: filteredItems.map((i) => ({
           itemId: i.itemId,
           itemName: i.itemName,

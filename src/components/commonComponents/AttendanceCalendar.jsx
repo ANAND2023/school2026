@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { Dialog } from "primereact/dialog"; // Assuming PrimeReact is used based on your previous code
-import { Calendar } from "primereact/calendar";
-import ReactSelect from "../../components/formComponent/ReactSelect"; // Your custom select
-import TextAreaInput from "../../components/formComponent/TextAreaInput"; // Your custom textarea
+import { Dialog } from "primereact/dialog";
+import ReactSelect from "../../components/formComponent/ReactSelect";
+import TextAreaInput from "../../components/formComponent/TextAreaInput";
 import "../../../src/AttendanceCalendar.css";
 import DatePicker from "../formComponent/DatePicker";
 
@@ -13,9 +12,13 @@ const AttendanceCalendar = ({
   onApplyLeave,
 }) => {
   const [mappedData, setMappedData] = useState({});
-  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  
+  // FIXED: Initialize state from LocalStorage so it survives refresh
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    const savedDate = localStorage.getItem("attendance_selected_month");
+    return savedDate ? new Date(savedDate) : new Date();
+  });
 
-  // Modal State
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [leaveForm, setLeaveForm] = useState({
@@ -38,42 +41,69 @@ const AttendanceCalendar = ({
     { label: "Working Day", color: "#87CEEB" },
   ];
 
-  // Process API Data
   useEffect(() => {
     const dataMap = {};
     if (attendanceData && Array.isArray(attendanceData)) {
       attendanceData.forEach((record) => {
         const dateKey = moment(record.attendanceDate).format("YYYY-MM-DD");
-        dataMap[dateKey] = record;
+        
+        if (dataMap[dateKey]) {
+          const existing = dataMap[dateKey];
+          
+          const oldLogin = moment(existing.loginDateTime);
+          const newLogin = moment(record.loginDateTime);
+          const earliestLogin = newLogin.isValid() && newLogin.isBefore(oldLogin) 
+            ? record.loginDateTime 
+            : existing.loginDateTime;
+
+          let latestLogout = existing.logoutDateTime;
+          if (record.logoutDateTime) {
+            const newLogout = moment(record.logoutDateTime);
+            if (!latestLogout || (newLogout.isValid() && newLogout.isAfter(moment(latestLogout)))) {
+              latestLogout = record.logoutDateTime;
+            }
+          }
+
+          dataMap[dateKey] = {
+            ...existing,
+            ...record,
+            loginDateTime: earliestLogin,
+            logoutDateTime: latestLogout
+          };
+        } else {
+          dataMap[dateKey] = record;
+        }
       });
     }
     setMappedData(dataMap);
   }, [attendanceData]);
 
-  // Handle Month Change
+  // FIXED: Trigger API on mount and when month changes
+  useEffect(() => {
+    if (onMonthChange) {
+      onMonthChange(
+        moment(selectedMonth).format("MM"),
+        moment(selectedMonth).format("YYYY")
+      );
+    }
+  }, [selectedMonth]); 
+
   const handleMonthChange = (e) => {
-    debugger
-    setSelectedMonth(e.value);
-    // if (onMonthChange) {
-    //   // Pass formatted start/end dates or month/year to parent
-    //   const month = moment(e.value).format("MM");
-    //   const year = moment(e.value).format("YYYY");
-    //   onMonthChange(month, year);
-    // }
+    const newDate = e.value;
+    setSelectedMonth(newDate);
+    // FIXED: Save to local storage
+    localStorage.setItem("attendance_selected_month", newDate.toISOString());
   };
 
-  // Handle Cell Click (Open Modal)
   const handleDateClick = (dateMoment) => {
-    // Logic: Only allow applying for leave on future dates or today
-    // Or based on specific business rules
     setSelectedDate(dateMoment);
-    setLeaveForm({ leaveType: null, reason: "" }); // Reset form
+    setLeaveForm({ leaveType: null, reason: "" });
     setShowLeaveModal(true);
   };
 
   const submitLeaveRequest = () => {
     if (!leaveForm.leaveType || !leaveForm.reason) {
-      alert("Please fill all details"); // Replace with your notify
+      alert("Please fill all details");
       return;
     }
 
@@ -89,43 +119,60 @@ const AttendanceCalendar = ({
     setShowLeaveModal(false);
   };
 
-  // Render Helpers
   const formatTime = (isoString) =>
-    isoString ? moment(isoString).format("hh:mm A") : "--:--";
+    isoString && moment(isoString).isValid()
+      ? moment(isoString).format("hh:mm A")
+      : "--:--";
 
   const calculateDuration = (start, end) => {
     if (!start || !end) return "--:--";
-    const dur = moment.duration(moment(end).diff(moment(start)));
-    return `${Math.floor(dur.asHours())}:${dur.minutes() < 10 ? "0" : ""}${dur.minutes()}`;
+    const startTime = moment(start);
+    const endTime = moment(end);
+
+    if (!startTime.isValid() || !endTime.isValid()) return "--:--";
+
+    const dur = moment.duration(endTime.diff(startTime));
+    const hours = Math.floor(dur.asHours());
+    const minutes = dur.minutes();
+
+    if (hours < 0) return "--:--";
+
+    return `${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
   };
 
   const getCellColor = (record, dayMoment) => {
-    if (dayMoment.format("MM-DD") === "01-26") return "#FFD700"; // Republic Day hardcoded example
+    if (dayMoment.format("MM-DD") === "01-26") return "#FFD700";
     if (!record) return "#FFFFFF";
-    if (record.status === 1) return "#87CEEB"; // Working
-    return "#FFFFFF";
+    
+    // Adjust status codes based on your API logic
+    switch (record.status) {
+      case 1: 
+      case 2:
+        return "#87CEEB"; 
+      case 3: 
+        return "#90EE90"; 
+      default:
+        return "#87CEEB"; 
+    }
   };
 
   const renderCalendar = () => {
     const startOfMonth = moment(selectedMonth).startOf("month");
     const endOfMonth = moment(selectedMonth).endOf("month");
-    const startDay = startOfMonth.day(); // 0-6
+    const startDay = startOfMonth.day();
     const totalDays = endOfMonth.date();
     const cells = [];
 
-    // Empty slots
     for (let i = 0; i < startDay; i++) {
       cells.push(<div key={`empty-${i}`} className="cal-cell empty"></div>);
     }
 
-    // Date slots
     for (let d = 1; d <= totalDays; d++) {
       const currDate = moment(selectedMonth).date(d);
       const dateKey = currDate.format("YYYY-MM-DD");
       const record = mappedData[dateKey];
       const bgColor = getCellColor(record, currDate);
 
-      // Holiday text example
       let holidayText =
         currDate.format("MM-DD") === "01-26" ? "Republic Day" : "";
 
@@ -133,12 +180,10 @@ const AttendanceCalendar = ({
         <div
           key={dateKey}
           className="cal-cell clickable"
-          // onClick={() => handleDateChange(currDate)} // For selection visual
-          onDoubleClick={() => handleDateClick(currDate)} // Double click to apply leave? or single click
+          onDoubleClick={() => handleDateClick(currDate)}
         >
           <div className="cell-header">
             <span className="date-number">{currDate.format("MMM D")}</span>
-            {/* Optional: Add Apply Leave Icon */}
             <i
               className="fa fa-plus-circle text-primary apply-btn"
               title="Apply Leave"
@@ -157,9 +202,6 @@ const AttendanceCalendar = ({
                 <div className="data-row">
                   <span>In:</span> {formatTime(record.loginDateTime)}
                 </div>
-                {
-                  console.log("record.logoutDateTime",record.logoutDateTime)
-                }
                 <div className="data-row">
                   <span>Out:</span> {formatTime(record.logoutDateTime)}
                 </div>
@@ -181,17 +223,10 @@ const AttendanceCalendar = ({
     return cells;
   };
 
-  useEffect(()=>{
-    onMonthChange && onMonthChange(moment(selectedMonth).format("MM"), moment(selectedMonth).format("YYYY"));
-  },[selectedMonth])
-
   return (
     <div className="attendance-wrapper">
-      {/* 1. Toolbar Section */}
-      {/* <div className="calendar-toolbar card p-2 mb-2 border-0 shadow-sm d-flex justify-content-between align-items-center"> */}
       <div className="p-2 mb-2 border-0 shadow-sm d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center gap-2">
-          
           <DatePicker
             lable={"Select Month"}
             value={selectedMonth}
@@ -203,7 +238,6 @@ const AttendanceCalendar = ({
           />
         </div>
 
-        {/* Legend - Horizontal for compactness */}
         <div className="legend-strip d-flex gap-3 align-items-center">
           {legends.map((l, i) => (
             <div
@@ -221,7 +255,6 @@ const AttendanceCalendar = ({
         </div>
       </div>
 
-      {/* 2. Calendar Grid */}
       <div className="calendar-container border shadow-sm">
         <div className="week-header">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -233,7 +266,6 @@ const AttendanceCalendar = ({
         <div className="month-grid">{renderCalendar()}</div>
       </div>
 
-      {/* 3. Leave Request Modal */}
       <Dialog
         header="Leave Request Details"
         visible={showLeaveModal}
@@ -242,7 +274,6 @@ const AttendanceCalendar = ({
         className="leave-modal"
       >
         <div className="row">
-          {/* Left Side Form */}
           <div className="col-md-7 border-end">
             <div className="mb-3">
               <label className="fw-bold mb-1">
@@ -275,7 +306,6 @@ const AttendanceCalendar = ({
             </div>
           </div>
 
-          {/* Right Side Info */}
           <div className="col-md-5 ps-4">
             <div className="info-block">
               <h6 className="text-primary fw-bold">Balance:</h6>

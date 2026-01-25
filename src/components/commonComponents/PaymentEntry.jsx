@@ -33,7 +33,7 @@ const PaymentEntry = ({
   // 🟢 Mode select hote hi auto amount + row bind
   const handleSelectChange = (name, option) => {
     debugger
-    if(remainingAmount===0) return notify("No Remaining Amount", "error")
+    if (remainingAmount === 0) return notify("No Remaining Amount", "error")
     if (!option) return;
 
     const newPayment = {
@@ -85,10 +85,11 @@ const PaymentEntry = ({
           placeholderName="Select Payment Mode"
           id="mode"
           name="mode"
-          respclass="col-md-4"
+          respclass="col-xl-3 col-md-4"
           dynamicOptions={paymentModes?.map(pm => ({
             label: pm.modeName,
             value: pm.id,
+            isOnline: pm.isOnline
           }))}
           value={currentPayment.mode}
           handleChange={handleSelectChange}
@@ -101,16 +102,57 @@ const PaymentEntry = ({
           <thead>
             <tr>
               <th>Mode</th>
+              {/* <th width="320">Info</th> */}
               <th width="120">Amount</th>
               <th width="60">Action</th>
             </tr>
           </thead>
           <tbody>
-            {addedPayments.map(pay => (
-              <tr key={pay.id}>
-                <td>{pay.mode?.label}</td>
+            {console.log(addedPayments,"addedPayments")}
+            {addedPayments.map((pay,index) => (
+              <tr key={pay.id}
+              
+              >
+                <td className="d-flex px-2 justify-content-between align-items-center">{pay.mode?.label}
+                  {pay?.mode?.isOnline && <>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="bankName"
+                    name="bankName"
+                    lable="Bank Name"
+                    value={pay.bankName}
+                    onChange={(e)=>{
+                      const newPayment = [...addedPayments];
+                      newPayment[index].bankName = e.target.value;
+                      setAddedPayments(newPayment);
+                      
+                    }}
+                    respclass="col-xl-4 col-lg-4 col-md-2"
+                  />
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="refNo"
+                    name="refNo"
+                    lable="Ref No."
+                    value={pay.refNo}
+                     onChange={(e)=>{
+                      const newPayment = [...addedPayments];
+                      newPayment[index].refNo = e.target.value;
+                      setAddedPayments(newPayment);
+                      
+                    }}
+                    respclass="col-xl-4 col-lg-4 col-md-2"
+                  />
+                  </>
+                  }
+                </td>
 
                 {/* Editable Amount */}
+                <td className="d-flex">
+                  
+                </td>
                 <td>
                   <input
                     type="number"
@@ -120,6 +162,7 @@ const PaymentEntry = ({
                       handleRowAmountChange(pay.id, e.target.value)
                     }
                   />
+                  
                 </td>
 
                 <td className="text-center">
